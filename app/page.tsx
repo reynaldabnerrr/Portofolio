@@ -5,13 +5,28 @@ import GitHubCalendar from "react-github-calendar";
 import { Typewriter } from "react-simple-typewriter";
 import { useState, useEffect, useRef } from "react";
 
+interface Project {
+  id: number;
+  title: string;
+  category: string;
+  description: string;
+  longDescription: string;
+  technologies: string[];
+  github: string;
+  demo: string | null;
+  image: string;
+  color: string;
+  features: string[];
+  status: string;
+}
+
 export default function Home() {
   const [activeSection, setActiveSection] = useState("home");
   const [isScrolled, setIsScrolled] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [particles, setParticles] = useState<Array<{ id: number; x: number; y: number; vx: number; vy: number; size: number }>>([]);
-  const [selectedProject, setSelectedProject] = useState<any>(null);
+  const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
