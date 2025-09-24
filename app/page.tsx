@@ -60,7 +60,7 @@ export default function Home() {
       longDescription: "A comprehensive travel and cultural exploration platform for Makassar city. The website provides detailed information about local attractions, cultural events, traditional cuisine, and travel guides. Features an interactive map, event calendar, restaurant finder, and user review system.",
       technologies: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Vercel", "API Integration"],
       github: "https://github.com/reynaldabnerr/Jokka-Web.git",
-      demo: "https://jokka-web-demo.vercel.app",
+      demo: "https://jokka-1d960.firebaseapp.com",
       image: "🌐",
       color: "from-green-600 to-blue-600",
       features: [
