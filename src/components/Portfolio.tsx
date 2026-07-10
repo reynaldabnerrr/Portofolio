@@ -21,10 +21,14 @@ export default function Portfolio() {
   const [activeSection, setActiveSection] = useState("home");
   const [isScrolled, setIsScrolled] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [loadingProgress, setLoadingProgress] = useState(0);
+  const [loadingStatus, setLoadingStatus] = useState("> BOOT: INITIATING SECURE ARCHITECTURE PROTOCOLS...");
+  const [fadeLoading, setFadeLoading] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [particles, setParticles] = useState<Array<{ id: number; x: number; y: number; vx: number; vy: number; size: number }>>([]);
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const isManualScrollRef = useRef(false);
   
   // E-Commerce Checkout Simulator states
   const [simCart, setSimCart] = useState<Array<{ id: number; name: string; price: number; image: string; quantity: number }>>([]);
@@ -154,8 +158,8 @@ export default function Portfolio() {
       id: 4,
       title: "Topcell CRM",
       category: "Enterprise Web Application",
-      description: "Sistem CRM komprehensif dengan integrasi Qontak WhatsApp API, pipeline follow-up kustom (H1, H7, 1-Bulan), manajemen hak akses, dan analitik penjualan lanjutan.",
-      longDescription: "Platform CRM enterprise yang dibangun di atas Laravel, MySQL, dan Tailwind CSS. Aplikasi ini mengotomatiskan follow-up pelanggan dengan mengintegrasikan Qontak WhatsApp Business API. Menyediakan mesin pelacakan checkpoints otomatis, role privilage, filter laporan ledger transaksi, serta template pesan marketing.",
+      description: "Comprehensive CRM system with Qontak WhatsApp API integration, custom follow-up pipelines (H1, H7, 1-Month), role privilege management, and advanced sales analytics.",
+      longDescription: "An enterprise CRM platform built on Laravel, MySQL, and Tailwind CSS. The application automates customer follow-ups by integrating the Qontak WhatsApp Business API. It provides automatic checkpoint tracking engines, role privileges, transaction ledger filter reports, and marketing message templates.",
       technologies: ["Laravel", "PHP", "Tailwind CSS", "MySQL", "Qontak API", "Axios", "Vite"],
       github: "https://github.com/reynaldabnerrr/CRM_TOPCELL.git",
       demo: null,
@@ -175,8 +179,8 @@ export default function Portfolio() {
       id: 1,
       title: "ANTEKHUB (Mobile App)",
       category: "Mobile Application",
-      description: "Frontend aplikasi mobile berbasis Flutter untuk jejaring alumni, mahasiswa, dan karir profesional. Mendukung pencarian kerja dan mentoring.",
-      longDescription: "Mengembangkan frontend ANTEKHUB, sebuah aplikasi Flutter untuk mempermudah jejaring antar alumni, mahasiswa, dan profesional. Merancang UI responsif untuk kenyamanan user, fitur direktori, portal mentoring, daftar lowongan kerja, dan integrasi API RESTful.",
+      description: "Flutter-based mobile application frontend for alumni, students, and professional networking. Supports job searches and mentorship.",
+      longDescription: "Developed the frontend of ANTEKHUB, a Flutter app to facilitate networking among alumni, students, and professionals. Designed responsive UI for user comfort, directory features, mentorship portal, job listings, and RESTful API integration.",
       technologies: ["Flutter", "Dart", "Firebase", "RESTful API", "Git"],
       github: "https://github.com/reynaldabnerrr",
       demo: null,
@@ -195,8 +199,8 @@ export default function Portfolio() {
       id: 2,
       title: "Jokka Web",
       category: "Web Application",
-      description: "Platform pariwisata yang memperkenalkan budaya, destinasi menarik, dan kuliner Makassar. Dilengkapi itinerary planner interaktif.",
-      longDescription: "Aplikasi penjelajah budaya dan travel Makassar. Menyediakan data destinasi terperinci, kalender event pariwisata daerah, panduan kuliner lokal, peta interaktif, serta sistem ulasan pengguna berbasis database.",
+      description: "Tourism platform introducing Makassar's culture, tourist destinations, and local culinary experiences. Equipped with an interactive itinerary planner.",
+      longDescription: "A Makassar culture and travel explorer application. Provides detailed destination data, local tourism event calendars, local culinary guides, interactive maps, and a database-driven user review system.",
       technologies: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Vercel", "API Integration"],
       github: "https://github.com/reynaldabnerrr/Jokka.git",
       demo: "https://jokka-1d960.firebaseapp.com",
@@ -216,8 +220,8 @@ export default function Portfolio() {
       id: 3,
       title: "Topcell Portfolio",
       category: "Corporate Website",
-      description: "Website profil perusahaan modern untuk Topcell, menampilkan layanan, visi, dan solusi digital secara interaktif dan elegan.",
-      longDescription: "Website profil korporat profesional yang dirancang untuk memperlihatkan layanan, visi misi, dan brand identity Topcell. Dibuat menggunakan Next.js dan Tailwind CSS dengan animasi yang halus dan layout modern di desktop maupun mobile.",
+      description: "Modern corporate profile website for Topcell, presenting services, vision, and digital solutions interactively and elegantly.",
+      longDescription: "Professional corporate profile website designed to display Topcell's services, vision, mission, and brand identity. Built using Next.js and Tailwind CSS with smooth animations and a modern layout on both desktop and mobile.",
       technologies: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Vercel"],
       github: "https://github.com/reynaldabnerrr",
       demo: "https://topcell.topgroup.asia/",
@@ -235,49 +239,49 @@ export default function Portfolio() {
   ];
 
   const achievements = [
-    { title: "GEMASTIK XVIII", category: "Finalist — Cyber Security Division", date: "Oct 2025", icon: "fa-solid fa-trophy text-yellow-400", details: "Kompetisi teknologi mahasiswa tingkat nasional oleh Balai Pengembangan Talenta Indonesia." },
-    { title: "Pragyan CTF 2025", category: "1st Place (Student Category)", date: "Feb 2025", icon: "fa-solid fa-award text-yellow-500", details: "Kompetisi Capture The Flag internasional yang diselenggarakan oleh NIT Trichy, India." },
-    { title: "Interfest CTF", category: "Top 6 (Telkom University)", date: "Dec 2024", icon: "fa-solid fa-crosshairs text-red-500", details: "Kompetisi keamanan siber tingkat nasional dengan skenario hands-on penetration testing." },
-    { title: "Cyber Jawara International", category: "Top 11", date: "Oct 2024", icon: "fa-solid fa-globe text-blue-400", details: "Kompetisi CTF bergengsi tingkat nasional/regional untuk tim profesional dan mahasiswa." },
-    { title: "HOLOGY 7.0 CTF", category: "Top 20 (Brawijaya University)", date: "Oct 2024", icon: "fa-solid fa-shield-halved text-cyan-400", details: "Kompetisi analisis insiden siber dan penyelesaian tantangan CTF nasional." },
-    { title: "COMPFEST 16 CTF", category: "Finalist (Universitas Indonesia)", date: "Sep 2024", icon: "fa-solid fa-lightbulb text-amber-400", details: "Salah satu kompetisi CTF mahasiswa paling ketat dan menantang di Indonesia." },
-    { title: "GEMASTIK XVII", category: "Finalist — Cyber Security Division", date: "Sep 2024", icon: "fa-solid fa-lock text-purple-400", details: "Finalis divisi Keamanan Siber pada ajang GEMASTIK nasional XVII." }
+    { title: "GEMASTIK XVIII", category: "Finalist — Cyber Security Division", date: "Oct 2025", icon: "fa-solid fa-trophy text-yellow-400", details: "National student technology competition organized by Balai Pengembangan Talenta Indonesia." },
+    { title: "Pragyan CTF 2025", category: "1st Place (Student Category)", date: "Feb 2025", icon: "fa-solid fa-award text-yellow-500", details: "International Capture The Flag competition organized by NIT Trichy, India." },
+    { title: "Interfest CTF", category: "Top 6 (Telkom University)", date: "Dec 2024", icon: "fa-solid fa-crosshairs text-red-500", details: "National cybersecurity competition with hands-on penetration testing scenarios." },
+    { title: "Cyber Jawara International", category: "Top 11", date: "Oct 2024", icon: "fa-solid fa-globe text-blue-400", details: "Prestigious national/regional CTF competition for professional and student teams." },
+    { title: "HOLOGY 7.0 CTF", category: "Top 20 (Brawijaya University)", date: "Oct 2024", icon: "fa-solid fa-shield-halved text-cyan-400", details: "Cyber incident analysis and national CTF challenge-solving competition." },
+    { title: "COMPFEST 16 CTF", category: "Finalist (Universitas Indonesia)", date: "Sep 2024", icon: "fa-solid fa-lightbulb text-amber-400", details: "One of the most rigorous and challenging student CTF competitions in Indonesia." },
+    { title: "GEMASTIK XVII", category: "Finalist — Cyber Security Division", date: "Sep 2024", icon: "fa-solid fa-lock text-purple-400", details: "Finalist in the Cyber Security division at the XVII National GEMASTIK competition." }
   ];
 
   const workExperience = [
     {
       role: "Software Engineer (Intern)",
       org: "RS UNHAS",
-      period: "Mei 2025 – September 2025",
+      period: "May 2025 – September 2025",
       points: [
-        "Mengembangkan dan merawat sistem backend untuk E-Logbook Information System berbasis web.",
-        "Membangun RESTful API menggunakan Laravel dan mengelola database MySQL dengan performa tinggi.",
-        "Mengimplementasikan autentikasi serta role-based access control untuk keamanan hak akses sistem.",
-        "Berkolaborasi dengan developer frontend untuk integrasi antarmuka yang mulus.",
-        "Melakukan pengujian API, debugging, dan penyusunan dokumentasi teknis sistem."
+        "Developed and maintained backend systems for a web-based E-Logbook Information System.",
+        "Built RESTful APIs using Laravel and managed MySQL databases with high performance.",
+        "Implemented authentication and role-based access control for system security.",
+        "Collaborated with frontend developers for seamless interface integration.",
+        "Conducted API testing, debugging, and prepared technical documentation."
       ]
     },
     {
       role: "Teaching Assistant – Mobile App Programming",
       org: "Universitas Hasanuddin (UNHAS)",
-      period: "Agustus 2025 – Desember 2025",
+      period: "August 2025 – December 2025",
       points: [
-        "Membantu dosen pengampu dalam memberikan materi pemrograman aplikasi mobile kelas sarjana.",
-        "Membimbing mahasiswa melalui sesi praktikum Flutter, mulai dari konsep dasar OOP hingga deployment.",
-        "Memberikan bantuan teknis dalam debugging, konsep UI/UX, dan optimalisasi performa state management.",
-        "Mentransfer pemahaman tentang clean code, struktur folder, dan best practices penyelesaian error.",
-        "Mengevaluasi tugas mingguan dan membantu standarisasi penilaian praktikum mahasiswa."
+        "Assisted lecturing professors in delivering mobile application programming courses for undergraduate classes.",
+        "Guided students through Flutter laboratory sessions, from basic OOP concepts to deployment.",
+        "Provided technical support in debugging, UI/UX design concepts, and state management optimization.",
+        "Transferred understanding of clean code, folder structures, and error-solving best practices.",
+        "Evaluated weekly assignments and assisted in standardizing undergraduate laboratory grading."
       ]
     },
     {
       role: "Freelance Frontend Developer",
       org: "ANTEKHUB (Mobile App)",
-      period: "Juli 2024 – September 2024",
+      period: "July 2024 – September 2024",
       points: [
-        "Mengembangkan frontend aplikasi ANTEKHUB menggunakan Flutter untuk alumni dan mahasiswa.",
-        "Membangun UI yang responsif dan fluid untuk navigasi berjejaring yang nyaman.",
-        "Mengintegrasikan fitur direktori, job listings, program mentorship, dan event scheduler.",
-        "Berkolaborasi erat bersama tim backend untuk konsumsi data API RESTful yang optimal."
+        "Developed the frontend of the ANTEKHUB application using Flutter for alumni and students.",
+        "Built responsive and fluid UI for comfortable networking navigation.",
+        "Integrated directory features, job listings, mentorship programs, and event schedulers.",
+        "Collaborated closely with the backend team for optimal consumption of RESTful API data."
       ]
     }
   ];
@@ -286,41 +290,79 @@ export default function Portfolio() {
     {
       role: "Head of Digital Forensics",
       org: "ICC UH (IT Computer Club Universitas Hasanuddin)",
-      period: "Januari 2025 – Juni 2025",
+      period: "January 2025 – June 2025",
       points: [
-        "Memimpin pelatihan berkala tentang Digital Forensics, OSINT, dan teknik investigasi digital.",
-        "Mentransfer skill analisis forensik disk, memori, dan penyelesaian tantangan CTF siber.",
-        "Mengikuti kompetisi CTF eksternal sebagai perwakilan klub komputer universitas.",
-        "Mengembangkan kurikulum keamanan siber klub komputer agar relevan dengan tren industri saat ini."
+        "Led regular training sessions on Digital Forensics, OSINT, and digital investigation techniques.",
+        "Transferred skills in disk forensics, memory analysis, and cyber CTF challenge solving.",
+        "Participated in external CTF competitions representing the university IT computer club.",
+        "Developed the club's cybersecurity curriculum to be relevant with current industry trends."
       ]
     },
     {
       role: "Coordinator – Mobile App Development",
       org: "Coder Institute",
-      period: "Maret 2024 – Februari 2025",
+      period: "March 2024 – February 2025",
       points: [
-        "Merancang kurikulum dan menyusun modul pembelajaran terstruktur untuk pengembangan aplikasi mobile.",
-        "Menyampaikan materi pelatihan dan memfasilitasi hands-on mentoring dalam framework Flutter & Android.",
-        "Mengarahkan anggota dalam pembuatan proyek aplikasi mobile riil mulai dari ide hingga presentasi.",
-        "Mengevaluasi perkembangan pemahaman anggota secara berkala demi efektivitas kurikulum."
+        "Designed curriculum and compiled structured learning modules for mobile application development.",
+        "Delivered training materials and facilitated hands-on mentoring in Flutter & Android frameworks.",
+        "Guided members in creating real-world mobile application projects from ideation to presentation.",
+        "Evaluated members' learning progress periodically for curriculum effectiveness."
       ]
     },
     {
       role: "Core Team – Technical",
       org: "Google Developer Student Clubs (GDSC)",
-      period: "September 2023 – Oktober 2024",
+      period: "September 2023 – October 2024",
       points: [
-        "Mengisi sesi teknis berkala dan menyusun aset modul pengenalan teknologi.",
-        "Membimbing anggota dalam implementasi flutter dasar dan konektivitas API.",
-        "Mendukung ekosistem pertumbuhan komunitas developer di tingkat universitas."
+        "Delivered periodic technical sessions and compiled technology introduction module assets.",
+        "Mentored members in basic Flutter implementation and API connectivity.",
+        "Supported the growth ecosystem of the developer community at the university level."
       ]
     }
   ];
 
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 1200);
+    const interval = setInterval(() => {
+      setLoadingProgress((prev) => {
+        if (prev >= 100) {
+          clearInterval(interval);
+          return 100;
+        }
+        const step = Math.floor(Math.random() * 8) + 4;
+        const next = Math.min(prev + step, 100);
+        
+        if (next < 25) {
+          setLoadingStatus("> BOOT: INITIATING SECURE ARCHITECTURE PROTOCOLS...");
+        } else if (next < 50) {
+          setLoadingStatus("> NET: ESTABLISHING INTEGRATED CRM ENDPOINTS...");
+        } else if (next < 75) {
+          setLoadingStatus("> RENDER: SHADING DYNAMIC CYBER GRAPHICS GRID...");
+        } else if (next < 95) {
+          setLoadingStatus("> CORE: SPINNING DECORATIVE BACKGROUND PARTICLES...");
+        } else {
+          setLoadingStatus("> SYSTEM: COGNITIVE WORKSPACE ONLINE.");
+        }
+        return next;
+      });
+    }, 45);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  useEffect(() => {
+    if (loadingProgress === 100) {
+      const fadeTimer = setTimeout(() => {
+        setFadeLoading(true);
+        const exitTimer = setTimeout(() => {
+          setIsLoading(false);
+        }, 500);
+        return () => clearTimeout(exitTimer);
+      }, 500);
+      return () => clearTimeout(fadeTimer);
+    }
+  }, [loadingProgress]);
+
+  useEffect(() => {
 
     const initParticles = () => {
       const newParticles = [];
@@ -345,14 +387,17 @@ export default function Portfolio() {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 40);
       
-      const sections = ['home', 'about', 'services', 'simulator', 'projects', 'skills', 'achievements', 'github', 'contact'];
-      const scrollPosition = window.scrollY + 140;
+      if (isManualScrollRef.current) return;
+      
+      const sections = ['home', 'about', 'services', 'simulator', 'skills', 'projects', 'achievements', 'github', 'contact'];
+      const scrollPosition = window.scrollY + 160;
       
       sections.forEach(section => {
         const element = document.getElementById(section);
         if (element) {
-          const offsetTop = element.offsetTop;
-          const offsetHeight = element.offsetHeight;
+          const rect = element.getBoundingClientRect();
+          const offsetTop = rect.top + window.scrollY;
+          const offsetHeight = rect.height;
           if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
             setActiveSection(section);
           }
@@ -365,7 +410,6 @@ export default function Portfolio() {
     window.addEventListener('mousemove', handleMouseMove);
     
     return () => {
-      clearTimeout(timer);
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('mousemove', handleMouseMove);
     };
@@ -464,11 +508,17 @@ export default function Portfolio() {
       const elementPosition = elementRect - bodyRect;
       const offsetPosition = elementPosition - offset;
       
+      isManualScrollRef.current = true;
+      setActiveSection(sectionId);
+      
       window.scrollTo({
         top: offsetPosition,
         behavior: 'smooth'
       });
-      setActiveSection(sectionId);
+      
+      setTimeout(() => {
+        isManualScrollRef.current = false;
+      }, 800);
     }
   };
 
@@ -498,15 +548,45 @@ export default function Portfolio() {
 
   if (isLoading) {
     return (
-      <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#030712] overflow-hidden">
-        <div className="relative flex items-center justify-center w-28 h-28">
-          <div className="absolute w-20 h-20 border-[3px] border-t-indigo-500 border-r-transparent border-b-transparent border-l-transparent rounded-full animate-spin"></div>
-          <div className="absolute w-24 h-24 border-[3px] border-b-cyan-400 border-t-transparent border-r-transparent border-l-transparent rounded-full animate-spin" style={{ animationDuration: '1.5s', animationDirection: 'reverse' }}></div>
-          <div className="absolute w-28 h-28 border-[3px] border-l-pink-500 border-t-transparent border-r-transparent border-b-transparent rounded-full animate-spin" style={{ animationDuration: '2.5s' }}></div>
-          <span className="text-xl font-black text-indigo-400 tracking-widest text-glow">RT</span>
+      <div className={`fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#030712] overflow-hidden transition-all duration-500 ${fadeLoading ? 'opacity-0 scale-95 pointer-events-none' : 'opacity-100 scale-100'}`}>
+        <div className="cyber-grid absolute inset-0 opacity-40" />
+        <div className="absolute w-[400px] h-[400px] bg-indigo-500/10 rounded-full blur-[80px] -top-10 -left-10 pointer-events-none" />
+        <div className="absolute w-[400px] h-[400px] bg-cyan-500/10 rounded-full blur-[80px] -bottom-10 -right-10 pointer-events-none" />
+        
+        <div className="relative flex flex-col items-center justify-center p-8 max-w-sm w-full z-10 text-center">
+          <div className="relative flex items-center justify-center w-40 h-40 mb-10 select-none scale-110">
+            <div className="absolute w-36 h-36 border-2 border-dashed border-indigo-500/30 rounded-full animate-spin" style={{ animationDuration: '12s' }}></div>
+            <div className="absolute w-40 h-40 border-2 border-t-indigo-500 border-b-indigo-500 border-r-transparent border-l-transparent rounded-full animate-spin" style={{ animationDuration: '6s' }}></div>
+            <div className="absolute w-32 h-32 border-2 border-r-cyan-400 border-l-cyan-400 border-t-transparent border-b-transparent rounded-full animate-spin" style={{ animationDuration: '3s', animationDirection: 'reverse' }}></div>
+            <div className="absolute w-24 h-24 bg-gradient-to-tr from-indigo-500/10 to-cyan-500/10 rounded-full blur-md animate-pulse"></div>
+            <div className="flex flex-col items-center justify-center z-10">
+              <span className="text-3xl font-black text-white tracking-tighter font-outfit text-glow">{loadingProgress}%</span>
+              <span className="text-[9px] uppercase tracking-widest text-indigo-400 font-bold mt-1">LOADING</span>
+            </div>
+          </div>
+
+          <div className="cyber-card p-5 w-full rounded-2xl border border-white/[0.06] bg-[#070b13]/60 backdrop-blur-xl space-y-3.5 shadow-2xl relative">
+            <div className="flex items-center gap-1.5 border-b border-white/[0.06] pb-2">
+              <div className="w-2 h-2 rounded-full bg-red-500/80"></div>
+              <div className="w-2 h-2 rounded-full bg-yellow-500/80"></div>
+              <div className="w-2 h-2 rounded-full bg-green-500/80"></div>
+              <span className="text-[9px] text-gray-500 font-mono ml-1.5 uppercase font-bold tracking-wider">Workspace Loader</span>
+            </div>
+            
+            <div className="w-full bg-white/[0.04] border border-white/[0.08] rounded-full h-1.5 overflow-hidden p-[1px]">
+              <div 
+                className="bg-gradient-to-r from-indigo-500 via-cyan-400 to-pink-500 h-full rounded-full transition-all duration-300 ease-out shadow-[0_0_10px_rgba(99,102,241,0.5)]" 
+                style={{ width: `${loadingProgress}%` }}
+              />
+            </div>
+
+            <div className="h-6 flex items-center justify-center">
+              <p className="text-[10px] font-mono text-gray-400 tracking-tight text-center font-semibold text-indigo-300/90 truncate w-full">
+                {loadingStatus}
+              </p>
+            </div>
+          </div>
         </div>
-        <h2 className="text-2xl font-bold text-white mt-8 tracking-wider font-outfit">Loading Experience</h2>
-        <p className="text-gray-400 text-sm mt-2 animate-pulse">Initializing Cyber-Obsidian Workspace...</p>
       </div>
     );
   }
@@ -549,8 +629,8 @@ export default function Portfolio() {
               { id: 'about', label: 'About' },
               { id: 'services', label: 'Services' },
               { id: 'simulator', label: 'Live Demo' },
-              { id: 'projects', label: 'Projects' },
               { id: 'skills', label: 'Skills' },
+              { id: 'projects', label: 'Projects' },
               { id: 'achievements', label: 'Achievements' },
               { id: 'github', label: 'Activity' },
               { id: 'contact', label: 'Contact' }
@@ -597,8 +677,8 @@ export default function Portfolio() {
               { id: 'about', label: 'About' },
               { id: 'services', label: 'Services' },
               { id: 'simulator', label: 'Live Demo' },
-              { id: 'projects', label: 'Projects' },
               { id: 'skills', label: 'Skills' },
+              { id: 'projects', label: 'Projects' },
               { id: 'achievements', label: 'Achievements' },
               { id: 'github', label: 'GitHub Activity' },
               { id: 'contact', label: 'Contact' }
@@ -640,7 +720,9 @@ export default function Portfolio() {
             <img
               src="/assets/profile.jpg"
               alt="Reynald Abner Tananda"
-              className="rounded-full relative z-10 border-[3px] border-white/10 w-40 h-40 object-cover shadow-2xl transition-all duration-500 scale-95 group-hover:scale-100 group-hover:border-indigo-400/60"
+              width={160}
+              height={160}
+              className="rounded-full relative z-10 border-2 border-white/20 shadow-2xl scale-95 transition-all duration-500 hover:scale-100 hover:border-indigo-400/50"
             />
           </div>
           
@@ -671,7 +753,7 @@ export default function Portfolio() {
           </h2>
           
           <p className="text-base sm:text-lg text-gray-400 max-w-2xl mx-auto leading-relaxed mb-6 font-medium">
-            Software Engineer dengan spesialisasi full-stack development dan keamanan siber. Menyediakan jasa pembuatan website kustom, sistem e-commerce & kasir (POS), integrasi API, serta otomatisasi bisnis.
+            Software Engineer specializing in full-stack development and cybersecurity. Providing custom website creation, e-commerce & POS systems, API integration, and business automation.
           </p>
           
           <div className="flex flex-col sm:flex-row items-center gap-4 pt-2 w-full sm:w-auto">
@@ -680,7 +762,7 @@ export default function Portfolio() {
               className="w-full sm:w-auto px-8 py-4 bg-indigo-600 hover:bg-indigo-500 rounded-full text-white font-bold tracking-wide transition-all duration-300 hover:scale-105 hover:shadow-[0_0_25px_rgba(99,102,241,0.5)] flex items-center justify-center gap-2 cyber-button"
             >
               Explore Projects
-              <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
               </svg>
             </button>
@@ -723,24 +805,24 @@ export default function Portfolio() {
                   Hi! I'm <span className="text-indigo-400 font-bold">Reynald Abner Tananda</span>, a final-year Computer Science student at <span className="text-white font-bold">Universitas Hasanuddin</span>. I specialize in Software Engineering and cybersecurity architectures, maintaining a <span className="text-cyan-400 font-black">GPA of 3.78/4.00</span>.
                 </p>
                 <p>
-                  Saya berpengalaman dalam membangun sistem berkinerja tinggi, sempat mengabdi sebagai backend developer intern untuk logbook rumah sakit serta menjadi asisten dosen dalam materi pemrograman aplikasi mobile (Flutter).
+                  I am experienced in building high-performance systems, having served as a backend developer intern for hospital logbooks and a teaching assistant for mobile application programming (Flutter).
                 </p>
                 <p>
-                  Di luar pemrograman, saya aktif memimpin divisi keamanan siber sebagai <span className="text-pink-400 font-bold">Head of Digital Forensics di ICC UH</span>, merancang modul training digital forensics, OSINT, reverse engineering, dan pertahanan siber.
+                  Outside of programming, I actively lead the cybersecurity division as the <span className="text-pink-400 font-bold">Head of Digital Forensics at ICC UH</span>, designing training modules for digital forensics, OSINT, reverse engineering, and cyber defense.
                 </p>
               </div>
               
               {/* Quick statistics styled nicely */}
               <div className="grid grid-cols-3 gap-4 pt-4">
-                <div className="p-4.5 rounded-2xl bg-white/[0.02] border border-white/[0.05] text-center shadow-md shadow-black/25">
+                <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/[0.05] text-center shadow-md shadow-black/25">
                   <span className="block text-3xl font-black text-indigo-400 tracking-tight font-outfit">3.78</span>
                   <span className="text-[10px] uppercase text-gray-500 tracking-wider font-bold block mt-1">GPA Score</span>
                 </div>
-                <div className="p-4.5 rounded-2xl bg-white/[0.02] border border-white/[0.05] text-center shadow-md shadow-black/25">
+                <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/[0.05] text-center shadow-md shadow-black/25">
                   <span className="block text-3xl font-black text-cyan-400 tracking-tight font-outfit">7+</span>
                   <span className="text-[10px] uppercase text-gray-500 tracking-wider font-bold block mt-1">CTF Awards</span>
                 </div>
-                <div className="p-4.5 rounded-2xl bg-white/[0.02] border border-white/[0.05] text-center shadow-md shadow-black/25">
+                <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/[0.05] text-center shadow-md shadow-black/25">
                   <span className="block text-3xl font-black text-pink-400 tracking-tight font-outfit">3+</span>
                   <span className="text-[10px] uppercase text-gray-500 tracking-wider font-bold block mt-1">TA & Interns</span>
                 </div>
@@ -775,11 +857,11 @@ export default function Portfolio() {
             <div className="text-center space-y-3">
               <span className="text-xs font-bold uppercase tracking-widest text-indigo-400 font-outfit text-glow">02 / Services</span>
               <h2 className="text-4xl sm:text-5xl font-black tracking-tight font-outfit text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">
-                Layanan & Solusi Kustom
+                Services & Custom Solutions
               </h2>
               <div className="w-16 h-1.5 bg-gradient-to-r from-indigo-500 to-cyan-500 rounded-full mx-auto"></div>
               <p className="text-gray-400 text-sm sm:text-base max-w-xl mx-auto pt-2 leading-relaxed">
-                Solusi rekayasa perangkat lunak dan digitalisasi bisnis kustom untuk mengoptimalkan proses kerja Anda.
+                Custom software engineering and business digitization solutions to optimize your workflows.
               </p>
             </div>
             
@@ -787,31 +869,31 @@ export default function Portfolio() {
               {[
                 {
                   title: "Web & App Development",
-                  desc: "Pembuatan website kustom, landing page, dan sistem e-commerce responsif menggunakan Next.js / Laravel dengan optimasi SEO modern.",
+                  desc: "Custom website creation, landing pages, and responsive e-commerce systems using Next.js / Laravel with modern SEO optimization.",
                   icon: "fa-solid fa-laptop-code",
                   glow: "cyber-card-glow-indigo"
                 },
                 {
                   title: "API & Payment Integration",
-                  desc: "Koneksi sistem dengan payment gateway (Midtrans/Xendit) untuk pembayaran QRIS/VA otomatis, serta integrasi RESTful API eksternal.",
+                  desc: "Connecting systems with payment gateways (Midtrans/Xendit) for automated QRIS/VA payments, as well as external RESTful API integration.",
                   icon: "fa-solid fa-credit-card",
                   glow: "cyber-card-glow-cyan"
                 },
                 {
                   title: "Custom Dashboards & POS",
-                  desc: "Sistem back-office kustom untuk manajemen inventaris, dashboard analitik, laporan transaksi harian/bulanan, dan hak akses admin.",
+                  desc: "Custom back-office systems for inventory management, analytical dashboards, daily/monthly transaction reports, and admin access control.",
                   icon: "fa-solid fa-chart-line",
                   glow: "cyber-card-glow-pink"
                 },
                 {
-                  title: "Otomatisasi & Integrasi",
-                  desc: "Otomasi notifikasi real-time, pengiriman OTP, broadcast, dan invoice otomatis yang terhubung langsung ke WhatsApp API.",
+                  title: "Automation & Integration",
+                  desc: "Automated real-time notifications, OTP delivery, broadcasts, and automated invoices connected directly to the WhatsApp API.",
                   icon: "fa-solid fa-message",
                   glow: "cyber-card-glow-green"
                 }
               ].map((service, sIdx) => (
-                <div key={sIdx} className={`cyber-card p-6.5 rounded-3xl border border-white/[0.05] hover:border-white/10 flex flex-col justify-between h-72 shadow-lg shadow-black/20 ${service.glow}`}>
-                  <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-xl text-white">
+                <div key={sIdx} className={`cyber-card p-6 sm:p-8 rounded-3xl border border-white/[0.05] hover:border-white/10 shadow-lg shadow-black/20 ${service.glow}`}>
+                  <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-xl text-white mb-6">
                     <i className={service.icon}></i>
                   </div>
                   <div>
@@ -834,7 +916,7 @@ export default function Portfolio() {
               </h2>
               <div className="w-16 h-1.5 bg-gradient-to-r from-indigo-500 to-cyan-500 rounded-full mx-auto"></div>
               <p className="text-gray-400 text-sm sm:text-base max-w-xl mx-auto pt-2 leading-relaxed">
-                Uji langsung integrasi sistem. Tambahkan produk, jalankan checkout, simulasikan callback webhook payment gateway (Midtrans), dan terima invoice WhatsApp otomatis.
+                Test system integration live. Add products, complete checkout, simulate a webhook callback from the payment gateway (Midtrans), and receive an automated WhatsApp invoice.
               </p>
             </div>
 
@@ -842,7 +924,7 @@ export default function Portfolio() {
               {/* Left Column: Product Cards Grid */}
               <div className="lg:col-span-5 space-y-4">
                 <h3 className="text-base font-bold text-white font-outfit pb-2 border-b border-white/[0.05] flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 bg-indigo-500 rounded-full animate-pulse"></span> 1. Pilih Produk Simulasi
+                  <span className="w-2.5 h-2.5 bg-indigo-500 rounded-full animate-pulse"></span> 1. Select Simulation Product
                 </h3>
                 
                 {/* Product List */}
@@ -866,7 +948,7 @@ export default function Portfolio() {
                         onClick={() => handleAddToCart(prod)}
                         className="px-3.5 py-2 bg-indigo-600/20 border border-indigo-500/30 hover:bg-indigo-600 rounded-xl text-xs font-bold text-indigo-300 hover:text-white transition-all duration-300"
                       >
-                        + Keranjang
+                        + Cart
                       </button>
                     </div>
                   ))}
@@ -902,13 +984,13 @@ export default function Portfolio() {
                     <div className="flex-1 flex flex-col justify-between animate-slide-up">
                       <div className="space-y-4">
                         <h4 className="font-bold text-white text-sm font-outfit flex items-center gap-2">
-                          <i className="fa-solid fa-cart-shopping text-indigo-400"></i> Keranjang Belanja Anda
+                          <i className="fa-solid fa-cart-shopping text-indigo-400"></i> Your Shopping Cart
                         </h4>
                         
                         {simCart.length === 0 ? (
                           <div className="text-center py-12 text-gray-500">
                             <i className="fa-solid fa-basket-shopping text-3xl mb-3 block text-gray-600"></i>
-                            <p className="text-xs font-medium">Keranjang Anda masih kosong. Silakan tambahkan produk di kolom kiri.</p>
+                            <p className="text-xs font-medium">Your cart is empty. Please add products from the left column.</p>
                           </div>
                         ) : (
                           <div className="space-y-2.5 max-h-[220px] overflow-y-auto pr-1">
@@ -972,7 +1054,7 @@ export default function Portfolio() {
                           </div>
 
                           <div>
-                            <label className="text-[10px] text-gray-500 block mb-1 font-bold">NOMOR WHATSAPP (Invoice Simulasi)</label>
+                            <label className="text-[10px] text-gray-500 block mb-1 font-bold">WHATSAPP NUMBER (Simulation Invoice)</label>
                             <input
                               type="tel"
                               required
@@ -984,7 +1066,7 @@ export default function Portfolio() {
                           </div>
 
                           <div>
-                            <label className="text-[10px] text-gray-500 block mb-1 font-bold">METODE PEMBAYARAN</label>
+                            <label className="text-[10px] text-gray-500 block mb-1 font-bold">PAYMENT METHOD</label>
                             <div className="grid grid-cols-2 gap-2">
                               <button
                                 type="button"
@@ -1009,7 +1091,7 @@ export default function Portfolio() {
 
                       <div className="border-t border-white/[0.06] pt-4 mt-4 space-y-3">
                         <div className="flex justify-between items-center text-xs font-bold text-white">
-                          <span>Total Tagihan:</span>
+                          <span>Total Invoice:</span>
                           <span>Rp {calculateSubtotal().toLocaleString("id-ID")}</span>
                         </div>
                         <div className="flex gap-2">
@@ -1018,7 +1100,7 @@ export default function Portfolio() {
                             onClick={() => setSimStep("cart")}
                             className="w-1/3 py-2.5 bg-white/[0.02] hover:bg-white/[0.05] border border-white/[0.08] text-gray-300 font-bold rounded-xl text-xs transition-colors"
                           >
-                            Kembali
+                            Back
                           </button>
                           <button
                             type="submit"
@@ -1032,7 +1114,7 @@ export default function Portfolio() {
                               </>
                             ) : (
                               <>
-                                Buat Invoice Pembayaran <i className="fa-solid fa-credit-card text-[10px]"></i>
+                                Generate Payment Invoice <i className="fa-solid fa-credit-card text-[10px]"></i>
                               </>
                             )}
                           </button>
@@ -1045,12 +1127,12 @@ export default function Portfolio() {
                   {simStep === "qris" && (
                     <div className="flex-1 flex flex-col justify-between items-center text-center animate-slide-up py-3 font-outfit">
                       <div className="space-y-3 w-full max-w-[280px]">
-                        <h4 className="font-bold text-white text-sm font-outfit">Simulasi Midtrans Payment</h4>
+                        <h4 className="font-bold text-white text-sm font-outfit">Simulated Midtrans Payment</h4>
                         
                         {/* Countdown Timer */}
                         <div className="flex items-center justify-center gap-1.5 text-xs font-mono font-bold text-pink-500 animate-pulse pb-1">
                           <i className="fa-solid fa-clock"></i>
-                          <span>Batas Waktu: {formatTimer(simTimer)}</span>
+                          <span>Time Limit: {formatTimer(simTimer)}</span>
                         </div>
 
                         {simPaymentMethod === "qris" ? (
@@ -1068,12 +1150,12 @@ export default function Portfolio() {
                         ) : (
                           <div className="p-4 bg-[#090d16] border border-white/[0.06] rounded-2xl flex flex-col items-stretch text-left w-full space-y-3 shadow-md">
                             <div className="flex items-center justify-between border-b border-white/[0.06] pb-2">
-                              <span className="font-bold text-white text-xs">Simulasi Virtual Account</span>
+                              <span className="font-bold text-white text-xs">Simulated Virtual Account</span>
                               <span className="text-[10px] text-indigo-400 font-extrabold">BANK MANDIRI</span>
                             </div>
                             
                             <div className="space-y-1.5">
-                              <label className="text-[9px] text-gray-500 block">NOMOR VIRTUAL ACCOUNT</label>
+                              <label className="text-[9px] text-gray-500 block">VIRTUAL ACCOUNT NUMBER</label>
                               <div className="flex items-center justify-between bg-white/[0.04] border border-white/[0.06] rounded-lg p-2.5">
                                 <span className="font-mono text-xs text-white tracking-widest font-bold">88012{simPhone.replace(/\D/g, "").slice(-10).padStart(10, "0")}</span>
                                 <button
@@ -1086,17 +1168,17 @@ export default function Portfolio() {
                                   }}
                                   className="text-[9px] font-bold text-indigo-400 hover:text-indigo-300 px-2 py-1 bg-indigo-500/10 rounded border border-indigo-500/20 transition-colors"
                                 >
-                                  Salin
+                                  Copy
                                 </button>
                               </div>
                             </div>
                             
                             <p className="text-[9px] text-gray-400 leading-normal">
-                              Salin nomor Virtual Account di atas dan simulasikan transfer VA lunas dengan klik tombol hijau di bawah.
+                              Copy the Virtual Account number above and simulate a paid VA transfer by clicking the green button below.
                             </p>
                           </div>
                         )}
-                        <p className="text-[10px] text-gray-400 leading-tight font-mono">Total Tagihan: <span className="font-bold text-indigo-400">Rp {calculateSubtotal().toLocaleString("id-ID")}</span></p>
+                        <p className="text-[10px] text-gray-400 leading-tight font-mono">Total Invoice: <span className="font-bold text-indigo-400">Rp {calculateSubtotal().toLocaleString("id-ID")}</span></p>
                       </div>
 
                       <div className="w-full mt-4 space-y-2">
@@ -1113,7 +1195,7 @@ export default function Portfolio() {
                             </>
                           ) : (
                             <>
-                              <i className="fa-solid fa-circle-check"></i> {simPaymentMethod === "qris" ? "Simulasikan Scan Bayar Berhasil" : "Simulasikan Transfer VA Lunas"}
+                              <i className="fa-solid fa-circle-check"></i> {simPaymentMethod === "qris" ? "Simulate Successful Scan & Pay" : "Simulate Paid VA Transfer"}
                             </>
                           )}
                         </button>
@@ -1122,7 +1204,7 @@ export default function Portfolio() {
                           onClick={() => setSimStep("checkout")}
                           className="w-full py-2 bg-white/[0.01] hover:bg-white/[0.04] border border-white/[0.06] text-gray-500 hover:text-gray-300 rounded-xl text-[10px] transition-colors"
                         >
-                          Batalkan Pembayaran
+                          Cancel Payment
                         </button>
                       </div>
                     </div>
@@ -1135,14 +1217,14 @@ export default function Portfolio() {
                         <i className="fa-solid fa-check"></i>
                       </div>
                       <div className="space-y-1">
-                        <h4 className="font-extrabold text-white text-lg font-outfit">Pembayaran Berhasil!</h4>
+                        <h4 className="font-extrabold text-white text-lg font-outfit">Payment Successful!</h4>
                         <p className="text-xs text-gray-400 max-w-[280px] leading-relaxed">
-                          Midtrans Gateway telah meneruskan webhook pembayaran lunas ke sistem backend.
+                          Midtrans Gateway has successfully forwarded the payment webhook to the backend system.
                         </p>
                       </div>
                       <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-500/5 border border-indigo-500/20 text-indigo-300 text-[10px] animate-pulse">
                         <div className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-ping"></div>
-                        Mengirimkan Invoice Otomatis via WhatsApp...
+                        Sending Automated Invoice via WhatsApp...
                       </div>
                     </div>
                   )}
@@ -1167,15 +1249,15 @@ export default function Portfolio() {
                           
                           <div className="flex justify-between items-center text-[10px] text-green-400 font-bold mb-2">
                             <span>💬 Don Neto Store - INVOICE</span>
-                            <span>{new Date().toLocaleTimeString("id-ID", { hour: '2-digit', minute: '2-digit' })}</span>
+                            <span>{new Date().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' })}</span>
                           </div>
                           <div className="border-b border-gray-800 pb-2 mb-2 text-[10px] text-gray-400">
-                            ID Transaksi: <span className="text-white font-bold">#DN-{simOrderId}</span>
+                            Transaction ID: <span className="text-white font-bold">#DN-{simOrderId}</span>
                           </div>
                           <div className="space-y-1 text-[11px] leading-relaxed">
-                            <p>Halo <span className="text-white font-bold">{simName}</span>!</p>
-                            <p>Pembayaran sebesar <span className="text-green-400 font-bold">Rp {calculateSubtotal().toLocaleString("id-ID")}</span> telah kami terima.</p>
-                            <p className="pt-1.5 text-gray-400">Rincian Pembelian:</p>
+                            <p>Hello <span className="text-white font-bold">{simName}</span>!</p>
+                            <p>We have received your payment of <span className="text-green-400 font-bold">Rp {calculateSubtotal().toLocaleString("id-ID")}</span>.</p>
+                            <p className="pt-1.5 text-gray-400">Purchase Details:</p>
                             <ul className="list-disc pl-4 text-gray-300">
                               {simCart.map((item) => (
                                 <li key={item.id}>
@@ -1183,7 +1265,7 @@ export default function Portfolio() {
                                 </li>
                               ))}
                             </ul>
-                            <p className="pt-2 text-[10px] text-gray-500">Status: <span className="bg-green-500/10 text-green-400 px-1.5 py-0.5 rounded font-bold border border-green-500/20 uppercase text-[9px]">Lunas via QRIS</span></p>
+                            <p className="pt-2 text-[10px] text-gray-500">Status: <span className="bg-green-500/10 text-green-400 px-1.5 py-0.5 rounded font-bold border border-green-500/20 uppercase text-[9px]">Paid via QRIS</span></p>
                           </div>
                         </div>
                       </div>
@@ -1194,7 +1276,7 @@ export default function Portfolio() {
                           onClick={handleSendRealWhatsApp}
                           className="w-full sm:w-2/3 py-3 bg-green-600 hover:bg-green-500 text-white font-bold rounded-xl text-xs transition-all duration-300 flex items-center justify-center gap-2 shadow-lg shadow-green-600/10 hover:shadow-green-600/20 active:scale-95"
                         >
-                          <i className="fab fa-whatsapp"></i> Kirim ke WhatsApp Asli
+                          <i className="fab fa-whatsapp"></i> Send to Real WhatsApp
                         </button>
                         <button
                           type="button"
@@ -1278,7 +1360,7 @@ export default function Portfolio() {
             
             {/* Added Coursework Tags & Soft Skills */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-6">
-              <div className="cyber-card p-6.5 rounded-3xl space-y-4 shadow-md">
+              <div className="cyber-card p-6 sm:p-8 rounded-3xl space-y-4 shadow-md">
                 <h4 className="font-bold text-white text-base font-outfit flex items-center gap-3">
                   <div className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-sm text-indigo-400">
                     <i className="fa-solid fa-graduation-cap"></i>
@@ -1294,7 +1376,7 @@ export default function Portfolio() {
                 </div>
               </div>
 
-              <div className="cyber-card p-6.5 rounded-3xl space-y-4 shadow-md">
+              <div className="cyber-card p-6 sm:p-8 rounded-3xl space-y-4 shadow-md">
                 <h4 className="font-bold text-white text-base font-outfit flex items-center gap-3">
                   <div className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-sm text-cyan-400">
                     <i className="fa-solid fa-handshake"></i>
@@ -1321,7 +1403,7 @@ export default function Portfolio() {
               <h2 className="text-4xl sm:text-5xl font-black tracking-tight font-outfit">Featured Projects</h2>
               <div className="w-16 h-1.5 bg-gradient-to-r from-indigo-500 to-cyan-500 rounded-full mx-auto"></div>
               <p className="text-gray-400 text-sm sm:text-base max-w-xl mx-auto pt-2 leading-relaxed">
-                Click "View Details" to interact dengan live dashboard mockups dan check system architectures.
+                Click "View Details" to interact with live dashboard mockups and check system architectures.
               </p>
             </div>
             
@@ -1477,7 +1559,7 @@ export default function Portfolio() {
                           rel="noopener noreferrer"
                           className="flex items-center justify-between p-3 bg-white/[0.02] border border-white/[0.05] hover:bg-white/[0.05] hover:border-white/10 rounded-xl text-xs font-bold text-gray-300 transition-colors"
                         >
-                          <span>Repository GitHub</span>
+                          <span>GitHub Repository</span>
                           <i className="fab fa-github text-sm"></i>
                         </a>
                         {selectedProject.demo && (
@@ -1487,7 +1569,7 @@ export default function Portfolio() {
                             rel="noopener noreferrer"
                             className="flex items-center justify-between p-3 bg-indigo-600/10 border border-indigo-500/20 hover:bg-indigo-600 hover:text-white rounded-xl text-xs font-bold text-indigo-300 transition-all duration-300"
                           >
-                            <span>Live Demo Aplikasi</span>
+                            <span>Live Application Demo</span>
                             <i className="fa-solid fa-arrow-up-right-from-square text-xs"></i>
                           </a>
                         )}
@@ -1504,7 +1586,7 @@ export default function Portfolio() {
                         <i className="fa-solid fa-terminal text-indigo-400 text-xs"></i> Interactive CRM Mock Dashboard
                       </h4>
                       <p className="text-xs text-gray-400">
-                        Simulasikan dashboard CRM Topcell. Kelola token OAuth Qontak API secara virtual dan pantau checkpoint milestone follow-up pelanggan.
+                        Simulate the Topcell CRM dashboard. Manage Qontak API OAuth tokens virtually and monitor client follow-up milestone checkpoints.
                       </p>
                     </div>
 
@@ -1589,11 +1671,11 @@ export default function Portfolio() {
                                 <div className="space-y-2">
                                   <div className="p-2.5 bg-white/[0.03] border border-white/[0.04] rounded-lg">
                                     <span className="font-semibold text-white block text-[11px]">followup_h1_customer</span>
-                                    <p className="text-gray-400 text-[9px] mt-1 font-mono">{"Halo {{1}}, terima kasih telah berbelanja di Topcell. Bagaimana..."}</p>
+                                    <p className="text-gray-400 text-[9px] mt-1 font-mono">{"Hello {{1}}, thank you for shopping at Topcell. How is..."}</p>
                                   </div>
                                   <div className="p-2.5 bg-white/[0.03] border border-white/[0.04] rounded-lg">
                                     <span className="font-semibold text-white block text-[11px]">followup_h7_aftercare</span>
-                                    <p className="text-gray-400 text-[9px] mt-1 font-mono">{"Halo {{1}}, produk {{2}} Anda sudah berumur 1 minggu. Jika..."}</p>
+                                    <p className="text-gray-400 text-[9px] mt-1 font-mono">{"Hello {{1}}, your product {{2}} is now 1 week old. If..."}</p>
                                   </div>
                                 </div>
                               </div>
@@ -1815,7 +1897,7 @@ export default function Portfolio() {
               <h2 className="text-4xl sm:text-5xl font-black tracking-tight font-outfit">Get In Touch</h2>
               <div className="w-16 h-1.5 bg-gradient-to-r from-indigo-500 to-cyan-500 rounded-full mx-auto"></div>
               <p className="text-gray-400 text-sm sm:text-base max-w-xl mx-auto pt-2 leading-relaxed">
-                Ada konsep proyek atau penawaran kerja sama menarik? Silakan hubungi saya melalui jalur di bawah.
+                Have an interesting project concept or collaboration offer? Please contact me through the channels below.
               </p>
             </div>
 
