@@ -59,7 +59,7 @@ export default function Home() {
       description: "Travel platform showcasing Makassar's rich culture and attractions. Features event exploration, destination discovery, and culinary experiences with intuitive interface for seamless travel planning.",
       longDescription: "A comprehensive travel and cultural exploration platform for Makassar city. The website provides detailed information about local attractions, cultural events, traditional cuisine, and travel guides. Features an interactive map, event calendar, restaurant finder, and user review system.",
       technologies: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Vercel", "API Integration"],
-      github: "https://github.com/reynaldabnerr/Jokka-Web.git",
+      github: "https://github.com/reynaldabnerrr/Jokka-Web.git",
       demo: "https://jokka-1d960.firebaseapp.com",
       image: "🌐",
       color: "from-green-600 to-blue-600",
@@ -880,7 +880,7 @@ export default function Home() {
             <div className="flex justify-center">
               <div className="glass-card p-8 w-full max-w-4xl">
                 <GitHubCalendar 
-                  username="reynaldabnerr" 
+                  username="reynaldabnerrr" 
                   colorScheme="dark"
                   blockSize={12}
                   blockMargin={4}
@@ -925,7 +925,7 @@ export default function Home() {
                 </a>
                 
                 <a
-                  href="https://github.com/reynaldabnerr"
+                  href="https://github.com/reynaldabnerrr"
                   className="flex flex-col items-center p-4 rounded-lg bg-gray-500/10 text-gray-400 hover:bg-gray-500/20 hover:scale-110 transition-all duration-300"
                   target="_blank"
                   rel="noopener noreferrer"
