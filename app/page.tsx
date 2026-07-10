@@ -38,6 +38,7 @@ export default function Home() {
   const [simIsProcessing, setSimIsProcessing] = useState(false);
   const [simSuccessToast, setSimSuccessToast] = useState<string | null>(null);
   const [simOrderId, setSimOrderId] = useState(0);
+  const [simTimer, setSimTimer] = useState(900); // 15 minutes in seconds
 
   const handleAddToCart = (product: { id: number; name: string; price: number; image: string }) => {
     setSimCart((prev) => {
@@ -74,6 +75,7 @@ export default function Home() {
     e.preventDefault();
     if (!simName || !simPhone) return;
     setSimOrderId(Math.floor(Math.random() * 90000 + 10000));
+    setSimTimer(900); // Set timer here
     setSimIsProcessing(true);
     // Simulate Midtrans Snap API token generation
     setTimeout(() => {
@@ -115,6 +117,29 @@ export default function Home() {
     const message = `Halo ${simName}!\n\nTerima kasih telah berbelanja di Don Neto Store.\n\nPembayaran sebesar *Rp ${totalText}* telah kami terima.\n\nRincian Pembelian:\n${itemsText}\n\nID Transaksi: #DN-${simOrderId}\nStatus: *LUNAS via QRIS (Midtrans)*\n\n_Nota ini dikirim otomatis oleh simulator website Don Neto._`;
     const url = `https://api.whatsapp.com/send?phone=${cleanPhone}&text=${encodeURIComponent(message)}`;
     window.open(url, "_blank");
+  };
+
+  useEffect(() => {
+    let interval: NodeJS.Timeout;
+    if (simStep === "qris") {
+      interval = setInterval(() => {
+        setSimTimer((prev) => {
+          if (prev <= 1) {
+            clearInterval(interval);
+            setSimStep("cart");
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [simStep]);
+
+  const formatTimer = (timeInSeconds: number) => {
+    const mins = Math.floor(timeInSeconds / 60);
+    const secs = timeInSeconds % 60;
+    return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
   };
   
   // Interactive topcell CRM mockup states
@@ -1030,23 +1055,64 @@ export default function Home() {
                     </form>
                   )}
 
-                  {/* SCREEN 3: MIDTRANS QRIS DISPLAY */}
+                  {/* SCREEN 3: MIDTRANS GATEWAY DISPLAY */}
                   {simStep === "qris" && (
-                    <div className="flex-1 flex flex-col justify-between items-center text-center animate-slide-up py-4">
+                    <div className="flex-1 flex flex-col justify-between items-center text-center animate-slide-up py-4 font-outfit">
                       <div className="space-y-3 w-full max-w-[280px]">
                         <h4 className="font-bold text-white text-sm font-outfit">Simulasi Midtrans Payment Gateway</h4>
-                        <div className="p-4 bg-white rounded-2xl flex flex-col items-center justify-center border border-indigo-200/50 shadow-[0_0_20px_rgba(99,102,241,0.15)] relative overflow-hidden">
-                          {/* Fake QRIS Image Container */}
-                          <div className="w-36 h-36 border border-gray-200 rounded-lg flex items-center justify-center bg-gray-50 relative p-1.5">
-                            {/* QRIS Header text */}
-                            <span className="absolute top-1 text-[8px] font-black text-blue-900 tracking-wider">QRIS NASIONAL</span>
-                            {/* Grid QRIS Pattern */}
-                            <div className="w-28 h-28 fake-qris-pattern opacity-85 rounded border border-gray-300"></div>
-                            {/* QRIS Logo Center */}
-                            <span className="absolute bg-white px-1.5 py-0.5 border border-gray-300 rounded text-[7px] font-extrabold text-blue-900 tracking-tighter">DN STORE</span>
-                          </div>
-                          <span className="text-[10px] text-gray-500 font-bold mt-2 font-mono">ORDER-ID: DN-{simOrderId}</span>
+                        
+                        {/* Countdown Timer */}
+                        <div className="flex items-center justify-center gap-1.5 text-xs font-mono font-bold text-pink-500 animate-pulse pb-1">
+                          <i className="fa-solid fa-clock"></i>
+                          <span>Batas Waktu: {formatTimer(simTimer)}</span>
                         </div>
+
+                        {simPaymentMethod === "qris" ? (
+                          <div className="p-4 bg-white rounded-2xl flex flex-col items-center justify-center border border-indigo-200/50 shadow-[0_0_20px_rgba(99,102,241,0.15)] relative overflow-hidden w-full">
+                            {/* Real QRIS Image Container using qrserver API linking to current URL! */}
+                            <div className="w-36 h-36 border border-gray-200 rounded-lg flex items-center justify-center bg-gray-50 relative p-1.5 pt-3">
+                              {/* QRIS Header text */}
+                              <span className="absolute top-1 text-[9px] font-black text-blue-900 tracking-wider">QRIS</span>
+                              {/* eslint-disable-next-line @next/next/no-img-element */}
+                              <img 
+                                src={`https://api.qrserver.com/v1/create-qr-code/?size=110x110&color=030712&data=${encodeURIComponent("https://www.abner.my.id/")}`}
+                                alt="QRIS Code" 
+                                className="w-28 h-28 border border-gray-300 rounded"
+                              />
+                            </div>
+                            <span className="text-[10px] text-gray-500 font-bold mt-2 font-mono">ORDER-ID: DN-{simOrderId}</span>
+                          </div>
+                        ) : (
+                          <div className="p-5 bg-[#090d16] border border-white/[0.06] rounded-2xl flex flex-col items-stretch text-left w-full space-y-3.5">
+                            <div className="flex items-center justify-between border-b border-white/[0.06] pb-2">
+                              <span className="font-bold text-white text-xs">Simulasi Virtual Account</span>
+                              <span className="text-[10px] text-indigo-400 font-extrabold">BANK MANDIRI</span>
+                            </div>
+                            
+                            <div className="space-y-1.5">
+                              <label className="text-[9px] text-gray-500 block">NOMOR VIRTUAL ACCOUNT</label>
+                              <div className="flex items-center justify-between bg-white/[0.04] border border-white/[0.06] rounded-lg p-2.5">
+                                <span className="font-mono text-xs text-white tracking-widest font-bold">88012{simPhone.replace(/\D/g, "").slice(-10).padStart(10, "0")}</span>
+                                <button
+                                  type="button"
+                                  onClick={() => {
+                                    const vaNum = `88012${simPhone.replace(/\D/g, "").slice(-10).padStart(10, "0")}`;
+                                    navigator.clipboard.writeText(vaNum);
+                                    setSimSuccessToast("Virtual Account copied!");
+                                    setTimeout(() => setSimSuccessToast(null), 2000);
+                                  }}
+                                  className="text-[10px] font-bold text-indigo-400 hover:text-indigo-300 px-2 py-1 bg-indigo-500/10 rounded border border-indigo-500/20"
+                                >
+                                  Salin
+                                </button>
+                              </div>
+                            </div>
+                            
+                            <p className="text-[9px] text-gray-400 leading-normal">
+                              Salin nomor Virtual Account di atas, lakukan pembayaran via transfer Virtual Account pada m-banking Livin' Mandiri Anda.
+                            </p>
+                          </div>
+                        )}
                         <p className="text-[10px] text-gray-400 leading-tight font-mono">Total Tagihan: <span className="font-bold text-indigo-400">Rp {calculateSubtotal().toLocaleString("id-ID")}</span></p>
                       </div>
 
@@ -1064,7 +1130,7 @@ export default function Home() {
                             </>
                           ) : (
                             <>
-                              <i className="fa-solid fa-circle-check"></i> Simulasikan Scan Bayar Berhasil
+                              <i className="fa-solid fa-circle-check"></i> {simPaymentMethod === "qris" ? "Simulasikan Scan Bayar Berhasil" : "Simulasikan Transfer VA Lunas"}
                             </>
                           )}
                         </button>
