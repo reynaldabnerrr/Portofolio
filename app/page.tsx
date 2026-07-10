@@ -72,6 +72,26 @@ export default function Home() {
         "User reviews and ratings"
       ],
       status: "Completed"
+    },
+    {
+      id: 3,
+      title: "Topcell Portfolio",
+      category: "Corporate Website",
+      description: "Modern portfolio website for Topcell, presenting the company profile, services, and digital solutions with a polished and responsive experience.",
+      longDescription: "A professional corporate portfolio website designed to highlight Topcell's capabilities, services, and brand identity. The site offers a clean presentation for company information, products, and contact points with a smooth user experience across devices.",
+      technologies: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Vercel"],
+      github: "https://github.com/reynaldabnerrr",
+      demo: "https://topcell.topgroup.asia/",
+      image: "🏢",
+      color: "from-orange-500 to-red-500",
+      features: [
+        "Professional company profile presentation",
+        "Responsive and modern landing page",
+        "Service and portfolio showcase",
+        "Clear call-to-action sections",
+        "Optimized experience for desktop and mobile"
+      ],
+      status: "Completed"
     }
   ];
 
