@@ -52,7 +52,7 @@ export default function Home() {
       technologies: ["Laravel", "PHP", "Tailwind CSS", "MySQL", "Qontak API", "Axios", "Vite"],
       github: "https://github.com/reynaldabnerrr/CRM_TOPCELL.git",
       demo: null,
-      image: "💬",
+      image: "fa-solid fa-comments",
       color: "from-indigo-600 via-purple-600 to-cyan-500",
       features: [
         "Dynamic follow-up checkpoints tracker (H+1, H+7, 1-Month)",
@@ -73,7 +73,7 @@ export default function Home() {
       technologies: ["Flutter", "Dart", "Firebase", "RESTful API", "Git"],
       github: "https://github.com/reynaldabnerrr",
       demo: null,
-      image: "📱",
+      image: "fa-solid fa-mobile-screen-button",
       color: "from-blue-600 to-purple-600",
       features: [
         "Responsive and user-friendly UI for professional networking",
@@ -93,7 +93,7 @@ export default function Home() {
       technologies: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Vercel", "API Integration"],
       github: "https://github.com/reynaldabnerrr/Jokka.git",
       demo: "https://jokka-1d960.firebaseapp.com",
-      image: "🌐",
+      image: "fa-solid fa-globe",
       color: "from-emerald-500 to-teal-600",
       features: [
         "Interactive destination explorer",
@@ -114,7 +114,7 @@ export default function Home() {
       technologies: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Vercel"],
       github: "https://github.com/reynaldabnerrr",
       demo: "https://topcell.topgroup.asia/",
-      image: "🏢",
+      image: "fa-solid fa-building",
       color: "from-orange-500 to-red-500",
       features: [
         "Professional company profile presentation",
@@ -128,13 +128,13 @@ export default function Home() {
   ];
 
   const achievements = [
-    { title: "GEMASTIK XVIII", category: "Finalist — Cyber Security Division", date: "Oct 2025", icon: "🏆", details: "National software and security competition held by Balai Pengembangan Talenta Indonesia." },
-    { title: "Pragyan CTF 2025", category: "1st Place (Student Category)", date: "Feb 2025", icon: "🥇", details: "International Capture The Flag competition organized by NIT Trichy, India." },
-    { title: "Interfest CTF", category: "Top 6 (Telkom University)", date: "Dec 2024", icon: "🎯", details: "National cybersecurity competition involving active threat hacking environments." },
-    { title: "Cyber Jawara International", category: "Top 11", date: "Oct 2024", icon: "🌐", details: "Prestigious cybersecurity challenge for professional and student teams in Indonesia." },
-    { title: "HOLOGY 7.0 CTF", category: "Top 20 (Brawijaya University)", date: "Oct 2024", icon: "🛡️", details: "National cyber incident analysis and Capture The Flag competition." },
-    { title: "COMPFEST 16 CTF", category: "Finalist (Universitas Indonesia)", date: "Sep 2024", icon: "💡", details: "One of the most competitive student CTF competitions in Indonesia." },
-    { title: "GEMASTIK XVII", category: "Finalist — Cyber Security Division", date: "Sep 2024", icon: "🔒", details: "National Cyber Security division finalist held by Puspresnas." }
+    { title: "GEMASTIK XVIII", category: "Finalist — Cyber Security Division", date: "Oct 2025", icon: "fa-solid fa-trophy text-yellow-400", details: "National software and security competition held by Balai Pengembangan Talenta Indonesia." },
+    { title: "Pragyan CTF 2025", category: "1st Place (Student Category)", date: "Feb 2025", icon: "fa-solid fa-award text-yellow-500", details: "International Capture The Flag competition organized by NIT Trichy, India." },
+    { title: "Interfest CTF", category: "Top 6 (Telkom University)", date: "Dec 2024", icon: "fa-solid fa-crosshairs text-red-500", details: "National cybersecurity competition involving active threat hacking environments." },
+    { title: "Cyber Jawara International", category: "Top 11", date: "Oct 2024", icon: "fa-solid fa-globe text-blue-400", details: "Prestigious cybersecurity challenge for professional and student teams in Indonesia." },
+    { title: "HOLOGY 7.0 CTF", category: "Top 20 (Brawijaya University)", date: "Oct 2024", icon: "fa-solid fa-shield-halved text-cyan-400", details: "National cyber incident analysis and Capture The Flag competition." },
+    { title: "COMPFEST 16 CTF", category: "Finalist (Universitas Indonesia)", date: "Sep 2024", icon: "fa-solid fa-lightbulb text-amber-400", details: "One of the most competitive student CTF competitions in Indonesia." },
+    { title: "GEMASTIK XVII", category: "Finalist — Cyber Security Division", date: "Sep 2024", icon: "fa-solid fa-lock text-purple-400", details: "National Cyber Security division finalist held by Puspresnas." }
   ];
 
   const workExperience = [
@@ -649,13 +649,15 @@ export default function Home() {
             {/* Column 2: Highlights Grid */}
             <div className="lg:col-span-5 grid grid-cols-2 gap-4">
               {[
-                { title: "Software Engineer", desc: "Laravel Backend, REST APIs, hospital logbook systems", icon: "⚙️", color: "cyber-card-glow-indigo" },
-                { title: "Mobile Specialist", desc: "Flutter layouts, Android concepts, TA guidance", icon: "📱", color: "cyber-card-glow-cyan" },
-                { title: "Digital Forensic", desc: "OSINT training, Incident response pipelines", icon: "🛡️", color: "cyber-card-glow-pink" },
-                { title: "Competitive CTF", desc: "Pragyan CTF winner, Gemastik cybersecurity", icon: "🥇", color: "cyber-card-glow-green" }
+                { title: "Software Engineer", desc: "Laravel Backend, REST APIs, hospital logbook systems", icon: "fa-solid fa-laptop-code text-indigo-400", color: "cyber-card-glow-indigo" },
+                { title: "Mobile Specialist", desc: "Flutter layouts, Android concepts, TA guidance", icon: "fa-solid fa-mobile-screen-button text-cyan-400", color: "cyber-card-glow-cyan" },
+                { title: "Digital Forensic", desc: "OSINT training, Incident response pipelines", icon: "fa-solid fa-user-shield text-pink-400", color: "cyber-card-glow-pink" },
+                { title: "Competitive CTF", desc: "Pragyan CTF winner, Gemastik cybersecurity", icon: "fa-solid fa-trophy text-emerald-400", color: "cyber-card-glow-green" }
               ].map((item, idx) => (
                 <div key={idx} className={`cyber-card p-6 rounded-3xl flex flex-col justify-between h-44 ${item.color}`}>
-                  <span className="text-3xl">{item.icon}</span>
+                  <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-2xl">
+                    <i className={item.icon}></i>
+                  </div>
                   <div>
                     <h4 className="font-bold text-white text-base font-outfit mb-1">{item.title}</h4>
                     <p className="text-xs text-gray-400 leading-tight">{item.desc}</p>
@@ -679,32 +681,34 @@ export default function Home() {
               {[
                 {
                   title: "Programming Languages",
-                  icon: "💻",
+                  icon: "fa-solid fa-code text-indigo-400",
                   skills: ["Python", "PHP", "JavaScript", "Kotlin", "Dart"],
                   accent: "text-indigo-400 border-indigo-500/20 bg-indigo-500/5"
                 },
                 {
                   title: "Web & Backend Development",
-                  icon: "⚙️",
+                  icon: "fa-solid fa-server text-cyan-400",
                   skills: ["Laravel", "React", "Next.js", "RESTful API", "Nginx"],
                   accent: "text-cyan-400 border-cyan-500/20 bg-cyan-500/5"
                 },
                 {
                   title: "Mobile & Data Science",
-                  icon: "📱",
+                  icon: "fa-solid fa-brain text-pink-400",
                   skills: ["Flutter", "Machine Learning", "Deep Learning", "NLP", "Data Analysis"],
                   accent: "text-pink-400 border-pink-500/20 bg-pink-500/5"
                 },
                 {
                   title: "Databases & Deployment",
-                  icon: "🗄️",
+                  icon: "fa-solid fa-database text-emerald-400",
                   skills: ["MySQL", "Firebase", "Nginx Configs", "VPS Deployments", "Git"],
                   accent: "text-emerald-400 border-emerald-500/20 bg-emerald-500/5"
                 }
               ].map((stack, idx) => (
                 <div key={idx} className="cyber-card p-6 rounded-3xl border border-white/[0.05] hover:border-white/10">
-                  <div className="flex items-center gap-3 mb-6">
-                    <span className="text-2xl">{stack.icon}</span>
+                  <div className="flex items-center gap-4 mb-6">
+                    <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-lg">
+                      <i className={stack.icon}></i>
+                    </div>
                     <h3 className="font-extrabold text-white text-lg font-outfit">{stack.title}</h3>
                   </div>
                   <ul className="space-y-3.5">
@@ -730,8 +734,11 @@ export default function Home() {
             {/* Added Coursework Tags & Soft Skills */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-6">
               <div className="cyber-card p-6 rounded-3xl space-y-4">
-                <h4 className="font-bold text-white text-lg font-outfit flex items-center gap-2">
-                  <span className="text-indigo-400">🎓</span> Academic Coursework
+                <h4 className="font-bold text-white text-lg font-outfit flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-sm text-indigo-400">
+                    <i className="fa-solid fa-graduation-cap"></i>
+                  </div>
+                  Academic Coursework
                 </h4>
                 <div className="flex flex-wrap gap-2">
                   {["Data Structures & Algorithms", "Web Development", "Mobile Application Development", "Machine Learning", "Data Science", "Natural Language Processing", "Cybersecurity", "Software Project Management"].map((course, cIdx) => (
@@ -743,8 +750,11 @@ export default function Home() {
               </div>
 
               <div className="cyber-card p-6 rounded-3xl space-y-4">
-                <h4 className="font-bold text-white text-lg font-outfit flex items-center gap-2">
-                  <span className="text-cyan-400">🤝</span> Professional & Soft Skills
+                <h4 className="font-bold text-white text-lg font-outfit flex items-center gap-3">
+                  <div className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-sm text-cyan-400">
+                    <i className="fa-solid fa-handshake"></i>
+                  </div>
+                  Professional & Soft Skills
                 </h4>
                 <div className="flex flex-wrap gap-2">
                   {["Leadership", "Strategic Planning", "Problem Solving", "Critical Thinking", "Communication", "Team Collaboration", "B2 English", "A2 Chinese"].map((softSkill, sIdx) => (
@@ -784,7 +794,9 @@ export default function Home() {
                       {/* Floating glowing background ball */}
                       <div className={`w-32 h-32 rounded-full absolute bg-gradient-to-tr ${project.color} filter blur-2xl opacity-35 animate-float-slow`}></div>
                       
-                      <div className="text-6xl relative z-10 drop-shadow-xl">{project.image}</div>
+                      <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-3xl text-white relative z-10 shadow-2xl">
+                        <i className={project.image}></i>
+                      </div>
                       
                       <div className="absolute top-4 right-4">
                         <span className="px-3 py-1 bg-white/[0.06] border border-white/[0.08] backdrop-blur-md text-indigo-300 rounded-full text-xs font-semibold uppercase tracking-wider">
@@ -860,7 +872,9 @@ export default function Home() {
                   </svg>
                 </button>
                 <div className={`absolute inset-0 bg-gradient-to-tr ${selectedProject.color} opacity-20 filter blur-2xl`}></div>
-                <div className="text-7xl sm:text-8xl relative z-10 drop-shadow-2xl">{selectedProject.image}</div>
+                <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-3xl bg-white/5 border border-white/10 flex items-center justify-center text-4xl sm:text-5xl text-white relative z-10 shadow-2xl">
+                  <i className={selectedProject.image}></i>
+                </div>
                 
                 <div className="absolute bottom-4 left-6">
                   <span className="px-4 py-1.5 bg-white/[0.05] border border-white/[0.08] text-indigo-300 rounded-full text-xs font-bold uppercase tracking-wider">
@@ -1184,7 +1198,10 @@ export default function Home() {
             {/* Work Experiences */}
             <div className="lg:col-span-6 space-y-8">
               <h3 className="text-2xl font-black text-white font-outfit border-b border-white/[0.08] pb-3 flex items-center gap-3">
-                <span className="text-indigo-400">💼</span> Work Experience
+                <div className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-base text-indigo-400">
+                  <i className="fa-solid fa-briefcase"></i>
+                </div>
+                Work Experience
               </h3>
               <div className="relative border-l border-white/[0.08] ml-3 space-y-10 pt-2">
                 {workExperience.map((exp, index) => (
@@ -1208,7 +1225,10 @@ export default function Home() {
             {/* Organization Experiences */}
             <div className="lg:col-span-6 space-y-8">
               <h3 className="text-2xl font-black text-white font-outfit border-b border-white/[0.08] pb-3 flex items-center gap-3">
-                <span className="text-cyan-400">🤝</span> Organization Experience
+                <div className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-base text-cyan-400">
+                  <i className="fa-solid fa-users"></i>
+                </div>
+                Organization Experience
               </h3>
               <div className="relative border-l border-white/[0.08] ml-3 space-y-10 pt-2">
                 {orgExperience.map((exp, index) => (
@@ -1246,7 +1266,9 @@ export default function Home() {
                 <div key={index} className="cyber-card p-6 rounded-3xl border border-white/[0.04] hover:border-white/10 flex flex-col justify-between space-y-4">
                   <div className="space-y-2">
                     <div className="flex items-center justify-between">
-                      <span className="text-3xl">{award.icon}</span>
+                      <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-lg">
+                        <i className={award.icon}></i>
+                      </div>
                       <span className="text-[10px] font-semibold bg-white/[0.05] border border-white/[0.08] text-indigo-300 px-2 py-0.5 rounded-full">
                         {award.date}
                       </span>
