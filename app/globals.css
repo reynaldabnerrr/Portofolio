@@ -266,3 +266,33 @@ body {
   filter: blur(40px);
   z-index: 0;
 }
+
+/* E-commerce simulator custom styles & micro-animations */
+@keyframes pulse-glow {
+  0%, 100% { box-shadow: 0 0 15px rgba(99, 102, 241, 0.2); }
+  50% { box-shadow: 0 0 25px rgba(6, 182, 212, 0.4); }
+}
+
+.glow-payment-success {
+  animation: pulse-glow 2s infinite;
+}
+
+@keyframes slide-up {
+  from { transform: translateY(15px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+.animate-slide-up {
+  animation: slide-up 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.fake-qris-pattern {
+  background-image: 
+    linear-gradient(45deg, #fff 25%, transparent 25%), 
+    linear-gradient(-45deg, #fff 25%, transparent 25%), 
+    linear-gradient(45deg, transparent 75%, #fff 75%), 
+    linear-gradient(-45deg, transparent 75%, #fff 75%);
+  background-size: 8px 8px;
+  background-position: 0 0, 0 4px, 4px -4px, -4px 0px;
+}
+

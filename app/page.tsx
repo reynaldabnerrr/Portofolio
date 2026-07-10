@@ -29,6 +29,94 @@ export default function Home() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   
+  // E-Commerce Checkout Simulator states
+  const [simCart, setSimCart] = useState<Array<{ id: number; name: string; price: number; image: string; quantity: number }>>([]);
+  const [simStep, setSimStep] = useState<"cart" | "checkout" | "qris" | "paid" | "notified">("cart");
+  const [simName, setSimName] = useState("");
+  const [simPhone, setSimPhone] = useState("");
+  const [simPaymentMethod, setSimPaymentMethod] = useState("qris");
+  const [simIsProcessing, setSimIsProcessing] = useState(false);
+  const [simSuccessToast, setSimSuccessToast] = useState<string | null>(null);
+  const [simOrderId, setSimOrderId] = useState(0);
+
+  const handleAddToCart = (product: { id: number; name: string; price: number; image: string }) => {
+    setSimCart((prev) => {
+      const existing = prev.find((item) => item.id === product.id);
+      if (existing) {
+        return prev.map((item) => item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item);
+      }
+      return [...prev, { id: product.id, name: product.name, price: product.price, image: product.image, quantity: 1 }];
+    });
+    setSimSuccessToast(`Added ${product.name} to cart!`);
+    setTimeout(() => setSimSuccessToast(null), 2500);
+  };
+
+  const handleUpdateQuantity = (id: number, delta: number) => {
+    setSimCart((prev) => prev.map((item) => {
+      if (item.id === id) {
+        const newQty = item.quantity + delta;
+        return newQty > 0 ? { ...item, quantity: newQty } : null;
+      }
+      return item;
+    }).filter(Boolean) as typeof simCart);
+  };
+
+  const calculateSubtotal = () => {
+    return simCart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  };
+
+  const handleStartCheckout = () => {
+    if (simCart.length === 0) return;
+    setSimStep("checkout");
+  };
+
+  const handleSubmitPayment = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!simName || !simPhone) return;
+    setSimOrderId(Math.floor(Math.random() * 90000 + 10000));
+    setSimIsProcessing(true);
+    // Simulate Midtrans Snap API token generation
+    setTimeout(() => {
+      setSimIsProcessing(false);
+      setSimStep("qris");
+    }, 1200);
+  };
+
+  const handleSimulatePaymentSuccess = () => {
+    setSimIsProcessing(true);
+    // Simulate payment webhook receipt
+    setTimeout(() => {
+      setSimIsProcessing(false);
+      setSimStep("paid");
+      // Automatically transition to notified after 2s to show WA dispatch
+      setTimeout(() => {
+        setSimStep("notified");
+      }, 2000);
+    }, 1200);
+  };
+
+  const handleResetSimulator = () => {
+    setSimCart([]);
+    setSimStep("cart");
+    setSimName("");
+    setSimPhone("");
+    setSimOrderId(0);
+  };
+
+  const handleSendRealWhatsApp = () => {
+    let cleanPhone = simPhone.replace(/\D/g, ""); // remove non-digits
+    if (cleanPhone.startsWith("0")) {
+      cleanPhone = "62" + cleanPhone.slice(1);
+    }
+    
+    const itemsText = simCart.map((item) => `- ${item.name} (x${item.quantity})`).join("\n");
+    const totalText = calculateSubtotal().toLocaleString("id-ID");
+    
+    const message = `Halo ${simName}!\n\nTerima kasih telah berbelanja di Don Neto Store.\n\nPembayaran sebesar *Rp ${totalText}* telah kami terima.\n\nRincian Pembelian:\n${itemsText}\n\nID Transaksi: #DN-${simOrderId}\nStatus: *LUNAS via QRIS (Midtrans)*\n\n_Nota ini dikirim otomatis oleh simulator website Don Neto._`;
+    const url = `https://api.whatsapp.com/send?phone=${cleanPhone}&text=${encodeURIComponent(message)}`;
+    window.open(url, "_blank");
+  };
+  
   // Interactive topcell CRM mockup states
   const [crmMockTab, setCrmMockTab] = useState<"dashboard" | "whatsapp" | "aftercare">("dashboard");
   const [qontakTokenStatus, setQontakTokenStatus] = useState<"idle" | "refreshing" | "success">("idle");
@@ -242,7 +330,7 @@ export default function Home() {
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 40);
       
-      const sections = ['home', 'about', 'skills', 'projects', 'achievements', 'github', 'contact'];
+      const sections = ['home', 'about', 'services', 'simulator', 'projects', 'skills', 'achievements', 'github', 'contact'];
       const scrollPosition = window.scrollY + 120;
       
       sections.forEach(section => {
@@ -445,8 +533,10 @@ export default function Home() {
             {[
               { id: 'home', label: 'Home' },
               { id: 'about', label: 'About' },
-              { id: 'skills', label: 'Skills' },
+              { id: 'services', label: 'Services' },
+              { id: 'simulator', label: 'Live Demo' },
               { id: 'projects', label: 'Projects' },
+              { id: 'skills', label: 'Skills' },
               { id: 'achievements', label: 'Achievements' },
               { id: 'github', label: 'Activity' },
               { id: 'contact', label: 'Contact' }
@@ -491,8 +581,10 @@ export default function Home() {
             {[
               { id: 'home', label: 'Home' },
               { id: 'about', label: 'About' },
-              { id: 'skills', label: 'Skills' },
+              { id: 'services', label: 'Services' },
+              { id: 'simulator', label: 'Live Demo' },
               { id: 'projects', label: 'Projects' },
+              { id: 'skills', label: 'Skills' },
               { id: 'achievements', label: 'Achievements' },
               { id: 'github', label: 'GitHub Activity' },
               { id: 'contact', label: 'Contact' }
@@ -527,7 +619,7 @@ export default function Home() {
         <div className="flex flex-col items-center justify-center w-full max-w-4xl mx-auto my-auto space-y-6">
           {/* Glowing badge */}
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-indigo-500/30 bg-indigo-500/5 text-indigo-300 text-xs font-semibold tracking-wide uppercase mb-2 animate-pulse">
-            <span className="w-2 h-2 rounded-full bg-indigo-400"></span> Available for Positions & Freelance
+            <span className="w-2 h-2 rounded-full bg-indigo-400"></span> Available for Freelance & Custom E-Commerce Projects
           </div>
           
           {/* Profile Picture */}
@@ -554,10 +646,10 @@ export default function Home() {
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">
               <Typewriter
                 words={[
-                  "Software Engineer (Intern) ⚙️",
-                  "Mobile App Assistant 📱",
-                  "1st Place Pragyan CTF Winner 🥇",
-                  "Head of Digital Forensics 🔐"
+                  "Web Store & POS Developer ⚙️",
+                  "Custom E-Commerce Systems 🛒",
+                  "Payment Gateway Integrator 💳",
+                  "WhatsApp API Automation Specialist 💬"
                 ]}
                 loop={0}
                 cursor
@@ -570,7 +662,7 @@ export default function Home() {
           </h2>
           
           <p className="text-lg text-gray-400 max-w-xl mx-auto leading-relaxed mb-6">
-            Final-year Computer Science student at Universitas Hasanuddin. Passionate about software engineering, secure mobile development, and data systems.
+            Spesialis pembuatan sistem toko online kustom, kasir (POS), integrasi payment gateway otomatis (Midtrans/Xendit), dan otomatisasi WhatsApp API untuk kelancaran bisnis Anda.
           </p>
           
           <div className="flex flex-col sm:flex-row items-center gap-4 pt-2">
@@ -664,6 +756,411 @@ export default function Home() {
                   </div>
                 </div>
               ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Services & Solutions Section */}
+        <section id="services" className="scroll-mt-24">
+          <div className="space-y-12">
+            <div className="text-center space-y-3">
+              <span className="text-xs font-bold uppercase tracking-widest text-indigo-400 font-outfit text-glow">02 / Services</span>
+              <h2 className="text-4xl sm:text-5xl font-black tracking-tight font-outfit text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">
+                Layanan & Jasa Pembuatan Website
+              </h2>
+              <div className="w-16 h-1 bg-gradient-to-r from-indigo-500 to-cyan-500 rounded-full mx-auto"></div>
+              <p className="text-gray-400 text-base max-w-xl mx-auto pt-2 leading-relaxed">
+                Solusi digital terintegrasi untuk mendigitalkan bisnis Anda melalui sistem toko online, kasir kustom, dan otomasi.
+              </p>
+            </div>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {[
+                {
+                  title: "E-Commerce Kustom",
+                  desc: "Desain storefront modern dan responsif menggunakan Next.js / Laravel dengan optimasi SEO terintegrasi agar mudah ditemukan di Google.",
+                  icon: "fa-solid fa-cart-shopping",
+                  glow: "cyber-card-glow-indigo"
+                },
+                {
+                  title: "Payment Gateway",
+                  desc: "Integrasi pembayaran otomatis via QRIS, Gopay, OVO, Virtual Account, Transfer Bank, dan Kartu Kredit menggunakan API Midtrans atau Xendit.",
+                  icon: "fa-solid fa-credit-card",
+                  glow: "cyber-card-glow-cyan"
+                },
+                {
+                  title: "Sistem POS & Inventaris",
+                  desc: "Dashboard back-office kustom untuk manajemen stok barang otomatis, laporan sales harian/bulanan, dan pembagian hak akses admin/kasir.",
+                  icon: "fa-solid fa-chart-line",
+                  glow: "cyber-card-glow-pink"
+                },
+                {
+                  title: "Otomatisasi WhatsApp",
+                  desc: "Pengiriman nota belanja/invoice otomatis dikirim langsung ke WhatsApp pembeli secara instan setelah pembayaran dikonfirmasi gateway.",
+                  icon: "fa-solid fa-message",
+                  glow: "cyber-card-glow-green"
+                }
+              ].map((service, sIdx) => (
+                <div key={sIdx} className={`cyber-card p-6 rounded-3xl border border-white/[0.05] hover:border-white/10 ${service.glow}`}>
+                  <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-xl mb-6 text-white">
+                    <i className={service.icon}></i>
+                  </div>
+                  <h3 className="font-extrabold text-white text-lg font-outfit mb-3">{service.title}</h3>
+                  <p className="text-xs text-gray-400 leading-relaxed">{service.desc}</p>
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Live E-Commerce Checkout Simulator */}
+        <section id="simulator" className="scroll-mt-24">
+          <div className="space-y-12">
+            <div className="text-center space-y-3">
+              <span className="text-xs font-bold uppercase tracking-widest text-indigo-400 font-outfit text-glow">03 / Demo</span>
+              <h2 className="text-4xl sm:text-5xl font-black tracking-tight font-outfit text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">
+                Interactive Store Checkout Simulator
+              </h2>
+              <div className="w-16 h-1 bg-gradient-to-r from-indigo-500 to-cyan-500 rounded-full mx-auto"></div>
+              <p className="text-gray-400 text-base max-w-xl mx-auto pt-2 leading-relaxed">
+                Uji langsung alur sistem toko online kustom. Tambahkan produk, jalankan checkout, simulasikan pembayaran QRIS Midtrans, dan terima invoice WhatsApp otomatis.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+              {/* Left Column: Product Cards Grid */}
+              <div className="lg:col-span-5 space-y-4">
+                <h3 className="text-lg font-bold text-white font-outfit pb-2 border-b border-white/[0.05] flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 bg-indigo-500 rounded-full"></span> 1. Pilih Produk Simulasi
+                </h3>
+                
+                {/* Product List */}
+                <div className="space-y-3">
+                  {[
+                    { id: 1, name: "Mechanical Keyboard RGB", price: 650000, image: "⌨️", desc: "Premium blue switches & double-shot keycaps." },
+                    { id: 2, name: "Wireless Ergonomic Mouse", price: 380000, image: "🖱️", desc: "Dual-mode Bluetooth with silent clicks." },
+                    { id: 3, name: "Minimalist Desk Mat (90x40)", price: 150000, image: "🌌", desc: "Smooth microfiber surface with stitched borders." }
+                  ].map((prod) => (
+                    <div key={prod.id} className="cyber-card p-4 rounded-2xl flex items-center justify-between border border-white/[0.04] gap-3">
+                      <div className="flex items-center gap-3">
+                        <span className="text-3xl bg-white/5 border border-white/10 w-12 h-12 rounded-xl flex items-center justify-center">{prod.image}</span>
+                        <div>
+                          <h4 className="font-bold text-white text-sm font-outfit">{prod.name}</h4>
+                          <p className="text-[10px] text-gray-500 leading-tight mb-1">{prod.desc}</p>
+                          <span className="text-xs font-semibold text-indigo-400">Rp {prod.price.toLocaleString("id-ID")}</span>
+                        </div>
+                      </div>
+                      <button
+                        type="button"
+                        onClick={() => handleAddToCart(prod)}
+                        className="px-3 py-1.5 bg-indigo-600/25 border border-indigo-500/35 hover:bg-indigo-600 rounded-xl text-xs font-bold text-indigo-300 hover:text-white transition-all"
+                      >
+                        + Keranjang
+                      </button>
+                    </div>
+                  ))}
+                </div>
+
+                {simSuccessToast && (
+                  <div className="p-3 bg-indigo-600/10 border border-indigo-500/20 text-indigo-300 rounded-xl text-xs font-semibold flex items-center gap-2 animate-pulse">
+                    <i className="fa-solid fa-circle-check"></i>
+                    <span>{simSuccessToast}</span>
+                  </div>
+                )}
+              </div>
+
+              {/* Right Column: Simulated Checkout Viewport */}
+              <div className="lg:col-span-7">
+                <div className="mock-window p-6 relative min-h-[400px] border border-white/[0.08] shadow-[0_0_50px_rgba(99,102,241,0.15)] flex flex-col justify-between">
+                  
+                  {/* Window Bar Header */}
+                  <div className="flex items-center justify-between border-b border-white/[0.06] pb-4 mb-4">
+                    <div className="flex items-center gap-2">
+                      <div className="w-2.5 h-2.5 rounded-full bg-red-500"></div>
+                      <div className="w-2.5 h-2.5 rounded-full bg-yellow-500"></div>
+                      <div className="w-2.5 h-2.5 rounded-full bg-green-500"></div>
+                      <span className="text-gray-400 text-[10px] ml-2 font-mono">checkout-gateway.test</span>
+                    </div>
+                    <span className="text-[9px] text-gray-500 bg-white/[0.03] border border-white/[0.06] px-2 py-0.5 rounded uppercase font-semibold font-mono">
+                      Step: {simStep.toUpperCase()}
+                    </span>
+                  </div>
+
+                  {/* SCREEN 1: CART DISPLAY */}
+                  {simStep === "cart" && (
+                    <div className="flex-1 flex flex-col justify-between animate-slide-up">
+                      <div className="space-y-4">
+                        <h4 className="font-bold text-white text-sm font-outfit flex items-center gap-2">
+                          <i className="fa-solid fa-cart-shopping text-indigo-400"></i> Keranjang Belanja Anda
+                        </h4>
+                        
+                        {simCart.length === 0 ? (
+                          <div className="text-center py-12 text-gray-500">
+                            <i className="fa-solid fa-basket-shopping text-3xl mb-3 block text-gray-600"></i>
+                            <p className="text-xs">Keranjang Anda masih kosong. Silakan tambahkan produk di kolom kiri.</p>
+                          </div>
+                        ) : (
+                          <div className="space-y-2.5 max-h-[220px] overflow-y-auto pr-1">
+                            {simCart.map((item) => (
+                              <div key={item.id} className="flex items-center justify-between p-2.5 bg-white/[0.02] border border-white/[0.04] rounded-xl text-xs">
+                                <div className="flex items-center gap-3">
+                                  <span className="text-xl">{item.image}</span>
+                                  <div>
+                                    <span className="font-bold text-white block text-xs">{item.name}</span>
+                                    <span className="text-[10px] text-gray-500">Rp {item.price.toLocaleString("id-ID")}</span>
+                                  </div>
+                                </div>
+                                <div className="flex items-center gap-2">
+                                  <button type="button" onClick={() => handleUpdateQuantity(item.id, -1)} className="w-5 h-5 bg-white/5 border border-white/10 rounded flex items-center justify-center font-bold text-gray-300 hover:bg-white/10">-</button>
+                                  <span className="font-bold text-white w-4 text-center">{item.quantity}</span>
+                                  <button type="button" onClick={() => handleUpdateQuantity(item.id, 1)} className="w-5 h-5 bg-white/5 border border-white/10 rounded flex items-center justify-center font-bold text-gray-300 hover:bg-white/10">+</button>
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+
+                      {simCart.length > 0 && (
+                        <div className="border-t border-white/[0.06] pt-4 mt-4 space-y-4">
+                          <div className="flex justify-between items-center text-xs font-bold text-white">
+                            <span>Total Tagihan:</span>
+                            <span className="text-indigo-400 text-sm">Rp {calculateSubtotal().toLocaleString("id-ID")}</span>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={handleStartCheckout}
+                            className="w-full py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl text-xs transition-colors flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/20"
+                          >
+                            Isi Data Pengiriman <i className="fa-solid fa-arrow-right"></i>
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  )}
+
+                  {/* SCREEN 2: CHECKOUT FORM */}
+                  {simStep === "checkout" && (
+                    <form onSubmit={handleSubmitPayment} className="flex-1 flex flex-col justify-between animate-slide-up">
+                      <div className="space-y-4">
+                        <h4 className="font-bold text-white text-sm font-outfit flex items-center gap-2">
+                          <i className="fa-solid fa-address-card text-cyan-400"></i> Formulir Pengiriman & Pembayaran
+                        </h4>
+
+                        <div className="space-y-3">
+                          <div>
+                            <label className="text-[10px] text-gray-500 block mb-1">NAMA PELANGGAN</label>
+                            <input
+                              type="text"
+                              required
+                              placeholder="Masukkan nama Anda (e.g. Budi)"
+                              value={simName}
+                              onChange={(e) => setSimName(e.target.value)}
+                              className="w-full bg-white/[0.04] border border-white/[0.06] text-white rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-indigo-500 transition-colors"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="text-[10px] text-gray-500 block mb-1">NOMOR WHATSAPP (Untuk Invoice Simulasi)</label>
+                            <input
+                              type="tel"
+                              required
+                              placeholder="e.g. 08123456789"
+                              value={simPhone}
+                              onChange={(e) => setSimPhone(e.target.value)}
+                              className="w-full bg-white/[0.04] border border-white/[0.06] text-white rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-indigo-500 transition-colors"
+                            />
+                          </div>
+
+                          <div>
+                            <label className="text-[10px] text-gray-500 block mb-1">METODE PEMBAYARAN</label>
+                            <div className="grid grid-cols-2 gap-2">
+                              <button
+                                type="button"
+                                onClick={() => setSimPaymentMethod("qris")}
+                                className={`p-2 rounded-lg border text-left flex items-center justify-between text-[11px] ${simPaymentMethod === "qris" ? "bg-indigo-600/10 border-indigo-500 text-indigo-300" : "bg-white/[0.02] border-white/[0.05] text-gray-400 hover:border-white/10"}`}
+                              >
+                                <span className="font-bold">QRIS (Automated)</span>
+                                <i className="fa-solid fa-qrcode"></i>
+                              </button>
+                              <button
+                                type="button"
+                                onClick={() => setSimPaymentMethod("va")}
+                                className={`p-2 rounded-lg border text-left flex items-center justify-between text-[11px] ${simPaymentMethod === "va" ? "bg-indigo-600/10 border-indigo-500 text-indigo-300" : "bg-white/[0.02] border-white/[0.05] text-gray-400 hover:border-white/10"}`}
+                              >
+                                <span className="font-bold">Virtual Account</span>
+                                <i className="fa-solid fa-building-columns"></i>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="border-t border-white/[0.06] pt-4 mt-4 space-y-3">
+                        <div className="flex justify-between items-center text-xs font-bold text-white">
+                          <span>Total Tagihan:</span>
+                          <span>Rp {calculateSubtotal().toLocaleString("id-ID")}</span>
+                        </div>
+                        <div className="flex gap-2">
+                          <button
+                            type="button"
+                            onClick={() => setSimStep("cart")}
+                            className="w-1/3 py-2.5 bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.08] text-gray-300 font-bold rounded-xl text-xs transition-colors"
+                          >
+                            Kembali
+                          </button>
+                          <button
+                            type="submit"
+                            disabled={simIsProcessing}
+                            className="w-2/3 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl text-xs transition-colors flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/20"
+                          >
+                            {simIsProcessing ? (
+                              <>
+                                <div className="w-3.5 h-3.5 border-2 border-t-transparent border-white rounded-full animate-spin"></div>
+                                Generating token...
+                              </>
+                            ) : (
+                              <>
+                                Buat Invoice Pembayaran <i className="fa-solid fa-credit-card"></i>
+                              </>
+                            )}
+                          </button>
+                        </div>
+                      </div>
+                    </form>
+                  )}
+
+                  {/* SCREEN 3: MIDTRANS QRIS DISPLAY */}
+                  {simStep === "qris" && (
+                    <div className="flex-1 flex flex-col justify-between items-center text-center animate-slide-up py-4">
+                      <div className="space-y-3 w-full max-w-[280px]">
+                        <h4 className="font-bold text-white text-sm font-outfit">Simulasi Midtrans Payment Gateway</h4>
+                        <div className="p-4 bg-white rounded-2xl flex flex-col items-center justify-center border border-indigo-200/50 shadow-[0_0_20px_rgba(99,102,241,0.15)] relative overflow-hidden">
+                          {/* Fake QRIS Image Container */}
+                          <div className="w-36 h-36 border border-gray-200 rounded-lg flex items-center justify-center bg-gray-50 relative p-1.5">
+                            {/* QRIS Header text */}
+                            <span className="absolute top-1 text-[8px] font-black text-blue-900 tracking-wider">QRIS NASIONAL</span>
+                            {/* Grid QRIS Pattern */}
+                            <div className="w-28 h-28 fake-qris-pattern opacity-85 rounded border border-gray-300"></div>
+                            {/* QRIS Logo Center */}
+                            <span className="absolute bg-white px-1.5 py-0.5 border border-gray-300 rounded text-[7px] font-extrabold text-blue-900 tracking-tighter">DN STORE</span>
+                          </div>
+                          <span className="text-[10px] text-gray-500 font-bold mt-2 font-mono">ORDER-ID: DN-{simOrderId}</span>
+                        </div>
+                        <p className="text-[10px] text-gray-400 leading-tight font-mono">Total Tagihan: <span className="font-bold text-indigo-400">Rp {calculateSubtotal().toLocaleString("id-ID")}</span></p>
+                      </div>
+
+                      <div className="w-full mt-4 space-y-2">
+                        <button
+                          type="button"
+                          onClick={handleSimulatePaymentSuccess}
+                          disabled={simIsProcessing}
+                          className="w-full py-3 bg-green-600 hover:bg-green-500 text-white font-bold rounded-xl text-xs transition-colors flex items-center justify-center gap-2 glow-payment-success animate-pulse"
+                        >
+                          {simIsProcessing ? (
+                            <>
+                              <div className="w-3.5 h-3.5 border-2 border-t-transparent border-white rounded-full animate-spin"></div>
+                              Verifying Payment...
+                            </>
+                          ) : (
+                            <>
+                              <i className="fa-solid fa-circle-check"></i> Simulasikan Scan Bayar Berhasil
+                            </>
+                          )}
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => setSimStep("checkout")}
+                          className="w-full py-2.5 bg-white/[0.02] hover:bg-white/[0.05] border border-white/[0.06] text-gray-400 rounded-xl text-[10px]"
+                        >
+                          Batalkan Pembayaran
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                  {/* SCREEN 4: PAYMENT APPROVED AND WA DISPATCHING */}
+                  {simStep === "paid" && (
+                    <div className="flex-1 flex flex-col items-center justify-center text-center animate-slide-up space-y-4">
+                      <div className="w-16 h-16 rounded-full bg-green-500/10 border border-green-500/20 flex items-center justify-center text-3xl text-green-400 animate-bounce shadow-lg shadow-green-500/10">
+                        <i className="fa-solid fa-check"></i>
+                      </div>
+                      <div className="space-y-1">
+                        <h4 className="font-extrabold text-white text-lg font-outfit">Pembayaran Berhasil!</h4>
+                        <p className="text-xs text-gray-400 max-w-[280px]">
+                          Midtrans Gateway telah meneruskan webhook pembayaran lunas ke sistem toko.
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-500/5 border border-indigo-500/20 text-indigo-300 text-[10px] animate-pulse">
+                        <div className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-ping"></div>
+                        Mengirimkan Invoice Otomatis via WhatsApp...
+                      </div>
+                    </div>
+                  )}
+
+                  {/* SCREEN 5: SIMULATED WHATSAPP CHAT PREVIEW (THE WOW MOMENT) */}
+                  {simStep === "notified" && (
+                    <div className="flex-1 flex flex-col justify-between animate-slide-up">
+                      <div className="space-y-3.5">
+                        <div className="flex items-center gap-2.5 bg-green-950/20 border border-green-500/20 p-2.5 rounded-2xl">
+                          <div className="w-8 h-8 rounded-full bg-green-600 flex items-center justify-center text-white text-sm">
+                            <i className="fab fa-whatsapp"></i>
+                          </div>
+                          <div>
+                            <span className="font-bold text-white block text-xs">WhatsApp Notification Dispatch</span>
+                            <span className="text-[9px] text-green-400 font-mono">Invoice successfully sent to +{simPhone.replace(/\D/g, "").startsWith("0") ? "62" + simPhone.replace(/\D/g, "").slice(1) : simPhone.replace(/\D/g, "")}</span>
+                          </div>
+                        </div>
+
+                        {/* WhatsApp Message Box */}
+                        <div className="bg-[#0b141a] border border-[#202c33] rounded-2xl p-4 text-xs font-mono text-gray-200 relative shadow-2xl">
+                          {/* Chat tail pointer */}
+                          <div className="absolute top-4 -left-2 w-0 h-0 border-t-[8px] border-t-transparent border-r-[10px] border-r-[#0b141a] border-b-[8px] border-b-transparent"></div>
+                          
+                          <div className="flex justify-between items-center text-[10px] text-green-400 font-bold mb-2">
+                            <span>💬 Don Neto Store - INVOICE</span>
+                            <span>{new Date().toLocaleTimeString("id-ID", { hour: '2-digit', minute: '2-digit' })}</span>
+                          </div>
+                          <div className="border-b border-gray-800 pb-2 mb-2 text-[10px] text-gray-400">
+                            ID Transaksi: <span className="text-white font-bold">#DN-{simOrderId}</span>
+                          </div>
+                          <div className="space-y-1 text-[11px] leading-relaxed">
+                            <p>Halo <span className="text-white font-bold">{simName}</span>!</p>
+                            <p>Pembayaran sebesar <span className="text-green-400 font-bold">Rp {calculateSubtotal().toLocaleString("id-ID")}</span> telah kami terima.</p>
+                            <p className="pt-1.5 text-gray-400">Rincian Pembelian:</p>
+                            <ul className="list-disc pl-4 text-gray-300">
+                              {simCart.map((item) => (
+                                <li key={item.id}>
+                                  {item.name} (x{item.quantity})
+                                </li>
+                              ))}
+                            </ul>
+                            <p className="pt-2 text-[10px] text-gray-500">Status: <span className="bg-green-500/10 text-green-400 px-1.5 py-0.5 rounded font-bold border border-green-500/20 uppercase text-[9px]">Lunas via QRIS</span></p>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div className="flex flex-col sm:flex-row gap-2 mt-4">
+                        <button
+                          type="button"
+                          onClick={handleSendRealWhatsApp}
+                          className="w-full sm:w-2/3 py-3 bg-green-600 hover:bg-green-500 text-white font-bold rounded-xl text-xs transition-all duration-300 flex items-center justify-center gap-2 shadow-lg shadow-green-600/10 hover:shadow-green-600/20 active:scale-95"
+                        >
+                          <i className="fab fa-whatsapp"></i> Kirim ke WhatsApp Asli
+                        </button>
+                        <button
+                          type="button"
+                          onClick={handleResetSimulator}
+                          className="w-full sm:w-1/3 py-3 bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.08] text-gray-300 font-bold rounded-xl text-xs transition-all duration-300 flex items-center justify-center gap-2"
+                        >
+                          <i className="fa-solid fa-rotate-left"></i> Reset
+                        </button>
+                      </div>
+                    </div>
+                  )}
+
+                </div>
+              </div>
             </div>
           </div>
         </section>
