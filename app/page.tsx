@@ -438,7 +438,7 @@ export default function Home() {
             onClick={() => scrollToSection('home')}
             className="text-white font-extrabold text-2xl tracking-widest hover:opacity-85 transition-opacity"
           >
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400 font-outfit">RA.T</span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400 font-outfit">Don Neto</span>
           </button>
           
           <div className="hidden md:flex items-center space-x-1">
