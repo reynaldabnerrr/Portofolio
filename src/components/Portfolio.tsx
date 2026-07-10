@@ -1,9 +1,6 @@
-"use client";
-
-import Image from "next/image";
+import React, { useState, useEffect, useRef } from "react";
 import { GitHubCalendar } from "react-github-calendar";
 import { Typewriter } from "react-simple-typewriter";
-import { useState, useEffect, useRef } from "react";
 
 interface Project {
   id: number;
@@ -20,7 +17,7 @@ interface Project {
   status: string;
 }
 
-export default function Home() {
+export default function Portfolio() {
   const [activeSection, setActiveSection] = useState("home");
   const [isScrolled, setIsScrolled] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
@@ -77,7 +74,6 @@ export default function Home() {
     setSimOrderId(Math.floor(Math.random() * 90000 + 10000));
     setSimTimer(900); // Set timer here
     setSimIsProcessing(true);
-    // Simulate Midtrans Snap API token generation
     setTimeout(() => {
       setSimIsProcessing(false);
       setSimStep("qris");
@@ -86,11 +82,9 @@ export default function Home() {
 
   const handleSimulatePaymentSuccess = () => {
     setSimIsProcessing(true);
-    // Simulate payment webhook receipt
     setTimeout(() => {
       setSimIsProcessing(false);
       setSimStep("paid");
-      // Automatically transition to notified after 2s to show WA dispatch
       setTimeout(() => {
         setSimStep("notified");
       }, 2000);
@@ -106,7 +100,7 @@ export default function Home() {
   };
 
   const handleSendRealWhatsApp = () => {
-    let cleanPhone = simPhone.replace(/\D/g, ""); // remove non-digits
+    let cleanPhone = simPhone.replace(/\D/g, "");
     if (cleanPhone.startsWith("0")) {
       cleanPhone = "62" + cleanPhone.slice(1);
     }
@@ -142,7 +136,7 @@ export default function Home() {
     return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
   };
   
-  // Interactive topcell CRM mockup states
+  // Interactive CRM states
   const [crmMockTab, setCrmMockTab] = useState<"dashboard" | "whatsapp" | "aftercare">("dashboard");
   const [qontakTokenStatus, setQontakTokenStatus] = useState<"idle" | "refreshing" | "success">("idle");
   const [crmCustomers, setCrmCustomers] = useState([
@@ -160,8 +154,8 @@ export default function Home() {
       id: 4,
       title: "Topcell CRM",
       category: "Enterprise Web Application",
-      description: "Comprehensive CRM system with Qontak WhatsApp API integrations, custom multi-stage follow-up pipelines (H1, H7, 1-Month), role privilege management, and advanced sales analytics.",
-      longDescription: "An end-to-end enterprise CRM built on Laravel, MySQL, and Tailwind CSS. The platform automates customer follow-ups and marketing campaigns by integrating with the Qontak WhatsApp Business API. It includes custom status engines, role toggling logic for staff, date range filtering, and campaign template management.",
+      description: "Sistem CRM komprehensif dengan integrasi Qontak WhatsApp API, pipeline follow-up kustom (H1, H7, 1-Bulan), manajemen hak akses, dan analitik penjualan lanjutan.",
+      longDescription: "Platform CRM enterprise yang dibangun di atas Laravel, MySQL, dan Tailwind CSS. Aplikasi ini mengotomatiskan follow-up pelanggan dengan mengintegrasikan Qontak WhatsApp Business API. Menyediakan mesin pelacakan checkpoints otomatis, role privilage, filter laporan ledger transaksi, serta template pesan marketing.",
       technologies: ["Laravel", "PHP", "Tailwind CSS", "MySQL", "Qontak API", "Axios", "Vite"],
       github: "https://github.com/reynaldabnerrr/CRM_TOPCELL.git",
       demo: null,
@@ -181,8 +175,8 @@ export default function Home() {
       id: 1,
       title: "ANTEKHUB (Mobile App)",
       category: "Mobile Application",
-      description: "Developed the frontend of ANTEKHUB, a Flutter-based mobile application for alumni, students, and professional networking. Features networking, job listings, and mentorship.",
-      longDescription: "Developed the frontend of ANTEKHUB, a Flutter-based mobile application for alumni, students, and professional networking. Built responsive and user-friendly UI to ensure smooth navigation and user experience. Implemented features including networking, job listings, mentorship, and event management. Collaborated with the team to ensure seamless integration with backend systems.",
+      description: "Frontend aplikasi mobile berbasis Flutter untuk jejaring alumni, mahasiswa, dan karir profesional. Mendukung pencarian kerja dan mentoring.",
+      longDescription: "Mengembangkan frontend ANTEKHUB, sebuah aplikasi Flutter untuk mempermudah jejaring antar alumni, mahasiswa, dan profesional. Merancang UI responsif untuk kenyamanan user, fitur direktori, portal mentoring, daftar lowongan kerja, dan integrasi API RESTful.",
       technologies: ["Flutter", "Dart", "Firebase", "RESTful API", "Git"],
       github: "https://github.com/reynaldabnerrr",
       demo: null,
@@ -201,8 +195,8 @@ export default function Home() {
       id: 2,
       title: "Jokka Web",
       category: "Web Application",
-      description: "Travel platform showcasing Makassar's rich culture and attractions. Features event exploration, destination discovery, and culinary experiences with intuitive interface for seamless travel planning.",
-      longDescription: "A comprehensive travel and cultural exploration platform for Makassar city. The website provides detailed information about local attractions, cultural events, traditional cuisine, and travel guides. Features an interactive map, event calendar, restaurant finder, and user review system.",
+      description: "Platform pariwisata yang memperkenalkan budaya, destinasi menarik, dan kuliner Makassar. Dilengkapi itinerary planner interaktif.",
+      longDescription: "Aplikasi penjelajah budaya dan travel Makassar. Menyediakan data destinasi terperinci, kalender event pariwisata daerah, panduan kuliner lokal, peta interaktif, serta sistem ulasan pengguna berbasis database.",
       technologies: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Vercel", "API Integration"],
       github: "https://github.com/reynaldabnerrr/Jokka.git",
       demo: "https://jokka-1d960.firebaseapp.com",
@@ -222,8 +216,8 @@ export default function Home() {
       id: 3,
       title: "Topcell Portfolio",
       category: "Corporate Website",
-      description: "Modern portfolio website for Topcell, presenting the company profile, services, and digital solutions with a polished and responsive experience.",
-      longDescription: "A professional corporate portfolio website designed to highlight Topcell's capabilities, services, and brand identity. The site offers a clean presentation for company information, products, and contact points with a smooth user experience across devices.",
+      description: "Website profil perusahaan modern untuk Topcell, menampilkan layanan, visi, dan solusi digital secara interaktif dan elegan.",
+      longDescription: "Website profil korporat profesional yang dirancang untuk memperlihatkan layanan, visi misi, dan brand identity Topcell. Dibuat menggunakan Next.js dan Tailwind CSS dengan animasi yang halus dan layout modern di desktop maupun mobile.",
       technologies: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Vercel"],
       github: "https://github.com/reynaldabnerrr",
       demo: "https://topcell.topgroup.asia/",
@@ -241,49 +235,49 @@ export default function Home() {
   ];
 
   const achievements = [
-    { title: "GEMASTIK XVIII", category: "Finalist — Cyber Security Division", date: "Oct 2025", icon: "fa-solid fa-trophy text-yellow-400", details: "National software and security competition held by Balai Pengembangan Talenta Indonesia." },
-    { title: "Pragyan CTF 2025", category: "1st Place (Student Category)", date: "Feb 2025", icon: "fa-solid fa-award text-yellow-500", details: "International Capture The Flag competition organized by NIT Trichy, India." },
-    { title: "Interfest CTF", category: "Top 6 (Telkom University)", date: "Dec 2024", icon: "fa-solid fa-crosshairs text-red-500", details: "National cybersecurity competition involving active threat hacking environments." },
-    { title: "Cyber Jawara International", category: "Top 11", date: "Oct 2024", icon: "fa-solid fa-globe text-blue-400", details: "Prestigious cybersecurity challenge for professional and student teams in Indonesia." },
-    { title: "HOLOGY 7.0 CTF", category: "Top 20 (Brawijaya University)", date: "Oct 2024", icon: "fa-solid fa-shield-halved text-cyan-400", details: "National cyber incident analysis and Capture The Flag competition." },
-    { title: "COMPFEST 16 CTF", category: "Finalist (Universitas Indonesia)", date: "Sep 2024", icon: "fa-solid fa-lightbulb text-amber-400", details: "One of the most competitive student CTF competitions in Indonesia." },
-    { title: "GEMASTIK XVII", category: "Finalist — Cyber Security Division", date: "Sep 2024", icon: "fa-solid fa-lock text-purple-400", details: "National Cyber Security division finalist held by Puspresnas." }
+    { title: "GEMASTIK XVIII", category: "Finalist — Cyber Security Division", date: "Oct 2025", icon: "fa-solid fa-trophy text-yellow-400", details: "Kompetisi teknologi mahasiswa tingkat nasional oleh Balai Pengembangan Talenta Indonesia." },
+    { title: "Pragyan CTF 2025", category: "1st Place (Student Category)", date: "Feb 2025", icon: "fa-solid fa-award text-yellow-500", details: "Kompetisi Capture The Flag internasional yang diselenggarakan oleh NIT Trichy, India." },
+    { title: "Interfest CTF", category: "Top 6 (Telkom University)", date: "Dec 2024", icon: "fa-solid fa-crosshairs text-red-500", details: "Kompetisi keamanan siber tingkat nasional dengan skenario hands-on penetration testing." },
+    { title: "Cyber Jawara International", category: "Top 11", date: "Oct 2024", icon: "fa-solid fa-globe text-blue-400", details: "Kompetisi CTF bergengsi tingkat nasional/regional untuk tim profesional dan mahasiswa." },
+    { title: "HOLOGY 7.0 CTF", category: "Top 20 (Brawijaya University)", date: "Oct 2024", icon: "fa-solid fa-shield-halved text-cyan-400", details: "Kompetisi analisis insiden siber dan penyelesaian tantangan CTF nasional." },
+    { title: "COMPFEST 16 CTF", category: "Finalist (Universitas Indonesia)", date: "Sep 2024", icon: "fa-solid fa-lightbulb text-amber-400", details: "Salah satu kompetisi CTF mahasiswa paling ketat dan menantang di Indonesia." },
+    { title: "GEMASTIK XVII", category: "Finalist — Cyber Security Division", date: "Sep 2024", icon: "fa-solid fa-lock text-purple-400", details: "Finalis divisi Keamanan Siber pada ajang GEMASTIK nasional XVII." }
   ];
 
   const workExperience = [
     {
       role: "Software Engineer (Intern)",
       org: "RS UNHAS",
-      period: "May 2025 – September 2025",
+      period: "Mei 2025 – September 2025",
       points: [
-        "Developed and maintained backend systems for a web-based E-Logbook Information System.",
-        "Built RESTful APIs using Laravel and managed MySQL databases for scalable performance.",
-        "Implemented authentication and role-based access control to ensure system security.",
-        "Collaborated with frontend developers to ensure seamless system integration.",
-        "Conducted API testing, debugging, and technical documentation to maintain reliability."
+        "Mengembangkan dan merawat sistem backend untuk E-Logbook Information System berbasis web.",
+        "Membangun RESTful API menggunakan Laravel dan mengelola database MySQL dengan performa tinggi.",
+        "Mengimplementasikan autentikasi serta role-based access control untuk keamanan hak akses sistem.",
+        "Berkolaborasi dengan developer frontend untuk integrasi antarmuka yang mulus.",
+        "Melakukan pengujian API, debugging, dan penyusunan dokumentasi teknis sistem."
       ]
     },
     {
       role: "Teaching Assistant – Mobile App Programming",
       org: "Universitas Hasanuddin (UNHAS)",
-      period: "August 2025 – December 2025",
+      period: "Agustus 2025 – Desember 2025",
       points: [
-        "Assisted lecturers in delivering undergraduate mobile application programming courses.",
-        "Guided students through hands-on sessions in Flutter-based mobile development, from basic concepts to application implementation.",
-        "Provided technical support in debugging, UI/UX design, and application deployment.",
-        "Mentored students to understand core programming concepts, clean code practices, and problem solving approaches.",
-        "Evaluated assignments and supported grading processes to ensure fair and consistent assessment."
+        "Membantu dosen pengampu dalam memberikan materi pemrograman aplikasi mobile kelas sarjana.",
+        "Membimbing mahasiswa melalui sesi praktikum Flutter, mulai dari konsep dasar OOP hingga deployment.",
+        "Memberikan bantuan teknis dalam debugging, konsep UI/UX, dan optimalisasi performa state management.",
+        "Mentransfer pemahaman tentang clean code, struktur folder, dan best practices penyelesaian error.",
+        "Mengevaluasi tugas mingguan dan membantu standarisasi penilaian praktikum mahasiswa."
       ]
     },
     {
       role: "Freelance Frontend Developer",
       org: "ANTEKHUB (Mobile App)",
-      period: "July 2024 – September 2024",
+      period: "Juli 2024 – September 2024",
       points: [
-        "Developed the frontend of ANTEKHUB, a Flutter-based mobile application for alumni, students, and professional networking.",
-        "Built responsive and user-friendly UI to ensure smooth navigation and user experience.",
-        "Implemented features including networking, job listings, mentorship, and event management.",
-        "Collaborated with the team to ensure seamless integration with backend systems."
+        "Mengembangkan frontend aplikasi ANTEKHUB menggunakan Flutter untuk alumni dan mahasiswa.",
+        "Membangun UI yang responsif dan fluid untuk navigasi berjejaring yang nyaman.",
+        "Mengintegrasikan fitur direktori, job listings, program mentorship, dan event scheduler.",
+        "Berkolaborasi erat bersama tim backend untuk konsumsi data API RESTful yang optimal."
       ]
     }
   ];
@@ -292,71 +286,67 @@ export default function Home() {
     {
       role: "Head of Digital Forensics",
       org: "ICC UH (IT Computer Club Universitas Hasanuddin)",
-      period: "January 2025 – June 2025",
+      period: "Januari 2025 – Juni 2025",
       points: [
-        "Led training sessions on digital forensics, OSINT, and cyber investigation techniques.",
-        "Mentored members in forensic analysis and real-world cybersecurity problem solving.",
-        "Participated in Capture The Flag (CTF) competitions focusing on forensics and reverse engineering.",
-        "Developed members' skills in cyber threat analysis and investigation methodologies."
+        "Memimpin pelatihan berkala tentang Digital Forensics, OSINT, dan teknik investigasi digital.",
+        "Mentransfer skill analisis forensik disk, memori, dan penyelesaian tantangan CTF siber.",
+        "Mengikuti kompetisi CTF eksternal sebagai perwakilan klub komputer universitas.",
+        "Mengembangkan kurikulum keamanan siber klub komputer agar relevan dengan tren industri saat ini."
       ]
     },
     {
       role: "Coordinator – Mobile App Development",
       org: "Coder Institute",
-      period: "March 2024 – February 2025",
+      period: "Maret 2024 – Februari 2025",
       points: [
-        "Designed curriculum and structured learning modules for mobile application development.",
-        "Delivered training sessions and hands-on mentoring in Flutter and Android development.",
-        "Guided members in developing real-world applications from concept to implementation.",
-        "Evaluated learning progress and improved training effectiveness."
+        "Merancang kurikulum dan menyusun modul pembelajaran terstruktur untuk pengembangan aplikasi mobile.",
+        "Menyampaikan materi pelatihan dan memfasilitasi hands-on mentoring dalam framework Flutter & Android.",
+        "Mengarahkan anggota dalam pembuatan proyek aplikasi mobile riil mulai dari ide hingga presentasi.",
+        "Mengevaluasi perkembangan pemahaman anggota secara berkala demi efektivitas kurikulum."
       ]
     },
     {
       role: "Core Team – Technical",
       org: "Google Developer Student Clubs (GDSC)",
-      period: "September 2023 – October 2024",
+      period: "September 2023 – Oktober 2024",
       points: [
-        "Led technical sessions and developed structured learning materials.",
-        "Mentored members in mobile application development.",
-        "Supported community growth through collaborative learning activities."
+        "Mengisi sesi teknis berkala dan menyusun aset modul pengenalan teknologi.",
+        "Membimbing anggota dalam implementasi flutter dasar dan konektivitas API.",
+        "Mendukung ekosistem pertumbuhan komunitas developer di tingkat universitas."
       ]
     }
   ];
 
   useEffect(() => {
-    // Loading animation
     const timer = setTimeout(() => {
       setIsLoading(false);
-    }, 1500);
+    }, 1200);
 
-    // Initialize particles
     const initParticles = () => {
       const newParticles = [];
-      const count = typeof window !== 'undefined' && window.innerWidth < 768 ? 30 : 60;
+      const count = typeof window !== 'undefined' && window.innerWidth < 768 ? 25 : 55;
       for (let i = 0; i < count; i++) {
         newParticles.push({
           id: i,
           x: Math.random() * (typeof window !== 'undefined' ? window.innerWidth : 1200),
           y: Math.random() * (typeof window !== 'undefined' ? window.innerHeight : 800),
-          vx: (Math.random() - 0.5) * 1.5,
-          vy: (Math.random() - 0.5) * 1.5,
+          vx: (Math.random() - 0.5) * 1.2,
+          vy: (Math.random() - 0.5) * 1.2,
           size: Math.random() * 2 + 1.2
         });
       }
       setParticles(newParticles);
     };
 
-    // Mouse move handler
     const handleMouseMove = (e: MouseEvent) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
     };
 
-    // Scroll effect for navbar
     const handleScroll = () => {
       setIsScrolled(window.scrollY > 40);
       
       const sections = ['home', 'about', 'services', 'simulator', 'projects', 'skills', 'achievements', 'github', 'contact'];
-      const scrollPosition = window.scrollY + 120;
+      const scrollPosition = window.scrollY + 140;
       
       sections.forEach(section => {
         const element = document.getElementById(section);
@@ -400,22 +390,19 @@ export default function Home() {
       ctx.clearRect(0, 0, canvas.width, canvas.height);
       
       particles.forEach((particle) => {
-        // Magnetic pull toward mouse cursor
         const dx = mousePosition.x - particle.x;
         const dy = mousePosition.y - particle.y;
         const distance = Math.sqrt(dx * dx + dy * dy);
         
-        if (distance < 150) {
-          const force = (150 - distance) / 150;
-          particle.x -= dx * force * 0.03;
-          particle.y -= dy * force * 0.03;
+        if (distance < 160) {
+          const force = (160 - distance) / 160;
+          particle.x -= dx * force * 0.025;
+          particle.y -= dy * force * 0.025;
         }
         
-        // Update velocity
         particle.x += particle.vx;
         particle.y += particle.vy;
         
-        // Boundaries checks
         if (particle.x < 0) {
           particle.x = 0;
           particle.vx *= -1;
@@ -432,23 +419,21 @@ export default function Home() {
           particle.vy *= -1;
         }
         
-        // Draw glow particle
         ctx.beginPath();
         ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
-        ctx.fillStyle = "rgba(99, 102, 241, 0.4)";
+        ctx.fillStyle = "rgba(99, 102, 241, 0.35)";
         ctx.fill();
         
-        // Draw fine connections
         particles.forEach((otherParticle) => {
           if (particle.id !== otherParticle.id) {
             const odx = particle.x - otherParticle.x;
             const ody = particle.y - otherParticle.y;
             const odistance = Math.sqrt(odx * odx + ody * ody);
             
-            if (odistance < 90) {
+            if (odistance < 95) {
               ctx.beginPath();
-              ctx.strokeStyle = `rgba(6, 182, 212, ${0.15 * (1 - odistance / 90)})`;
-              ctx.lineWidth = 0.6;
+              ctx.strokeStyle = `rgba(6, 182, 212, ${0.12 * (1 - odistance / 95)})`;
+              ctx.lineWidth = 0.5;
               ctx.moveTo(particle.x, particle.y);
               ctx.lineTo(otherParticle.x, otherParticle.y);
               ctx.stroke();
@@ -473,7 +458,7 @@ export default function Home() {
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
-      const offset = 80; // height of fixed navbar
+      const offset = 80;
       const bodyRect = document.body.getBoundingClientRect().top;
       const elementRect = element.getBoundingClientRect().top;
       const elementPosition = elementRect - bodyRect;
@@ -514,10 +499,9 @@ export default function Home() {
   if (isLoading) {
     return (
       <div className="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#030712] overflow-hidden">
-        {/* Loading Ring */}
         <div className="relative flex items-center justify-center w-28 h-28">
           <div className="absolute w-20 h-20 border-[3px] border-t-indigo-500 border-r-transparent border-b-transparent border-l-transparent rounded-full animate-spin"></div>
-          <div className="absolute w-24 h-24 border-[3px] border-b-cyan-400 border-t-transparent border-r-transparent border-l-transparent rounded-full animate-spin-reverse" style={{ animationDuration: '1.5s' }}></div>
+          <div className="absolute w-24 h-24 border-[3px] border-b-cyan-400 border-t-transparent border-r-transparent border-l-transparent rounded-full animate-spin" style={{ animationDuration: '1.5s', animationDirection: 'reverse' }}></div>
           <div className="absolute w-28 h-28 border-[3px] border-l-pink-500 border-t-transparent border-r-transparent border-b-transparent rounded-full animate-spin" style={{ animationDuration: '2.5s' }}></div>
           <span className="text-xl font-black text-indigo-400 tracking-widest text-glow">RT</span>
         </div>
@@ -529,32 +513,37 @@ export default function Home() {
 
   return (
     <div className="min-h-screen w-full bg-[#030712] text-gray-100 selection:bg-indigo-500/30 selection:text-indigo-200 relative overflow-hidden">
-      {/* Glow rings in background */}
-      <div className="glow-ring w-[600px] h-[600px] top-[-200px] left-[-200px]" />
-      <div className="glow-ring w-[500px] h-[500px] bottom-[100px] right-[-100px]" />
+      
+      {/* High-tech tech grid pattern background overlay */}
+      <div className="cyber-grid" />
+
+      {/* Decorative Blur Ambient Blobs */}
+      <div className="hero-orb top-[-15%] left-[-10%]" />
+      <div className="hero-orb bottom-[15%] right-[-10%] bg-radial-gradient(circle,rgba(6,182,212,0.12)_0%,transparent_65%)" />
+      <div className="hero-orb top-[40%] left-[35%] w-[550px] h-[550px] bg-radial-gradient(circle,rgba(236,72,153,0.04)_0%,transparent_65%)" />
       
       {/* Interacting Canvas */}
       <canvas
         ref={canvasRef}
-        className="fixed inset-0 pointer-events-none z-0"
-        style={{ opacity: 0.8 }}
+        className="fixed inset-0 pointer-events-none z-[2]"
+        style={{ opacity: 0.85 }}
       />
       
       {/* Navigation Bar */}
-      <nav className={`fixed top-0 left-0 right-0 z-40 transition-all duration-300 ${
+      <nav className={`fixed top-0 left-0 right-0 z-40 transition-all duration-500 ${
         isScrolled 
-          ? 'bg-[#030712]/80 backdrop-blur-xl border-b border-white/[0.08] shadow-2xl py-3' 
-          : 'bg-transparent py-5'
+          ? 'bg-[#030712]/75 backdrop-blur-xl border-b border-white/[0.08] shadow-2xl py-3.5' 
+          : 'bg-transparent py-6'
       }`}>
         <div className="max-w-6xl mx-auto px-6 sm:px-8 flex items-center justify-between">
           <button 
             onClick={() => scrollToSection('home')}
             className="text-white font-extrabold text-2xl tracking-widest hover:opacity-85 transition-opacity"
           >
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400 font-outfit">Don Neto</span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-cyan-400 to-indigo-400 font-outfit text-glow">DON NETO</span>
           </button>
           
-          <div className="hidden md:flex items-center space-x-1">
+          <div className="hidden md:flex items-center space-x-1.5">
             {[
               { id: 'home', label: 'Home' },
               { id: 'about', label: 'About' },
@@ -569,10 +558,10 @@ export default function Home() {
               <button
                 key={item.id}
                 onClick={() => scrollToSection(item.id)}
-                className={`text-sm px-4 py-2 rounded-full font-medium transition-all duration-300 relative ${
+                className={`text-xs px-3.5 py-2 rounded-full font-semibold transition-all duration-300 relative ${
                   activeSection === item.id 
-                    ? 'text-white bg-white/[0.06] border border-white/[0.08]' 
-                    : 'text-gray-400 hover:text-white'
+                    ? 'text-white bg-white/[0.08] border border-white/[0.12] shadow-inner shadow-white/5' 
+                    : 'text-gray-400 hover:text-white hover:bg-white/[0.03]'
                 }`}
               >
                 {item.label}
@@ -584,7 +573,7 @@ export default function Home() {
           <div className="md:hidden">
             <button 
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="text-white p-2 rounded-lg bg-white/[0.03] border border-white/[0.08] hover:bg-white/[0.08] transition-colors"
+              className="text-white p-2 rounded-xl bg-white/[0.04] border border-white/[0.08] hover:bg-white/[0.08] transition-colors"
               aria-label="Toggle menu"
             >
               <svg className={`w-5 h-5 transition-transform duration-300 ${isMobileMenuOpen ? 'rotate-90' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -599,7 +588,7 @@ export default function Home() {
         </div>
         
         {/* Mobile Menu Dropdown */}
-        <div className={`md:hidden absolute top-full left-0 right-0 border-b border-white/[0.08] bg-[#030712]/95 backdrop-blur-xl transition-all duration-300 ease-in-out ${
+        <div className={`md:hidden absolute top-full left-0 right-0 border-b border-white/[0.08] bg-[#030712]/95 backdrop-blur-2xl transition-all duration-300 ease-in-out ${
           isMobileMenuOpen ? 'opacity-100 max-h-screen visible py-4' : 'opacity-0 max-h-0 invisible overflow-hidden'
         }`}>
           <div className="px-6 space-y-1">
@@ -620,7 +609,7 @@ export default function Home() {
                   scrollToSection(item.id);
                   setIsMobileMenuOpen(false);
                 }}
-                className={`block w-full text-left px-4 py-3 rounded-xl transition-all ${
+                className={`block w-full text-left px-4 py-3.5 rounded-xl transition-all ${
                   activeSection === item.id 
                     ? 'bg-indigo-600/10 border border-indigo-500/20 text-indigo-400' 
                     : 'text-gray-400 hover:text-white hover:bg-white/[0.04]'
@@ -634,41 +623,36 @@ export default function Home() {
       </nav>
 
       {/* Hero Section */}
-      <header id="home" className="relative min-h-screen flex flex-col items-center justify-between text-center px-6 py-12 sm:py-16 z-10">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(99,102,241,0.08),transparent_60%)] pointer-events-none"></div>
-        
-        {/* Spacer at the top for layout balance */}
+      <header id="home" className="relative min-h-screen flex flex-col items-center justify-between text-center px-6 py-12 sm:py-24 z-10">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(99,102,241,0.06),transparent_60%)] pointer-events-none"></div>
         <div className="h-4 sm:h-8"></div>
         
-        {/* Main Content Area */}
-        <div className="flex flex-col items-center justify-center w-full max-w-4xl mx-auto my-auto space-y-6">
+        <div className="flex flex-col items-center justify-center w-full max-w-4xl mx-auto my-auto space-y-8">
           {/* Glowing badge */}
-          <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-indigo-500/30 bg-indigo-500/5 text-indigo-300 text-xs font-semibold tracking-wide uppercase mb-2 animate-pulse">
-            <span className="w-2 h-2 rounded-full bg-indigo-400"></span> Available for Freelance & Custom Software Projects
+          <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-indigo-500/30 bg-indigo-500/5 text-indigo-300 text-xs font-semibold tracking-wide uppercase mb-2 shadow-[0_0_15px_rgba(99,102,241,0.1)]">
+            <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span> Available for Freelance & Custom Software Projects
           </div>
           
-          {/* Profile Picture */}
-          <div className="relative mb-2">
-            <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-indigo-500 via-pink-500 to-cyan-500 blur-xl opacity-40 scale-105 animate-float-medium"></div>
-            <Image
+          {/* Profile Picture with modern glowing layout */}
+          <div className="relative mb-3 group">
+            <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-indigo-500 via-pink-500 to-cyan-400 blur-2xl opacity-40 scale-110 group-hover:opacity-60 transition-opacity duration-500 animate-float-medium"></div>
+            <div className="absolute -inset-1.5 rounded-full bg-gradient-to-r from-indigo-500 to-cyan-400 opacity-30 blur-sm scale-95 group-hover:scale-100 group-hover:opacity-65 transition-all duration-500"></div>
+            <img
               src="/assets/profile.jpg"
               alt="Reynald Abner Tananda"
-              width={160}
-              height={160}
-              className="rounded-full relative z-10 border-2 border-white/20 shadow-2xl scale-95 transition-all duration-500 hover:scale-100 hover:border-indigo-400/50"
-              priority
+              className="rounded-full relative z-10 border-[3px] border-white/10 w-40 h-40 object-cover shadow-2xl transition-all duration-500 scale-95 group-hover:scale-100 group-hover:border-indigo-400/60"
             />
           </div>
           
           <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight mb-2 font-outfit max-w-4xl">
-            <span className="block text-gray-400 text-2xl sm:text-3xl font-light mb-2">Hello, World! 👋 I'm</span>
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-300 via-cyan-300 to-pink-300">
+            <span className="block text-gray-400 text-xl sm:text-2xl font-light mb-3 tracking-wide">Hello, World! 👋 I'm</span>
+            <span className="text-gradient-cyber leading-tight block">
               Reynald Abner Tananda
             </span>
           </h1>
           
-          <h2 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 text-gray-300 min-h-[50px] font-outfit">
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">
+          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-3 text-gray-300 min-h-[50px] font-outfit">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-cyan-400 to-pink-400">
               <Typewriter
                 words={[
                   "Full-Stack Software Engineer 💻",
@@ -686,40 +670,40 @@ export default function Home() {
             </span>
           </h2>
           
-          <p className="text-lg text-gray-400 max-w-2xl mx-auto leading-relaxed mb-6">
+          <p className="text-base sm:text-lg text-gray-400 max-w-2xl mx-auto leading-relaxed mb-6 font-medium">
             Software Engineer dengan spesialisasi full-stack development dan keamanan siber. Menyediakan jasa pembuatan website kustom, sistem e-commerce & kasir (POS), integrasi API, serta otomatisasi bisnis.
           </p>
           
-          <div className="flex flex-col sm:flex-row items-center gap-4 pt-2">
+          <div className="flex flex-col sm:flex-row items-center gap-4 pt-2 w-full sm:w-auto">
             <button 
               onClick={() => scrollToSection('projects')}
-              className="w-full sm:w-auto px-8 py-3.5 bg-indigo-600 hover:bg-indigo-500 rounded-full text-white font-semibold transition-all duration-300 hover:scale-105 hover:shadow-[0_0_20px_rgba(99,102,241,0.4)] flex items-center justify-center gap-2 cyber-button"
+              className="w-full sm:w-auto px-8 py-4 bg-indigo-600 hover:bg-indigo-500 rounded-full text-white font-bold tracking-wide transition-all duration-300 hover:scale-105 hover:shadow-[0_0_25px_rgba(99,102,241,0.5)] flex items-center justify-center gap-2 cyber-button"
             >
               Explore Projects
-              <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
               </svg>
             </button>
             <button 
               onClick={() => scrollToSection('contact')}
-              className="w-full sm:w-auto px-8 py-3.5 bg-white/[0.04] border border-white/[0.08] hover:bg-white/[0.08] rounded-full text-gray-200 font-semibold transition-all duration-300 hover:scale-105 hover:border-gray-500 flex items-center justify-center"
+              className="w-full sm:w-auto px-8 py-4 bg-white/[0.04] border border-white/[0.08] hover:bg-white/[0.08] rounded-full text-gray-200 font-bold tracking-wide transition-all duration-300 hover:scale-105 hover:border-gray-500 flex items-center justify-center"
             >
               Get in Touch
             </button>
           </div>
         </div>
         
-        {/* Floating Indicator (No longer absolute, naturally placed at bottom of page flow to avoid button collision) */}
-        <div className="flex flex-col items-center opacity-60 mt-8 pt-4">
-          <span className="text-xs uppercase tracking-widest text-indigo-400/80 mb-2 font-bold font-outfit">Scroll</span>
-          <div className="w-5 h-8 border-2 border-white/20 rounded-full flex justify-center p-1">
-            <div className="w-1 h-2 bg-indigo-400 rounded-full animate-bounce"></div>
+        {/* Floating Indicator */}
+        <div className="flex flex-col items-center opacity-65 mt-10">
+          <span className="text-[10px] uppercase tracking-widest text-indigo-400/90 mb-2.5 font-bold font-outfit">Scroll</span>
+          <div className="w-5.5 h-9 border-2 border-white/20 rounded-full flex justify-center p-1">
+            <div className="w-1.5 h-2 bg-indigo-400 rounded-full animate-bounce"></div>
           </div>
         </div>
       </header>
 
       {/* Main Container */}
-      <main className="relative z-10 max-w-6xl mx-auto px-6 sm:px-8 py-12 space-y-36">
+      <main className="relative z-10 max-w-6xl mx-auto px-6 sm:px-8 py-16 space-y-36">
         
         {/* About Me Section */}
         <section id="about" className="scroll-mt-24">
@@ -731,34 +715,34 @@ export default function Home() {
                 <h2 className="text-4xl sm:text-5xl font-black tracking-tight font-outfit text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">
                   About Me
                 </h2>
-                <div className="w-16 h-1 bg-gradient-to-r from-indigo-500 to-cyan-500 rounded-full"></div>
+                <div className="w-16 h-1.5 bg-gradient-to-r from-indigo-500 to-cyan-500 rounded-full"></div>
               </div>
               
-              <div className="space-y-4 text-gray-400 text-base leading-relaxed">
+              <div className="space-y-4.5 text-gray-400 text-base leading-relaxed font-medium">
                 <p>
-                  Hi! I'm <span className="text-indigo-400 font-bold">Reynald Abner Tananda</span>, a final-year Computer Science student at <span className="text-white font-semibold">Universitas Hasanuddin</span> specializing in Software Engineering and cybersecurity structures. I maintain a <span className="text-cyan-400 font-bold">GPA of 3.78/4.00</span>.
+                  Hi! I'm <span className="text-indigo-400 font-bold">Reynald Abner Tananda</span>, a final-year Computer Science student at <span className="text-white font-bold">Universitas Hasanuddin</span>. I specialize in Software Engineering and cybersecurity architectures, maintaining a <span className="text-cyan-400 font-black">GPA of 3.78/4.00</span>.
                 </p>
                 <p>
-                  I have built and integrated scalable software architectures, serving as a backend developer intern for hospital systems and a teaching assistant for mobile application programming classes.
+                  Saya berpengalaman dalam membangun sistem berkinerja tinggi, sempat mengabdi sebagai backend developer intern untuk logbook rumah sakit serta menjadi asisten dosen dalam materi pemrograman aplikasi mobile (Flutter).
                 </p>
                 <p>
-                  In addition, I led cybersecurity labs as the <span className="text-pink-400 font-semibold">Head of Digital Forensics at ICC UH</span>, coordinating technical workshops on OSINT, reverse engineering, and threat mitigation.
+                  Di luar pemrograman, saya aktif memimpin divisi keamanan siber sebagai <span className="text-pink-400 font-bold">Head of Digital Forensics di ICC UH</span>, merancang modul training digital forensics, OSINT, reverse engineering, dan pertahanan siber.
                 </p>
               </div>
               
-              {/* Quick statistics */}
-              <div className="grid grid-cols-3 gap-6 pt-4">
-                <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.04] text-center">
+              {/* Quick statistics styled nicely */}
+              <div className="grid grid-cols-3 gap-4 pt-4">
+                <div className="p-4.5 rounded-2xl bg-white/[0.02] border border-white/[0.05] text-center shadow-md shadow-black/25">
                   <span className="block text-3xl font-black text-indigo-400 tracking-tight font-outfit">3.78</span>
-                  <span className="text-xs uppercase text-gray-500 tracking-wider">GPA Score</span>
+                  <span className="text-[10px] uppercase text-gray-500 tracking-wider font-bold block mt-1">GPA Score</span>
                 </div>
-                <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.04] text-center">
+                <div className="p-4.5 rounded-2xl bg-white/[0.02] border border-white/[0.05] text-center shadow-md shadow-black/25">
                   <span className="block text-3xl font-black text-cyan-400 tracking-tight font-outfit">7+</span>
-                  <span className="text-xs uppercase text-gray-500 tracking-wider">CTF Awards</span>
+                  <span className="text-[10px] uppercase text-gray-500 tracking-wider font-bold block mt-1">CTF Awards</span>
                 </div>
-                <div className="p-4 rounded-2xl bg-white/[0.02] border border-white/[0.04] text-center">
+                <div className="p-4.5 rounded-2xl bg-white/[0.02] border border-white/[0.05] text-center shadow-md shadow-black/25">
                   <span className="block text-3xl font-black text-pink-400 tracking-tight font-outfit">3+</span>
-                  <span className="text-xs uppercase text-gray-500 tracking-wider">TA / Intern Roles</span>
+                  <span className="text-[10px] uppercase text-gray-500 tracking-wider font-bold block mt-1">TA & Interns</span>
                 </div>
               </div>
             </div>
@@ -766,18 +750,18 @@ export default function Home() {
             {/* Column 2: Highlights Grid */}
             <div className="lg:col-span-5 grid grid-cols-2 gap-4">
               {[
-                { title: "Software Engineer", desc: "Laravel Backend, REST APIs, hospital logbook systems", icon: "fa-solid fa-laptop-code text-indigo-400", color: "cyber-card-glow-indigo" },
-                { title: "Mobile Specialist", desc: "Flutter layouts, Android concepts, TA guidance", icon: "fa-solid fa-mobile-screen-button text-cyan-400", color: "cyber-card-glow-cyan" },
-                { title: "Digital Forensic", desc: "OSINT training, Incident response pipelines", icon: "fa-solid fa-user-shield text-pink-400", color: "cyber-card-glow-pink" },
-                { title: "Competitive CTF", desc: "Pragyan CTF winner, Gemastik cybersecurity", icon: "fa-solid fa-trophy text-emerald-400", color: "cyber-card-glow-green" }
+                { title: "Software Engineer", desc: "Laravel Backend, REST APIs, hospital databases", icon: "fa-solid fa-laptop-code text-indigo-400", color: "cyber-card-glow-indigo" },
+                { title: "Mobile Specialist", desc: "Flutter layouts, Android concepts, TA tutoring", icon: "fa-solid fa-mobile-screen-button text-cyan-400", color: "cyber-card-glow-cyan" },
+                { title: "Digital Forensic", desc: "OSINT workflow, incident response structures", icon: "fa-solid fa-user-shield text-pink-400", color: "cyber-card-glow-pink" },
+                { title: "Competitive CTF", desc: "Pragyan CTF winner, Gemastik national finalist", icon: "fa-solid fa-trophy text-emerald-400", color: "cyber-card-glow-green" }
               ].map((item, idx) => (
-                <div key={idx} className={`cyber-card p-6 rounded-3xl flex flex-col justify-between h-44 ${item.color}`}>
+                <div key={idx} className={`cyber-card p-5 rounded-3xl flex flex-col justify-between h-44 shadow-lg shadow-black/10 ${item.color}`}>
                   <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-2xl">
                     <i className={item.icon}></i>
                   </div>
                   <div>
-                    <h4 className="font-bold text-white text-base font-outfit mb-1">{item.title}</h4>
-                    <p className="text-xs text-gray-400 leading-tight">{item.desc}</p>
+                    <h4 className="font-bold text-white text-sm font-outfit mb-1 leading-tight">{item.title}</h4>
+                    <p className="text-[10px] text-gray-400 leading-normal">{item.desc}</p>
                   </div>
                 </div>
               ))}
@@ -793,8 +777,8 @@ export default function Home() {
               <h2 className="text-4xl sm:text-5xl font-black tracking-tight font-outfit text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">
                 Layanan & Solusi Kustom
               </h2>
-              <div className="w-16 h-1 bg-gradient-to-r from-indigo-500 to-cyan-500 rounded-full mx-auto"></div>
-              <p className="text-gray-400 text-base max-w-xl mx-auto pt-2 leading-relaxed">
+              <div className="w-16 h-1.5 bg-gradient-to-r from-indigo-500 to-cyan-500 rounded-full mx-auto"></div>
+              <p className="text-gray-400 text-sm sm:text-base max-w-xl mx-auto pt-2 leading-relaxed">
                 Solusi rekayasa perangkat lunak dan digitalisasi bisnis kustom untuk mengoptimalkan proses kerja Anda.
               </p>
             </div>
@@ -826,12 +810,14 @@ export default function Home() {
                   glow: "cyber-card-glow-green"
                 }
               ].map((service, sIdx) => (
-                <div key={sIdx} className={`cyber-card p-6 rounded-3xl border border-white/[0.05] hover:border-white/10 ${service.glow}`}>
-                  <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-xl mb-6 text-white">
+                <div key={sIdx} className={`cyber-card p-6.5 rounded-3xl border border-white/[0.05] hover:border-white/10 flex flex-col justify-between h-72 shadow-lg shadow-black/20 ${service.glow}`}>
+                  <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-xl text-white">
                     <i className={service.icon}></i>
                   </div>
-                  <h3 className="font-extrabold text-white text-lg font-outfit mb-3">{service.title}</h3>
-                  <p className="text-xs text-gray-400 leading-relaxed">{service.desc}</p>
+                  <div>
+                    <h3 className="font-extrabold text-white text-base font-outfit mb-3">{service.title}</h3>
+                    <p className="text-xs text-gray-400 leading-relaxed font-medium">{service.desc}</p>
+                  </div>
                 </div>
               ))}
             </div>
@@ -844,10 +830,10 @@ export default function Home() {
             <div className="text-center space-y-3">
               <span className="text-xs font-bold uppercase tracking-widest text-indigo-400 font-outfit text-glow">03 / Demo</span>
               <h2 className="text-4xl sm:text-5xl font-black tracking-tight font-outfit text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">
-                Interactive System Integration Simulator
+                Interactive System Simulator
               </h2>
-              <div className="w-16 h-1 bg-gradient-to-r from-indigo-500 to-cyan-500 rounded-full mx-auto"></div>
-              <p className="text-gray-400 text-base max-w-xl mx-auto pt-2 leading-relaxed">
+              <div className="w-16 h-1.5 bg-gradient-to-r from-indigo-500 to-cyan-500 rounded-full mx-auto"></div>
+              <p className="text-gray-400 text-sm sm:text-base max-w-xl mx-auto pt-2 leading-relaxed">
                 Uji langsung integrasi sistem. Tambahkan produk, jalankan checkout, simulasikan callback webhook payment gateway (Midtrans), dan terima invoice WhatsApp otomatis.
               </p>
             </div>
@@ -855,8 +841,8 @@ export default function Home() {
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
               {/* Left Column: Product Cards Grid */}
               <div className="lg:col-span-5 space-y-4">
-                <h3 className="text-lg font-bold text-white font-outfit pb-2 border-b border-white/[0.05] flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 bg-indigo-500 rounded-full"></span> 1. Pilih Produk Simulasi
+                <h3 className="text-base font-bold text-white font-outfit pb-2 border-b border-white/[0.05] flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 bg-indigo-500 rounded-full animate-pulse"></span> 1. Pilih Produk Simulasi
                 </h3>
                 
                 {/* Product List */}
@@ -878,7 +864,7 @@ export default function Home() {
                       <button
                         type="button"
                         onClick={() => handleAddToCart(prod)}
-                        className="px-3 py-1.5 bg-indigo-600/25 border border-indigo-500/35 hover:bg-indigo-600 rounded-xl text-xs font-bold text-indigo-300 hover:text-white transition-all"
+                        className="px-3.5 py-2 bg-indigo-600/20 border border-indigo-500/30 hover:bg-indigo-600 rounded-xl text-xs font-bold text-indigo-300 hover:text-white transition-all duration-300"
                       >
                         + Keranjang
                       </button>
@@ -887,7 +873,7 @@ export default function Home() {
                 </div>
 
                 {simSuccessToast && (
-                  <div className="p-3 bg-indigo-600/10 border border-indigo-500/20 text-indigo-300 rounded-xl text-xs font-semibold flex items-center gap-2 animate-pulse">
+                  <div className="p-3 bg-indigo-600/10 border border-indigo-500/25 text-indigo-300 rounded-xl text-xs font-semibold flex items-center gap-2 animate-pulse">
                     <i className="fa-solid fa-circle-check"></i>
                     <span>{simSuccessToast}</span>
                   </div>
@@ -896,7 +882,7 @@ export default function Home() {
 
               {/* Right Column: Simulated Checkout Viewport */}
               <div className="lg:col-span-7">
-                <div className="mock-window p-6 relative min-h-[400px] border border-white/[0.08] shadow-[0_0_50px_rgba(99,102,241,0.15)] flex flex-col justify-between">
+                <div className="mock-window p-6 relative min-h-[400px] border border-white/[0.08] shadow-[0_0_50px_rgba(99,102,241,0.12)] flex flex-col justify-between">
                   
                   {/* Window Bar Header */}
                   <div className="flex items-center justify-between border-b border-white/[0.06] pb-4 mb-4">
@@ -906,7 +892,7 @@ export default function Home() {
                       <div className="w-2.5 h-2.5 rounded-full bg-green-500"></div>
                       <span className="text-gray-400 text-[10px] ml-2 font-mono">checkout-gateway.test</span>
                     </div>
-                    <span className="text-[9px] text-gray-500 bg-white/[0.03] border border-white/[0.06] px-2 py-0.5 rounded uppercase font-semibold font-mono">
+                    <span className="text-[9px] text-gray-400 bg-white/[0.04] border border-white/[0.08] px-2.5 py-0.5 rounded uppercase font-semibold font-mono">
                       Step: {simStep.toUpperCase()}
                     </span>
                   </div>
@@ -922,12 +908,12 @@ export default function Home() {
                         {simCart.length === 0 ? (
                           <div className="text-center py-12 text-gray-500">
                             <i className="fa-solid fa-basket-shopping text-3xl mb-3 block text-gray-600"></i>
-                            <p className="text-xs">Keranjang Anda masih kosong. Silakan tambahkan produk di kolom kiri.</p>
+                            <p className="text-xs font-medium">Keranjang Anda masih kosong. Silakan tambahkan produk di kolom kiri.</p>
                           </div>
                         ) : (
                           <div className="space-y-2.5 max-h-[220px] overflow-y-auto pr-1">
                             {simCart.map((item) => (
-                              <div key={item.id} className="flex items-center justify-between p-2.5 bg-white/[0.02] border border-white/[0.04] rounded-xl text-xs">
+                              <div key={item.id} className="flex items-center justify-between p-2.5 bg-white/[0.02] border border-white/[0.05] rounded-xl text-xs">
                                 <div className="flex items-center gap-3">
                                   <span className="text-xl">{item.image}</span>
                                   <div>
@@ -957,7 +943,7 @@ export default function Home() {
                             onClick={handleStartCheckout}
                             className="w-full py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl text-xs transition-colors flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/20"
                           >
-                            Isi Data Pengiriman <i className="fa-solid fa-arrow-right"></i>
+                            Isi Data Pengiriman <i className="fa-solid fa-arrow-right text-[10px]"></i>
                           </button>
                         </div>
                       )}
@@ -974,47 +960,47 @@ export default function Home() {
 
                         <div className="space-y-3">
                           <div>
-                            <label className="text-[10px] text-gray-500 block mb-1">NAMA PELANGGAN</label>
+                            <label className="text-[10px] text-gray-500 block mb-1 font-bold">NAMA PELANGGAN</label>
                             <input
                               type="text"
                               required
                               placeholder="Masukkan nama Anda (e.g. Budi)"
                               value={simName}
                               onChange={(e) => setSimName(e.target.value)}
-                              className="w-full bg-white/[0.04] border border-white/[0.06] text-white rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-indigo-500 transition-colors"
+                              className="w-full bg-white/[0.03] border border-white/[0.08] text-white rounded-lg px-3 py-2.5 text-xs focus:outline-none focus:border-indigo-500 transition-colors placeholder:text-gray-600"
                             />
                           </div>
 
                           <div>
-                            <label className="text-[10px] text-gray-500 block mb-1">NOMOR WHATSAPP (Untuk Invoice Simulasi)</label>
+                            <label className="text-[10px] text-gray-500 block mb-1 font-bold">NOMOR WHATSAPP (Invoice Simulasi)</label>
                             <input
                               type="tel"
                               required
                               placeholder="e.g. 08123456789"
                               value={simPhone}
                               onChange={(e) => setSimPhone(e.target.value)}
-                              className="w-full bg-white/[0.04] border border-white/[0.06] text-white rounded-lg px-3 py-2 text-xs focus:outline-none focus:border-indigo-500 transition-colors"
+                              className="w-full bg-white/[0.03] border border-white/[0.08] text-white rounded-lg px-3 py-2.5 text-xs focus:outline-none focus:border-indigo-500 transition-colors placeholder:text-gray-600"
                             />
                           </div>
 
                           <div>
-                            <label className="text-[10px] text-gray-500 block mb-1">METODE PEMBAYARAN</label>
+                            <label className="text-[10px] text-gray-500 block mb-1 font-bold">METODE PEMBAYARAN</label>
                             <div className="grid grid-cols-2 gap-2">
                               <button
                                 type="button"
                                 onClick={() => setSimPaymentMethod("qris")}
-                                className={`p-2 rounded-lg border text-left flex items-center justify-between text-[11px] ${simPaymentMethod === "qris" ? "bg-indigo-600/10 border-indigo-500 text-indigo-300" : "bg-white/[0.02] border-white/[0.05] text-gray-400 hover:border-white/10"}`}
+                                className={`p-2.5 rounded-lg border text-left flex items-center justify-between text-[11px] ${simPaymentMethod === "qris" ? "bg-indigo-600/10 border-indigo-500 text-indigo-300" : "bg-white/[0.02] border-white/[0.05] text-gray-400 hover:border-white/10"}`}
                               >
                                 <span className="font-bold">QRIS (Automated)</span>
-                                <i className="fa-solid fa-qrcode"></i>
+                                <i className="fa-solid fa-qrcode text-xs"></i>
                               </button>
                               <button
                                 type="button"
                                 onClick={() => setSimPaymentMethod("va")}
-                                className={`p-2 rounded-lg border text-left flex items-center justify-between text-[11px] ${simPaymentMethod === "va" ? "bg-indigo-600/10 border-indigo-500 text-indigo-300" : "bg-white/[0.02] border-white/[0.05] text-gray-400 hover:border-white/10"}`}
+                                className={`p-2.5 rounded-lg border text-left flex items-center justify-between text-[11px] ${simPaymentMethod === "va" ? "bg-indigo-600/10 border-indigo-500 text-indigo-300" : "bg-white/[0.02] border-white/[0.05] text-gray-400 hover:border-white/10"}`}
                               >
                                 <span className="font-bold">Virtual Account</span>
-                                <i className="fa-solid fa-building-columns"></i>
+                                <i className="fa-solid fa-building-columns text-xs"></i>
                               </button>
                             </div>
                           </div>
@@ -1030,7 +1016,7 @@ export default function Home() {
                           <button
                             type="button"
                             onClick={() => setSimStep("cart")}
-                            className="w-1/3 py-2.5 bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.08] text-gray-300 font-bold rounded-xl text-xs transition-colors"
+                            className="w-1/3 py-2.5 bg-white/[0.02] hover:bg-white/[0.05] border border-white/[0.08] text-gray-300 font-bold rounded-xl text-xs transition-colors"
                           >
                             Kembali
                           </button>
@@ -1046,7 +1032,7 @@ export default function Home() {
                               </>
                             ) : (
                               <>
-                                Buat Invoice Pembayaran <i className="fa-solid fa-credit-card"></i>
+                                Buat Invoice Pembayaran <i className="fa-solid fa-credit-card text-[10px]"></i>
                               </>
                             )}
                           </button>
@@ -1057,9 +1043,9 @@ export default function Home() {
 
                   {/* SCREEN 3: MIDTRANS GATEWAY DISPLAY */}
                   {simStep === "qris" && (
-                    <div className="flex-1 flex flex-col justify-between items-center text-center animate-slide-up py-4 font-outfit">
+                    <div className="flex-1 flex flex-col justify-between items-center text-center animate-slide-up py-3 font-outfit">
                       <div className="space-y-3 w-full max-w-[280px]">
-                        <h4 className="font-bold text-white text-sm font-outfit">Simulasi Midtrans Payment Gateway</h4>
+                        <h4 className="font-bold text-white text-sm font-outfit">Simulasi Midtrans Payment</h4>
                         
                         {/* Countdown Timer */}
                         <div className="flex items-center justify-center gap-1.5 text-xs font-mono font-bold text-pink-500 animate-pulse pb-1">
@@ -1068,12 +1054,9 @@ export default function Home() {
                         </div>
 
                         {simPaymentMethod === "qris" ? (
-                          <div className="p-4 bg-white rounded-2xl flex flex-col items-center justify-center border border-indigo-200/50 shadow-[0_0_20px_rgba(99,102,241,0.15)] relative overflow-hidden w-full">
-                            {/* Real QRIS Image Container using qrserver API linking to current URL! */}
+                          <div className="p-4 bg-white rounded-2xl flex flex-col items-center justify-center border border-indigo-200/50 shadow-lg relative overflow-hidden w-full">
                             <div className="w-36 h-36 border border-gray-200 rounded-lg flex items-center justify-center bg-gray-50 relative p-1.5 pt-3">
-                              {/* QRIS Header text */}
                               <span className="absolute top-1 text-[9px] font-black text-blue-900 tracking-wider">QRIS</span>
-                              {/* eslint-disable-next-line @next/next/no-img-element */}
                               <img 
                                 src={`https://api.qrserver.com/v1/create-qr-code/?size=110x110&color=030712&data=${encodeURIComponent("https://www.abner.my.id/")}`}
                                 alt="QRIS Code" 
@@ -1083,7 +1066,7 @@ export default function Home() {
                             <span className="text-[10px] text-gray-500 font-bold mt-2 font-mono">ORDER-ID: DN-{simOrderId}</span>
                           </div>
                         ) : (
-                          <div className="p-5 bg-[#090d16] border border-white/[0.06] rounded-2xl flex flex-col items-stretch text-left w-full space-y-3.5">
+                          <div className="p-4 bg-[#090d16] border border-white/[0.06] rounded-2xl flex flex-col items-stretch text-left w-full space-y-3 shadow-md">
                             <div className="flex items-center justify-between border-b border-white/[0.06] pb-2">
                               <span className="font-bold text-white text-xs">Simulasi Virtual Account</span>
                               <span className="text-[10px] text-indigo-400 font-extrabold">BANK MANDIRI</span>
@@ -1101,7 +1084,7 @@ export default function Home() {
                                     setSimSuccessToast("Virtual Account copied!");
                                     setTimeout(() => setSimSuccessToast(null), 2000);
                                   }}
-                                  className="text-[10px] font-bold text-indigo-400 hover:text-indigo-300 px-2 py-1 bg-indigo-500/10 rounded border border-indigo-500/20"
+                                  className="text-[9px] font-bold text-indigo-400 hover:text-indigo-300 px-2 py-1 bg-indigo-500/10 rounded border border-indigo-500/20 transition-colors"
                                 >
                                   Salin
                                 </button>
@@ -1109,7 +1092,7 @@ export default function Home() {
                             </div>
                             
                             <p className="text-[9px] text-gray-400 leading-normal">
-                              Salin nomor Virtual Account di atas, lakukan pembayaran via transfer Virtual Account pada m-banking Livin' Mandiri Anda.
+                              Salin nomor Virtual Account di atas dan simulasikan transfer VA lunas dengan klik tombol hijau di bawah.
                             </p>
                           </div>
                         )}
@@ -1121,7 +1104,7 @@ export default function Home() {
                           type="button"
                           onClick={handleSimulatePaymentSuccess}
                           disabled={simIsProcessing}
-                          className="w-full py-3 bg-green-600 hover:bg-green-500 text-white font-bold rounded-xl text-xs transition-colors flex items-center justify-center gap-2 glow-payment-success animate-pulse"
+                          className="w-full py-3 bg-green-600 hover:bg-green-500 text-white font-bold rounded-xl text-xs transition-colors flex items-center justify-center gap-2 glow-payment-success active:scale-[0.98]"
                         >
                           {simIsProcessing ? (
                             <>
@@ -1137,7 +1120,7 @@ export default function Home() {
                         <button
                           type="button"
                           onClick={() => setSimStep("checkout")}
-                          className="w-full py-2.5 bg-white/[0.02] hover:bg-white/[0.05] border border-white/[0.06] text-gray-400 rounded-xl text-[10px]"
+                          className="w-full py-2 bg-white/[0.01] hover:bg-white/[0.04] border border-white/[0.06] text-gray-500 hover:text-gray-300 rounded-xl text-[10px] transition-colors"
                         >
                           Batalkan Pembayaran
                         </button>
@@ -1145,7 +1128,7 @@ export default function Home() {
                     </div>
                   )}
 
-                  {/* SCREEN 4: PAYMENT APPROVED AND WA DISPATCHING */}
+                  {/* SCREEN 4: PAYMENT APPROVED */}
                   {simStep === "paid" && (
                     <div className="flex-1 flex flex-col items-center justify-center text-center animate-slide-up space-y-4">
                       <div className="w-16 h-16 rounded-full bg-green-500/10 border border-green-500/20 flex items-center justify-center text-3xl text-green-400 animate-bounce shadow-lg shadow-green-500/10">
@@ -1153,7 +1136,7 @@ export default function Home() {
                       </div>
                       <div className="space-y-1">
                         <h4 className="font-extrabold text-white text-lg font-outfit">Pembayaran Berhasil!</h4>
-                        <p className="text-xs text-gray-400 max-w-[280px]">
+                        <p className="text-xs text-gray-400 max-w-[280px] leading-relaxed">
                           Midtrans Gateway telah meneruskan webhook pembayaran lunas ke sistem backend.
                         </p>
                       </div>
@@ -1164,7 +1147,7 @@ export default function Home() {
                     </div>
                   )}
 
-                  {/* SCREEN 5: SIMULATED WHATSAPP CHAT PREVIEW (THE WOW MOMENT) */}
+                  {/* SCREEN 5: SIMULATED WHATSAPP CHAT PREVIEW */}
                   {simStep === "notified" && (
                     <div className="flex-1 flex flex-col justify-between animate-slide-up">
                       <div className="space-y-3.5">
@@ -1180,7 +1163,6 @@ export default function Home() {
 
                         {/* WhatsApp Message Box */}
                         <div className="bg-[#0b141a] border border-[#202c33] rounded-2xl p-4 text-xs font-mono text-gray-200 relative shadow-2xl">
-                          {/* Chat tail pointer */}
                           <div className="absolute top-4 -left-2 w-0 h-0 border-t-[8px] border-t-transparent border-r-[10px] border-r-[#0b141a] border-b-[8px] border-b-transparent"></div>
                           
                           <div className="flex justify-between items-center text-[10px] text-green-400 font-bold mb-2">
@@ -1235,55 +1217,55 @@ export default function Home() {
         <section id="skills" className="scroll-mt-24">
           <div className="space-y-12">
             <div className="text-center space-y-3">
-              <span className="text-xs font-bold uppercase tracking-widest text-indigo-400 font-outfit text-glow">02 / Stack</span>
+              <span className="text-xs font-bold uppercase tracking-widest text-indigo-400 font-outfit text-glow">04 / Stack</span>
               <h2 className="text-4xl sm:text-5xl font-black tracking-tight font-outfit">Skills & Core Stack</h2>
-              <div className="w-16 h-1 bg-gradient-to-r from-indigo-500 to-cyan-500 rounded-full mx-auto"></div>
+              <div className="w-16 h-1.5 bg-gradient-to-r from-indigo-500 to-cyan-500 rounded-full mx-auto"></div>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
                 {
-                  title: "Programming Languages",
+                  title: "Programming",
                   icon: "fa-solid fa-code text-indigo-400",
                   skills: ["Python", "PHP", "JavaScript", "Kotlin", "Dart"],
                   accent: "text-indigo-400 border-indigo-500/20 bg-indigo-500/5"
                 },
                 {
-                  title: "Web & Backend Development",
+                  title: "Web & Backend",
                   icon: "fa-solid fa-server text-cyan-400",
                   skills: ["Laravel", "React", "Next.js", "RESTful API", "Nginx"],
                   accent: "text-cyan-400 border-cyan-500/20 bg-cyan-500/5"
                 },
                 {
-                  title: "Mobile & Data Science",
+                  title: "Mobile & DS",
                   icon: "fa-solid fa-brain text-pink-400",
                   skills: ["Flutter", "Machine Learning", "Deep Learning", "NLP", "Data Analysis"],
                   accent: "text-pink-400 border-pink-500/20 bg-pink-500/5"
                 },
                 {
-                  title: "Databases & Deployment",
+                  title: "Databases & DevOps",
                   icon: "fa-solid fa-database text-emerald-400",
                   skills: ["MySQL", "Firebase", "Nginx Configs", "VPS Deployments", "Git"],
                   accent: "text-emerald-400 border-emerald-500/20 bg-emerald-500/5"
                 }
               ].map((stack, idx) => (
-                <div key={idx} className="cyber-card p-6 rounded-3xl border border-white/[0.05] hover:border-white/10">
+                <div key={idx} className="cyber-card p-6 rounded-3xl border border-white/[0.05] hover:border-white/10 shadow-md">
                   <div className="flex items-center gap-4 mb-6">
                     <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-lg">
                       <i className={stack.icon}></i>
                     </div>
-                    <h3 className="font-extrabold text-white text-lg font-outfit">{stack.title}</h3>
+                    <h3 className="font-extrabold text-white text-base font-outfit">{stack.title}</h3>
                   </div>
-                  <ul className="space-y-3.5">
+                  <ul className="space-y-4">
                     {stack.skills.map((skill, sIdx) => (
                       <li key={sIdx} className="flex flex-col gap-1.5">
                         <div className="flex justify-between text-xs text-gray-300 font-medium">
                           <span>{skill}</span>
-                          <span className="text-gray-500">{(95 - sIdx * 5)}%</span>
+                          <span className="text-gray-500 font-bold">{(95 - sIdx * 5)}%</span>
                         </div>
                         <div className="w-full bg-white/[0.04] rounded-full h-1.5 overflow-hidden">
                           <div 
-                            className="bg-gradient-to-r from-indigo-500 to-cyan-400 h-full rounded-full fill-bar-animate"
+                            className="bg-gradient-to-r from-indigo-500 to-cyan-400 h-full rounded-full fill-bar-animate animate-pulse"
                             style={{ width: `${95 - sIdx * 5}%` }}
                           ></div>
                         </div>
@@ -1296,8 +1278,8 @@ export default function Home() {
             
             {/* Added Coursework Tags & Soft Skills */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 pt-6">
-              <div className="cyber-card p-6 rounded-3xl space-y-4">
-                <h4 className="font-bold text-white text-lg font-outfit flex items-center gap-3">
+              <div className="cyber-card p-6.5 rounded-3xl space-y-4 shadow-md">
+                <h4 className="font-bold text-white text-base font-outfit flex items-center gap-3">
                   <div className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-sm text-indigo-400">
                     <i className="fa-solid fa-graduation-cap"></i>
                   </div>
@@ -1305,15 +1287,15 @@ export default function Home() {
                 </h4>
                 <div className="flex flex-wrap gap-2">
                   {["Data Structures & Algorithms", "Web Development", "Mobile Application Development", "Machine Learning", "Data Science", "Natural Language Processing", "Cybersecurity", "Software Project Management"].map((course, cIdx) => (
-                    <span key={cIdx} className="px-3 py-1.5 text-xs font-semibold bg-white/[0.03] border border-white/[0.06] rounded-xl text-gray-300">
+                    <span key={cIdx} className="px-3.5 py-1.5 text-xs font-semibold bg-white/[0.03] border border-white/[0.06] rounded-xl text-gray-300 hover:border-indigo-500/30 transition-colors duration-300">
                       {course}
                     </span>
                   ))}
                 </div>
               </div>
 
-              <div className="cyber-card p-6 rounded-3xl space-y-4">
-                <h4 className="font-bold text-white text-lg font-outfit flex items-center gap-3">
+              <div className="cyber-card p-6.5 rounded-3xl space-y-4 shadow-md">
+                <h4 className="font-bold text-white text-base font-outfit flex items-center gap-3">
                   <div className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center text-sm text-cyan-400">
                     <i className="fa-solid fa-handshake"></i>
                   </div>
@@ -1321,7 +1303,7 @@ export default function Home() {
                 </h4>
                 <div className="flex flex-wrap gap-2">
                   {["Leadership", "Strategic Planning", "Problem Solving", "Critical Thinking", "Communication", "Team Collaboration", "B2 English", "A2 Chinese"].map((softSkill, sIdx) => (
-                    <span key={sIdx} className="px-3 py-1.5 text-xs font-semibold bg-indigo-500/10 border border-indigo-500/20 rounded-xl text-indigo-300">
+                    <span key={sIdx} className="px-3.5 py-1.5 text-xs font-semibold bg-indigo-500/5 border border-indigo-500/25 rounded-xl text-indigo-300 hover:border-indigo-400 transition-colors duration-300">
                       {softSkill}
                     </span>
                   ))}
@@ -1335,11 +1317,11 @@ export default function Home() {
         <section id="projects" className="scroll-mt-24">
           <div className="space-y-12">
             <div className="text-center space-y-3">
-              <span className="text-xs font-bold uppercase tracking-widest text-indigo-400 font-outfit text-glow">03 / Works</span>
+              <span className="text-xs font-bold uppercase tracking-widest text-indigo-400 font-outfit text-glow">05 / Works</span>
               <h2 className="text-4xl sm:text-5xl font-black tracking-tight font-outfit">Featured Projects</h2>
-              <div className="w-16 h-1 bg-gradient-to-r from-indigo-500 to-cyan-500 rounded-full mx-auto"></div>
-              <p className="text-gray-400 text-lg max-w-xl mx-auto pt-2">
-                Click "View Details" to interact with live dashboard mockups and check system architectures.
+              <div className="w-16 h-1.5 bg-gradient-to-r from-indigo-500 to-cyan-500 rounded-full mx-auto"></div>
+              <p className="text-gray-400 text-sm sm:text-base max-w-xl mx-auto pt-2 leading-relaxed">
+                Click "View Details" to interact dengan live dashboard mockups dan check system architectures.
               </p>
             </div>
             
@@ -1347,14 +1329,13 @@ export default function Home() {
               {projects.map((project) => (
                 <div 
                   key={project.id} 
-                  className="cyber-card rounded-3xl overflow-hidden group flex flex-col justify-between border border-white/[0.04]"
+                  className="cyber-card rounded-3xl overflow-hidden group flex flex-col justify-between border border-white/[0.04] shadow-lg"
                 >
                   <div>
                     <div className="relative h-48 bg-gradient-to-br from-indigo-950 via-[#0a0f1d] to-[#030712] flex items-center justify-center border-b border-white/[0.05] overflow-hidden">
                       <div className="absolute inset-0 bg-cover bg-center opacity-25 group-hover:scale-110 transition-transform duration-700"></div>
                       <div className="absolute inset-0 bg-gradient-to-t from-[#030712] via-transparent to-transparent"></div>
                       
-                      {/* Floating glowing background ball */}
                       <div className={`w-32 h-32 rounded-full absolute bg-gradient-to-tr ${project.color} filter blur-2xl opacity-35 animate-float-slow`}></div>
                       
                       <div className="w-16 h-16 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-3xl text-white relative z-10 shadow-2xl">
@@ -1362,7 +1343,7 @@ export default function Home() {
                       </div>
                       
                       <div className="absolute top-4 right-4">
-                        <span className="px-3 py-1 bg-white/[0.06] border border-white/[0.08] backdrop-blur-md text-indigo-300 rounded-full text-xs font-semibold uppercase tracking-wider">
+                        <span className="px-3.5 py-1 bg-white/[0.06] border border-white/[0.08] backdrop-blur-md text-indigo-300 rounded-full text-[10px] font-bold uppercase tracking-wider">
                           {project.status}
                         </span>
                       </div>
@@ -1373,18 +1354,18 @@ export default function Home() {
                       <h3 className="text-2xl font-black text-white group-hover:text-indigo-300 transition-colors font-outfit leading-tight">
                         {project.title}
                       </h3>
-                      <p className="text-gray-400 text-sm leading-relaxed">
+                      <p className="text-gray-400 text-sm leading-relaxed font-medium">
                         {project.description}
                       </p>
                       
                       <div className="flex flex-wrap gap-2 pt-2">
                         {project.technologies.slice(0, 4).map((tech) => (
-                          <span key={tech} className="px-3 py-1 rounded-full text-xs font-semibold bg-white/[0.04] border border-white/[0.06] text-gray-300">
+                          <span key={tech} className="px-3 py-1 rounded-full text-[10px] font-bold bg-white/[0.04] border border-white/[0.06] text-gray-300">
                             {tech}
                           </span>
                         ))}
                         {project.technologies.length > 4 && (
-                          <span className="px-3 py-1 rounded-full text-xs font-semibold bg-indigo-500/10 text-indigo-300">
+                          <span className="px-3 py-1 rounded-full text-[10px] font-bold bg-indigo-500/10 text-indigo-300">
                             +{project.technologies.length - 4} more
                           </span>
                         )}
@@ -1395,11 +1376,11 @@ export default function Home() {
                   <div className="p-8 pt-0 flex flex-wrap gap-3">
                     <button
                       onClick={() => setSelectedProject(project)}
-                      className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl transition-all duration-300 flex items-center justify-center text-sm font-semibold tracking-wide gap-2 shadow-lg shadow-indigo-600/15"
+                      className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl transition-all duration-300 flex items-center justify-center text-xs font-bold tracking-wide gap-2 shadow-lg shadow-indigo-600/15"
                     >
-                      <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                      <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                       </svg>
                       View Details
                     </button>
@@ -1408,9 +1389,9 @@ export default function Home() {
                       href={project.github}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="px-5 py-2.5 bg-white/[0.03] hover:bg-white/[0.08] text-gray-200 border border-white/[0.06] rounded-xl transition-all duration-300 flex items-center justify-center text-sm font-semibold gap-2"
+                      className="px-5 py-2.5 bg-white/[0.03] hover:bg-white/[0.08] text-gray-200 border border-white/[0.06] rounded-xl transition-all duration-300 flex items-center justify-center text-xs font-bold gap-2"
                     >
-                      <i className="fab fa-github text-base"></i>
+                      <i className="fab fa-github text-sm"></i>
                       GitHub
                     </a>
                   </div>
@@ -1420,10 +1401,10 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Project Detail Modal with interactive topcell CRM widget */}
+        {/* Project Detail Modal with interactive CRM widget */}
         {selectedProject && (
-          <div className="fixed inset-0 z-50 overflow-y-auto bg-[#030712]/90 backdrop-blur-md animate-fade-in flex justify-center items-start p-4 sm:p-10">
-            <div className="cyber-card rounded-3xl max-w-4xl w-full border border-white/[0.08] shadow-[0_0_50px_rgba(0,0,0,0.8)]">
+          <div className="fixed inset-0 z-50 overflow-y-auto bg-[#030712]/92 backdrop-blur-md flex justify-center items-start p-4 sm:p-10 animate-slide-up">
+            <div className="cyber-card rounded-3xl max-w-4xl w-full border border-white/[0.08] shadow-2xl my-auto">
               {/* Modal Banner */}
               <div className="relative h-48 sm:h-56 bg-gradient-to-br from-indigo-950 via-[#0d1326] to-[#030712] flex items-center justify-center border-b border-white/[0.08]">
                 <button
@@ -1446,24 +1427,22 @@ export default function Home() {
                 </div>
               </div>
               
-              <div className="p-6 sm:p-8 space-y-8">
-                {/* Description Header */}
+              <div className="p-6 sm:p-8 space-y-8 max-h-[70vh] overflow-y-auto">
                 <div className="space-y-3">
                   <h2 className="text-3xl sm:text-4xl font-black text-white font-outfit tracking-tight">{selectedProject.title}</h2>
-                  <p className="text-gray-300 text-base leading-relaxed">{selectedProject.longDescription}</p>
+                  <p className="text-gray-300 text-sm sm:text-base leading-relaxed font-medium">{selectedProject.longDescription}</p>
                 </div>
 
-                {/* Tech & Features Grid */}
                 <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
-                  {/* Left Column: Key Features Checklist */}
+                  {/* Left Column: Features */}
                   <div className="md:col-span-7 space-y-4">
-                    <h3 className="text-xl font-bold text-white font-outfit border-b border-white/[0.05] pb-2 flex items-center gap-2">
+                    <h3 className="text-lg font-bold text-white font-outfit border-b border-white/[0.05] pb-2 flex items-center gap-2">
                       <span className="w-2.5 h-2.5 bg-indigo-500 rounded-full"></span> Key Features & Architecture
                     </h3>
                     <ul className="space-y-3">
                       {selectedProject.features.map((feature, index) => (
-                        <li key={index} className="flex items-start text-sm text-gray-300">
-                          <svg className="w-5 h-5 text-indigo-400 mr-3 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <li key={index} className="flex items-start text-xs sm:text-sm text-gray-300">
+                          <svg className="w-5 h-5 text-indigo-400 mr-2.5 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
                           </svg>
                           <span>{feature}</span>
@@ -1475,7 +1454,7 @@ export default function Home() {
                   {/* Right Column: Tech & Resources */}
                   <div className="md:col-span-5 space-y-6">
                     <div className="space-y-3">
-                      <h3 className="text-xl font-bold text-white font-outfit border-b border-white/[0.05] pb-2 flex items-center gap-2">
+                      <h3 className="text-lg font-bold text-white font-outfit border-b border-white/[0.05] pb-2 flex items-center gap-2">
                         <span className="w-2.5 h-2.5 bg-cyan-400 rounded-full"></span> Tech Stack
                       </h3>
                       <div className="flex flex-wrap gap-2">
@@ -1488,31 +1467,28 @@ export default function Home() {
                     </div>
                     
                     <div className="space-y-3">
-                      <h3 className="text-xl font-bold text-white font-outfit border-b border-white/[0.05] pb-2 flex items-center gap-2">
-                        <span className="w-2.5 h-2.5 bg-pink-400 rounded-full"></span> Project Assets
+                      <h3 className="text-lg font-bold text-white font-outfit border-b border-white/[0.05] pb-2 flex items-center gap-2">
+                        <span className="w-2.5 h-2.5 bg-pink-400 rounded-full"></span> Project Links
                       </h3>
-                      <div className="space-y-2">
+                      <div className="flex flex-col gap-2">
                         <a
                           href={selectedProject.github}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="flex items-center w-full px-4 py-3 bg-white/[0.03] border border-white/[0.06] hover:bg-white/[0.06] text-white rounded-xl transition-colors text-sm font-semibold gap-3"
+                          className="flex items-center justify-between p-3 bg-white/[0.02] border border-white/[0.05] hover:bg-white/[0.05] hover:border-white/10 rounded-xl text-xs font-bold text-gray-300 transition-colors"
                         >
-                          <i className="fab fa-github text-lg text-gray-400"></i>
-                          Browse Git Repository
+                          <span>Repository GitHub</span>
+                          <i className="fab fa-github text-sm"></i>
                         </a>
-                        
                         {selectedProject.demo && (
                           <a
                             href={selectedProject.demo}
                             target="_blank"
                             rel="noopener noreferrer"
-                            className="flex items-center w-full px-4 py-3 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl transition-colors text-sm font-semibold gap-3"
+                            className="flex items-center justify-between p-3 bg-indigo-600/10 border border-indigo-500/20 hover:bg-indigo-600 hover:text-white rounded-xl text-xs font-bold text-indigo-300 transition-all duration-300"
                           >
-                            <svg className="w-5 h-5 text-indigo-200" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
-                            </svg>
-                            Explore Live Application
+                            <span>Live Demo Aplikasi</span>
+                            <i className="fa-solid fa-arrow-up-right-from-square text-xs"></i>
                           </a>
                         )}
                       </div>
@@ -1520,235 +1496,195 @@ export default function Home() {
                   </div>
                 </div>
 
-                {/* INTERACTIVE COMPONENT FOR TOPCELL CRM */}
+                {/* PROJECT-SPECIFIC INTERACTIVE DEMOS inside modal */}
                 {selectedProject.id === 4 && (
-                  <div className="space-y-4 pt-4 border-t border-white/[0.08]">
-                    <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
-                      <div>
-                        <h4 className="text-lg font-black text-white font-outfit flex items-center gap-2">
-                          <span className="relative flex h-2.5 w-2.5">
-                            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-cyan-400 opacity-75"></span>
-                            <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-cyan-500"></span>
-                          </span>
-                          Interactive Live CRM Mockup
-                        </h4>
-                        <p className="text-xs text-gray-500">Click tabs to preview real modules built in Topcell CRM.</p>
-                      </div>
-                      
-                      {/* Tab buttons */}
-                      <div className="flex bg-white/[0.03] border border-white/[0.06] rounded-xl p-1 text-xs">
-                        <button 
-                          onClick={() => setCrmMockTab("dashboard")}
-                          className={`px-3 py-1.5 rounded-lg transition-all ${crmMockTab === "dashboard" ? "bg-indigo-600 text-white shadow" : "text-gray-400 hover:text-white"}`}
-                        >
-                          Dashboard
-                        </button>
-                        <button 
-                          onClick={() => setCrmMockTab("whatsapp")}
-                          className={`px-3 py-1.5 rounded-lg transition-all ${crmMockTab === "whatsapp" ? "bg-indigo-600 text-white shadow" : "text-gray-400 hover:text-white"}`}
-                        >
-                          Qontak WA API
-                        </button>
-                        <button 
-                          onClick={() => setCrmMockTab("aftercare")}
-                          className={`px-3 py-1.5 rounded-lg transition-all ${crmMockTab === "aftercare" ? "bg-indigo-600 text-white shadow" : "text-gray-400 hover:text-white"}`}
-                        >
-                          Aftercare Pipeline
-                        </button>
-                      </div>
+                  <div className="border-t border-white/[0.08] pt-8 space-y-6">
+                    <div className="space-y-2">
+                      <h4 className="text-lg font-extrabold text-white font-outfit flex items-center gap-2">
+                        <i className="fa-solid fa-terminal text-indigo-400 text-xs"></i> Interactive CRM Mock Dashboard
+                      </h4>
+                      <p className="text-xs text-gray-400">
+                        Simulasikan dashboard CRM Topcell. Kelola token OAuth Qontak API secara virtual dan pantau checkpoint milestone follow-up pelanggan.
+                      </p>
                     </div>
 
-                    {/* MOCK CLIENT DISPLAY BOX */}
-                    <div className="mock-window p-6 text-xs relative">
-                      
-                      {/* Toast notification inside mock */}
-                      {waToast && (
-                        <div className="absolute top-4 right-4 bg-indigo-600 border border-indigo-400 text-white px-4 py-2 rounded-xl flex items-center gap-2 shadow-2xl animate-bounce z-30">
-                          <i className="fab fa-whatsapp text-lg"></i>
-                          <span>{waToast}</span>
-                        </div>
-                      )}
-
-                      {/* Header line */}
-                      <div className="flex items-center justify-between border-b border-white/[0.06] pb-4 mb-4">
-                        <div className="flex items-center gap-2">
-                          <div className="w-2.5 h-2.5 rounded-full bg-red-500"></div>
-                          <div className="w-2.5 h-2.5 rounded-full bg-yellow-500"></div>
-                          <div className="w-2.5 h-2.5 rounded-full bg-green-500"></div>
-                          <span className="text-gray-400 text-[10px] ml-2">topcell-crm.test / admin</span>
-                        </div>
-                        <span className="px-2 py-0.5 rounded bg-indigo-500/10 text-indigo-400 font-semibold border border-indigo-500/20 text-[10px]">
-                          Role: Superadmin
-                        </span>
+                    <div className="mock-window border border-white/[0.08]">
+                      {/* Window Tab Controller */}
+                      <div className="flex border-b border-white/[0.06] bg-white/[0.01]">
+                        <button type="button" onClick={() => setCrmMockTab("dashboard")} className={`px-5 py-3 text-xs font-bold transition-colors ${crmMockTab === "dashboard" ? "mock-tab-active" : "text-gray-500 hover:text-gray-300"}`}>
+                          Dashboard Overview
+                        </button>
+                        <button type="button" onClick={() => setCrmMockTab("whatsapp")} className={`px-5 py-3 text-xs font-bold transition-colors ${crmMockTab === "whatsapp" ? "mock-tab-active" : "text-gray-500 hover:text-gray-300"}`}>
+                          WhatsApp Config
+                        </button>
+                        <button type="button" onClick={() => setCrmMockTab("aftercare")} className={`px-5 py-3 text-xs font-bold transition-colors ${crmMockTab === "aftercare" ? "mock-tab-active" : "text-gray-500 hover:text-gray-300"}`}>
+                          Checkpoints Pipeline
+                        </button>
                       </div>
 
-                      {/* TAB CONTENT: DASHBOARD */}
-                      {crmMockTab === "dashboard" && (
-                        <div className="space-y-4">
-                          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                            <div className="bg-white/[0.02] border border-white/[0.04] p-3.5 rounded-xl">
-                              <span className="text-gray-500 block uppercase tracking-wider text-[10px]">Total Sales</span>
-                              <span className="text-lg font-extrabold text-white font-outfit">1,482 Transactions</span>
+                      <div className="p-5">
+                        {crmMockTab === "dashboard" && (
+                          <div className="space-y-4">
+                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                              <div className="bg-white/[0.02] border border-white/[0.04] p-3.5 rounded-xl">
+                                <span className="text-gray-500 block uppercase tracking-wider text-[9px] font-bold">Total Clients Ledgers</span>
+                                <span className="text-2xl font-black text-white font-outfit">1,402</span>
+                              </div>
+                              <div className="bg-white/[0.02] border border-white/[0.04] p-3.5 rounded-xl">
+                                <span className="text-gray-500 block uppercase tracking-wider text-[9px] font-bold">Pending Follow-ups</span>
+                                <span className="text-2xl font-black text-indigo-400 font-outfit">18 Today</span>
+                              </div>
+                              <div className="bg-white/[0.02] border border-white/[0.04] p-3.5 rounded-xl col-span-2 sm:col-span-1">
+                                <span className="text-gray-500 block uppercase tracking-wider text-[9px] font-bold">Qontak API Connection</span>
+                                <span className="text-xs font-black text-green-400 font-outfit flex items-center gap-1.5 mt-1">
+                                  <span className="w-2 h-2 rounded-full bg-green-500 animate-ping"></span> ONLINE
+                                </span>
+                              </div>
                             </div>
-                            <div className="bg-white/[0.02] border border-white/[0.04] p-3.5 rounded-xl">
-                              <span className="text-gray-500 block uppercase tracking-wider text-[10px]">Today Follow-ups</span>
-                              <span className="text-lg font-extrabold text-cyan-400 font-outfit">8 Customers</span>
-                            </div>
-                            <div className="bg-white/[0.02] border border-white/[0.04] p-3.5 rounded-xl">
-                              <span className="text-gray-500 block uppercase tracking-wider text-[10px]">Pending Pipeline</span>
-                              <span className="text-lg font-extrabold text-pink-400 font-outfit">42 Customers</span>
-                            </div>
-                            <div className="bg-white/[0.02] border border-white/[0.04] p-3.5 rounded-xl">
-                              <span className="text-gray-500 block uppercase tracking-wider text-[10px]">Qontak API</span>
-                              <span className="text-lg font-extrabold text-green-400 font-outfit">Online</span>
-                            </div>
-                          </div>
-                          
-                          <div className="bg-white/[0.02] border border-white/[0.04] p-4 rounded-xl space-y-2">
-                            <h5 className="font-bold text-white text-sm">Follow-up Activity Chart Preview</h5>
-                            <div className="h-16 flex items-end gap-2 pt-2 border-b border-white/10 pb-1">
-                              <div className="bg-indigo-500 w-full h-[60%] rounded-t"></div>
-                              <div className="bg-indigo-500 w-full h-[85%] rounded-t"></div>
-                              <div className="bg-indigo-500 w-full h-[40%] rounded-t"></div>
-                              <div className="bg-cyan-500 w-full h-[100%] rounded-t"></div>
-                              <div className="bg-indigo-500 w-full h-[70%] rounded-t"></div>
-                              <div className="bg-indigo-500 w-full h-[90%] rounded-t"></div>
-                              <div className="bg-pink-500 w-full h-[55%] rounded-t"></div>
-                            </div>
-                            <div className="flex justify-between text-[9px] text-gray-500">
-                              <span>Mon</span>
-                              <span>Tue</span>
-                              <span>Wed</span>
-                              <span>Thu (Today)</span>
-                              <span>Fri</span>
-                              <span>Sat</span>
-                              <span>Sun</span>
+                            
+                            <div className="bg-white/[0.02] border border-white/[0.04] p-4 rounded-xl space-y-2.5">
+                              <h5 className="font-bold text-white text-xs">Follow-up Activity Chart Preview</h5>
+                              <div className="h-16 flex items-end gap-2 pt-2 border-b border-white/10 pb-1">
+                                <div className="bg-indigo-500/50 w-full h-[60%] rounded-t"></div>
+                                <div className="bg-indigo-500 w-full h-[85%] rounded-t"></div>
+                                <div className="bg-indigo-500/50 w-full h-[40%] rounded-t"></div>
+                                <div className="bg-cyan-500 w-full h-[100%] rounded-t animate-pulse"></div>
+                                <div className="bg-indigo-500/70 w-full h-[70%] rounded-t"></div>
+                                <div className="bg-indigo-500 w-full h-[90%] rounded-t"></div>
+                                <div className="bg-pink-500 w-full h-[55%] rounded-t"></div>
+                              </div>
+                              <div className="flex justify-between text-[9px] text-gray-500 font-bold font-mono">
+                                <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
+                              </div>
                             </div>
                           </div>
-                        </div>
-                      )}
+                        )}
 
-                      {/* TAB CONTENT: WHATSAPP CONFIG */}
-                      {crmMockTab === "whatsapp" && (
-                        <div className="space-y-4">
-                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                            <div className="bg-white/[0.02] border border-white/[0.04] p-4 rounded-xl space-y-3">
-                              <h5 className="font-bold text-white text-sm">Qontak credentials</h5>
-                              <div className="space-y-2">
-                                <div>
-                                  <label className="text-[10px] text-gray-500 block">QONTAK_BASE_URL</label>
-                                  <input type="text" readOnly value="https://service.qontak.com/api/v1/templates" className="w-full bg-white/[0.04] border border-white/[0.06] text-gray-300 rounded px-2.5 py-1.5 focus:outline-none" />
+                        {crmMockTab === "whatsapp" && (
+                          <div className="space-y-4 animate-slide-up">
+                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                              <div className="bg-white/[0.02] border border-white/[0.04] p-4 rounded-xl space-y-3">
+                                <h5 className="font-bold text-white text-xs font-outfit">Qontak credentials</h5>
+                                <div className="space-y-2">
+                                  <div>
+                                    <label className="text-[9px] text-gray-500 block">QONTAK_BASE_URL</label>
+                                    <input type="text" readOnly value="https://service.qontak.com/api/v1/templates" className="w-full bg-white/[0.03] border border-white/[0.06] text-gray-300 rounded px-2.5 py-1.5 focus:outline-none text-[10px] font-mono" />
+                                  </div>
+                                  <div>
+                                    <label className="text-[9px] text-gray-500 block">API ACCESS TOKEN</label>
+                                    <input type="password" readOnly value="••••••••••••••••••••••••••••••••••••••••" className="w-full bg-white/[0.03] border border-white/[0.06] text-gray-300 rounded px-2.5 py-1.5 focus:outline-none text-[10px]" />
+                                  </div>
                                 </div>
-                                <div>
-                                  <label className="text-[10px] text-gray-500 block">API ACCESS TOKEN</label>
-                                  <input type="password" readOnly value="••••••••••••••••••••••••••••••••••••••••" className="w-full bg-white/[0.04] border border-white/[0.06] text-gray-300 rounded px-2.5 py-1.5 focus:outline-none" />
+                                <button 
+                                  onClick={triggerQontakTokenRefresh}
+                                  disabled={qontakTokenStatus === "refreshing"}
+                                  className="w-full py-2 bg-indigo-600 hover:bg-indigo-500 font-bold rounded-lg text-white text-xs transition-colors"
+                                >
+                                  {qontakTokenStatus === "refreshing" ? "Syncing credentials..." : "Refresh Qontak OAuth Token"}
+                                </button>
+                              </div>
+
+                              <div className="bg-white/[0.02] border border-white/[0.04] p-4 rounded-xl space-y-3">
+                                <h5 className="font-bold text-white text-xs font-outfit">Synced WhatsApp Templates</h5>
+                                <div className="space-y-2">
+                                  <div className="p-2.5 bg-white/[0.03] border border-white/[0.04] rounded-lg">
+                                    <span className="font-semibold text-white block text-[11px]">followup_h1_customer</span>
+                                    <p className="text-gray-400 text-[9px] mt-1 font-mono">{"Halo {{1}}, terima kasih telah berbelanja di Topcell. Bagaimana..."}</p>
+                                  </div>
+                                  <div className="p-2.5 bg-white/[0.03] border border-white/[0.04] rounded-lg">
+                                    <span className="font-semibold text-white block text-[11px]">followup_h7_aftercare</span>
+                                    <p className="text-gray-400 text-[9px] mt-1 font-mono">{"Halo {{1}}, produk {{2}} Anda sudah berumur 1 minggu. Jika..."}</p>
+                                  </div>
                                 </div>
                               </div>
+                            </div>
+                          </div>
+                        )}
+
+                        {crmMockTab === "aftercare" && (
+                          <div className="space-y-4 animate-slide-up">
+                            <div className="flex justify-between items-center bg-white/[0.02] p-2.5 border border-white/[0.04] rounded-xl flex-wrap gap-2">
+                              <span className="font-bold text-white text-xs font-outfit">Aftercare Ledger Milestones</span>
                               <button 
-                                onClick={triggerQontakTokenRefresh}
-                                disabled={qontakTokenStatus === "refreshing"}
-                                className="w-full py-2 bg-indigo-600 hover:bg-indigo-500 font-bold rounded-lg text-white transition-colors"
+                                onClick={() => showWaToast("Broadcast dispatch queue sent to Qontak API!")}
+                                className="px-3 py-1 bg-green-600 hover:bg-green-500 rounded text-white font-bold text-[10px] transition-colors"
                               >
-                                {qontakTokenStatus === "refreshing" ? "Syncing credentials..." : "Refresh Qontak OAuth Token"}
+                                Broadcast All Pending
                               </button>
                             </div>
+                            
+                            <div className="overflow-x-auto">
+                              <table className="w-full text-left text-xs">
+                                <thead>
+                                  <tr className="border-b border-white/[0.06] text-gray-500 text-[10px] uppercase font-bold">
+                                    <th className="pb-2 font-mono">Name</th>
+                                    <th className="pb-2 font-mono">H+1</th>
+                                    <th className="pb-2 font-mono">H+7</th>
+                                    <th className="pb-2 font-mono">1-Month</th>
+                                    <th className="pb-2 text-right font-mono">Action</th>
+                                  </tr>
+                                </thead>
+                                <tbody className="divide-y divide-white/[0.04]">
+                                  {crmCustomers.map((cust, index) => (
+                                    <tr key={index} className="text-gray-300 font-medium">
+                                      <td className="py-2.5 text-white">{cust.name}</td>
+                                      
+                                      <td className="py-2.5">
+                                        <button 
+                                          onClick={() => handleUpdateCrmStatus(index, "h1", cust.h1 === "done" ? "pending" : "done")}
+                                          className={`px-1.5 py-0.5 rounded text-[9px] font-bold ${cust.h1 === "done" ? "bg-green-500/10 text-green-400 border border-green-500/20" : "bg-yellow-500/10 text-yellow-400 border border-yellow-500/20"}`}
+                                        >
+                                          {cust.h1}
+                                        </button>
+                                      </td>
 
-                            <div className="bg-white/[0.02] border border-white/[0.04] p-4 rounded-xl space-y-3">
-                              <h5 className="font-bold text-white text-sm">Synced WhatsApp Templates</h5>
-                              <div className="space-y-2">
-                                <div className="p-2.5 bg-white/[0.03] border border-white/[0.04] rounded-lg">
-                                  <span className="font-semibold text-white block">followup_h1_customer</span>
-                                  <p className="text-gray-400 text-[10px] mt-1">{"Halo {{1}}, terima kasih telah berbelanja di Topcell. Bagaimana pengalaman Anda?"}</p>
-                                </div>
-                                <div className="p-2.5 bg-white/[0.03] border border-white/[0.04] rounded-lg">
-                                  <span className="font-semibold text-white block">followup_h7_aftercare</span>
-                                  <p className="text-gray-400 text-[10px] mt-1">{"Halo {{1}}, produk {{2}} Anda sudah berumur 1 minggu. Jika ada pertanyaan hubungi..."}</p>
-                                </div>
-                              </div>
+                                      <td className="py-2.5">
+                                        <button 
+                                          onClick={() => handleUpdateCrmStatus(index, "h7", cust.h7 === "done" ? "pending" : "done")}
+                                          className={`px-1.5 py-0.5 rounded text-[9px] font-bold ${cust.h7 === "done" ? "bg-green-500/10 text-green-400 border border-green-500/20" : "bg-yellow-500/10 text-yellow-400 border border-yellow-500/20"}`}
+                                        >
+                                          {cust.h7}
+                                        </button>
+                                      </td>
+
+                                      <td className="py-2.5">
+                                        <button 
+                                          onClick={() => handleUpdateCrmStatus(index, "month", cust.month === "done" ? "pending" : "done")}
+                                          className={`px-1.5 py-0.5 rounded text-[9px] font-bold ${cust.month === "done" ? "bg-green-500/10 text-green-400 border border-green-500/20" : "bg-yellow-500/10 text-yellow-400 border border-yellow-500/20"}`}
+                                        >
+                                          {cust.month}
+                                        </button>
+                                      </td>
+
+                                      <td className="py-2.5 text-right">
+                                        <button 
+                                          onClick={() => showWaToast(`WA message sent via Qontak API to ${cust.name} (${cust.phone})`)}
+                                          className="px-2 py-1 bg-white/[0.04] border border-white/[0.08] hover:bg-indigo-600 hover:text-white rounded text-[10px] text-gray-300 font-bold transition-all"
+                                        >
+                                          Send WA
+                                        </button>
+                                      </td>
+                                    </tr>
+                                  ))}
+                                </tbody>
+                              </table>
                             </div>
                           </div>
-                        </div>
-                      )}
-
-                      {/* TAB CONTENT: AFTERCARE PIPELINE */}
-                      {crmMockTab === "aftercare" && (
-                        <div className="space-y-4">
-                          <div className="flex justify-between items-center bg-white/[0.02] p-2 border border-white/[0.04] rounded-xl">
-                            <span className="font-bold text-white">Aftercare Ledger Milestones (Active Actions)</span>
-                            <button 
-                              onClick={() => showWaToast("Broadcast dispatch queue sent to Qontak API!")}
-                              className="px-3 py-1 bg-green-600 hover:bg-green-500 rounded text-white font-semibold"
-                            >
-                              Broadcast All Pending
-                            </button>
-                          </div>
-                          
-                          <div className="overflow-x-auto">
-                            <table className="w-full text-left">
-                              <thead>
-                                <tr className="border-b border-white/[0.06] text-gray-500 text-[10px]">
-                                  <th className="pb-2">Name</th>
-                                  <th className="pb-2">Trigger Type</th>
-                                  <th className="pb-2">H+1</th>
-                                  <th className="pb-2">H+7</th>
-                                  <th className="pb-2">1-Month</th>
-                                  <th className="pb-2 text-right">Action</th>
-                                </tr>
-                              </thead>
-                              <tbody className="divide-y divide-white/[0.04]">
-                                {crmCustomers.map((cust, index) => (
-                                  <tr key={index} className="text-gray-300">
-                                    <td className="py-2.5 font-medium text-white">{cust.name}</td>
-                                    <td className="py-2.5 text-gray-400">{cust.type}</td>
-                                    
-                                    {/* H+1 cell */}
-                                    <td className="py-2.5">
-                                      <button 
-                                        onClick={() => handleUpdateCrmStatus(index, "h1", cust.h1 === "done" ? "pending" : "done")}
-                                        className={`px-1.5 py-0.5 rounded text-[9px] font-bold ${cust.h1 === "done" ? "bg-green-500/10 text-green-400 border border-green-500/20" : "bg-yellow-500/10 text-yellow-400 border border-yellow-500/20"}`}
-                                      >
-                                        {cust.h1}
-                                      </button>
-                                    </td>
-
-                                    {/* H+7 cell */}
-                                    <td className="py-2.5">
-                                      <button 
-                                        onClick={() => handleUpdateCrmStatus(index, "h7", cust.h7 === "done" ? "pending" : "done")}
-                                        className={`px-1.5 py-0.5 rounded text-[9px] font-bold ${cust.h7 === "done" ? "bg-green-500/10 text-green-400 border border-green-500/20" : "bg-yellow-500/10 text-yellow-400 border border-yellow-500/20"}`}
-                                      >
-                                        {cust.h7}
-                                      </button>
-                                    </td>
-
-                                    {/* 1-Month cell */}
-                                    <td className="py-2.5">
-                                      <button 
-                                        onClick={() => handleUpdateCrmStatus(index, "month", cust.month === "done" ? "pending" : "done")}
-                                        className={`px-1.5 py-0.5 rounded text-[9px] font-bold ${cust.month === "done" ? "bg-green-500/10 text-green-400 border border-green-500/20" : "bg-yellow-500/10 text-yellow-400 border border-yellow-500/20"}`}
-                                      >
-                                        {cust.month}
-                                      </button>
-                                    </td>
-
-                                    <td className="py-2.5 text-right">
-                                      <button 
-                                        onClick={() => showWaToast(`WA message sent via Qontak API to ${cust.name} (${cust.phone})`)}
-                                        className="px-2 py-1 bg-white/[0.04] border border-white/[0.08] hover:bg-indigo-600 hover:text-white rounded text-[10px] text-gray-300 font-bold transition-all"
-                                      >
-                                        Send WA
-                                      </button>
-                                    </td>
-                                  </tr>
-                                ))}
-                              </tbody>
-                            </table>
-                          </div>
-                        </div>
-                      )}
+                        )}
+                      </div>
                     </div>
                   </div>
                 )}
+              </div>
+
+              {/* Close Button in Footer */}
+              <div className="p-6 border-t border-white/[0.08] flex justify-end">
+                <button
+                  onClick={() => setSelectedProject(null)}
+                  className="px-6 py-2.5 bg-white/[0.03] border border-white/[0.08] hover:bg-white/[0.08] hover:border-gray-500 text-white rounded-xl text-xs font-bold transition-colors"
+                >
+                  Close Window
+                </button>
               </div>
             </div>
           </div>
@@ -1766,15 +1702,15 @@ export default function Home() {
                 </div>
                 Work Experience
               </h3>
-              <div className="relative border-l border-white/[0.08] ml-3 space-y-10 pt-2">
+              <div className="relative border-l border-white/[0.08] ml-4 space-y-10 pt-2">
                 {workExperience.map((exp, index) => (
                   <div key={index} className="relative pl-6 group">
                     <div className="absolute -left-[5px] top-1.5 w-2.5 h-2.5 rounded-full bg-indigo-500 shadow-glow transition-all group-hover:scale-125"></div>
-                    <div className="space-y-1">
-                      <span className="text-xs font-semibold text-indigo-400 uppercase tracking-widest">{exp.period}</span>
-                      <h4 className="text-lg font-bold text-white font-outfit">{exp.role}</h4>
+                    <div className="space-y-1.5">
+                      <span className="text-[10px] font-bold text-indigo-400 uppercase tracking-widest">{exp.period}</span>
+                      <h4 className="text-lg font-bold text-white font-outfit leading-snug">{exp.role}</h4>
                       <span className="text-xs text-gray-500 block font-semibold">{exp.org}</span>
-                      <ul className="list-disc list-outside pl-4 text-xs text-gray-400 space-y-1 pt-2">
+                      <ul className="list-disc list-outside pl-4 text-xs text-gray-400 space-y-2 pt-2.5 font-medium leading-relaxed">
                         {exp.points.map((pt, pIdx) => (
                           <li key={pIdx}>{pt}</li>
                         ))}
@@ -1793,15 +1729,15 @@ export default function Home() {
                 </div>
                 Organization Experience
               </h3>
-              <div className="relative border-l border-white/[0.08] ml-3 space-y-10 pt-2">
+              <div className="relative border-l border-white/[0.08] ml-4 space-y-10 pt-2">
                 {orgExperience.map((exp, index) => (
                   <div key={index} className="relative pl-6 group">
                     <div className="absolute -left-[5px] top-1.5 w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-glow transition-all group-hover:scale-125"></div>
-                    <div className="space-y-1">
-                      <span className="text-xs font-semibold text-cyan-400 uppercase tracking-widest">{exp.period}</span>
-                      <h4 className="text-lg font-bold text-white font-outfit">{exp.role}</h4>
+                    <div className="space-y-1.5">
+                      <span className="text-[10px] font-bold text-cyan-400 uppercase tracking-widest">{exp.period}</span>
+                      <h4 className="text-lg font-bold text-white font-outfit leading-snug">{exp.role}</h4>
                       <span className="text-xs text-gray-500 block font-semibold">{exp.org}</span>
-                      <ul className="list-disc list-outside pl-4 text-xs text-gray-400 space-y-1 pt-2">
+                      <ul className="list-disc list-outside pl-4 text-xs text-gray-400 space-y-2 pt-2.5 font-medium leading-relaxed">
                         {exp.points.map((pt, pIdx) => (
                           <li key={pIdx}>{pt}</li>
                         ))}
@@ -1819,26 +1755,26 @@ export default function Home() {
         <section id="achievements" className="scroll-mt-24">
           <div className="space-y-12">
             <div className="text-center space-y-3">
-              <span className="text-xs font-bold uppercase tracking-widest text-indigo-400 font-outfit text-glow">04 / Awards</span>
+              <span className="text-xs font-bold uppercase tracking-widest text-indigo-400 font-outfit text-glow">06 / Awards</span>
               <h2 className="text-4xl sm:text-5xl font-black tracking-tight font-outfit">Competitions & Achievements</h2>
-              <div className="w-16 h-1 bg-gradient-to-r from-indigo-500 to-cyan-500 rounded-full mx-auto"></div>
+              <div className="w-16 h-1.5 bg-gradient-to-r from-indigo-500 to-cyan-500 rounded-full mx-auto"></div>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {achievements.map((award, index) => (
-                <div key={index} className="cyber-card p-6 rounded-3xl border border-white/[0.04] hover:border-white/10 flex flex-col justify-between space-y-4">
-                  <div className="space-y-2">
+                <div key={index} className="cyber-card p-6 rounded-3xl border border-white/[0.04] hover:border-white/10 flex flex-col justify-between space-y-4 shadow-lg">
+                  <div className="space-y-3">
                     <div className="flex items-center justify-between">
                       <div className="w-10 h-10 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-lg">
                         <i className={award.icon}></i>
                       </div>
-                      <span className="text-[10px] font-semibold bg-white/[0.05] border border-white/[0.08] text-indigo-300 px-2 py-0.5 rounded-full">
+                      <span className="text-[10px] font-bold bg-white/[0.05] border border-white/[0.08] text-indigo-300 px-3 py-1 rounded-full">
                         {award.date}
                       </span>
                     </div>
-                    <h4 className="font-extrabold text-white text-lg font-outfit leading-snug">{award.title}</h4>
-                    <span className="text-xs text-cyan-400 font-semibold block">{award.category}</span>
-                    <p className="text-gray-400 text-xs leading-relaxed">{award.details}</p>
+                    <h4 className="font-extrabold text-white text-base sm:text-lg font-outfit leading-snug">{award.title}</h4>
+                    <span className="text-xs text-cyan-400 font-bold block">{award.category}</span>
+                    <p className="text-gray-400 text-xs leading-relaxed font-medium">{award.details}</p>
                   </div>
                 </div>
               ))}
@@ -1850,13 +1786,13 @@ export default function Home() {
         <section id="github" className="scroll-mt-24">
           <div className="space-y-12">
             <div className="text-center space-y-3">
-              <span className="text-xs font-bold uppercase tracking-widest text-indigo-400 font-outfit text-glow">05 / Code</span>
+              <span className="text-xs font-bold uppercase tracking-widest text-indigo-400 font-outfit text-glow">07 / Code</span>
               <h2 className="text-4xl sm:text-5xl font-black tracking-tight font-outfit">GitHub Activity</h2>
-              <div className="w-16 h-1 bg-gradient-to-r from-indigo-500 to-cyan-500 rounded-full mx-auto"></div>
+              <div className="w-16 h-1.5 bg-gradient-to-r from-indigo-500 to-cyan-500 rounded-full mx-auto"></div>
             </div>
             
             <div className="flex justify-center">
-              <div className="cyber-card p-6 sm:p-8 rounded-3xl w-full max-w-4xl border border-white/[0.04] overflow-x-auto">
+              <div className="cyber-card p-6 sm:p-8 rounded-3xl w-full max-w-4xl border border-white/[0.04] overflow-x-auto shadow-xl">
                 <div className="min-w-[700px] flex justify-center py-2">
                   <GitHubCalendar 
                     username="reynaldabnerrr" 
@@ -1875,60 +1811,70 @@ export default function Home() {
         <section id="contact" className="scroll-mt-24">
           <div className="space-y-12">
             <div className="text-center space-y-3">
-              <span className="text-xs font-bold uppercase tracking-widest text-indigo-400 font-outfit text-glow">06 / Contact</span>
+              <span className="text-xs font-bold uppercase tracking-widest text-indigo-400 font-outfit text-glow">08 / Contact</span>
               <h2 className="text-4xl sm:text-5xl font-black tracking-tight font-outfit">Get In Touch</h2>
-              <div className="w-16 h-1 bg-gradient-to-r from-indigo-500 to-cyan-500 rounded-full mx-auto"></div>
-              <p className="text-gray-400 text-base max-w-xl mx-auto pt-2">
-                Have a project concept or potential role? Reach out through any channel below.
+              <div className="w-16 h-1.5 bg-gradient-to-r from-indigo-500 to-cyan-500 rounded-full mx-auto"></div>
+              <p className="text-gray-400 text-sm sm:text-base max-w-xl mx-auto pt-2 leading-relaxed">
+                Ada konsep proyek atau penawaran kerja sama menarik? Silakan hubungi saya melalui jalur di bawah.
               </p>
             </div>
 
-            <div className="cyber-card p-8 rounded-3xl max-w-2xl mx-auto border border-white/[0.04]">
+            <div className="cyber-card p-8 rounded-3xl max-w-2xl mx-auto border border-white/[0.04] shadow-xl">
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
                 <a
                   href="mailto:reynald030685@gmail.com"
-                  className="flex flex-col items-center p-5 rounded-2xl bg-red-500/5 border border-red-500/10 text-red-400 hover:bg-red-500/10 hover:border-red-400 hover:scale-105 transition-all duration-300"
+                  className="flex flex-col items-center p-5 rounded-2xl bg-red-500/5 border border-red-500/10 text-red-400 hover:bg-red-500/10 hover:border-red-400 hover:scale-105 hover:shadow-[0_0_15px_rgba(239,68,68,0.2)] transition-all duration-300"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
                   <i className="fas fa-envelope text-3xl mb-3"></i>
-                  <span className="text-xs font-bold uppercase tracking-wider font-outfit">Email</span>
+                  <span className="text-[10px] font-bold uppercase tracking-wider font-outfit">Email</span>
                 </a>
                 
                 <a
                   href="https://www.linkedin.com/in/reynald-abner-tananda-a060b4227/"
-                  className="flex flex-col items-center p-5 rounded-2xl bg-blue-500/5 border border-blue-500/10 text-blue-400 hover:bg-blue-500/10 hover:border-blue-400 hover:scale-105 transition-all duration-300"
+                  className="flex flex-col items-center p-5 rounded-2xl bg-blue-500/5 border border-blue-500/10 text-blue-400 hover:bg-blue-500/10 hover:border-blue-400 hover:scale-105 hover:shadow-[0_0_15px_rgba(59,130,246,0.2)] transition-all duration-300"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
                   <i className="fab fa-linkedin text-3xl mb-3"></i>
-                  <span className="text-xs font-bold uppercase tracking-wider font-outfit">LinkedIn</span>
+                  <span className="text-[10px] font-bold uppercase tracking-wider font-outfit">LinkedIn</span>
                 </a>
                 
                 <a
                   href="https://github.com/reynaldabnerrr"
-                  className="flex flex-col items-center p-5 rounded-2xl bg-gray-500/5 border border-gray-500/10 text-gray-400 hover:bg-gray-500/10 hover:border-gray-300 hover:scale-105 transition-all duration-300"
+                  className="flex flex-col items-center p-5 rounded-2xl bg-gray-500/5 border border-gray-500/10 text-gray-400 hover:bg-gray-500/10 hover:border-gray-300 hover:scale-105 hover:shadow-[0_0_15px_rgba(156,163,175,0.2)] transition-all duration-300"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
                   <i className="fab fa-github text-3xl mb-3"></i>
-                  <span className="text-xs font-bold uppercase tracking-wider font-outfit">GitHub</span>
+                  <span className="text-[10px] font-bold uppercase tracking-wider font-outfit">GitHub</span>
                 </a>
                 
                 <a
                   href="https://www.instagram.com/reynaldabnerr/"
-                  className="flex flex-col items-center p-5 rounded-2xl bg-pink-500/5 border border-pink-500/10 text-pink-400 hover:bg-pink-500/10 hover:border-pink-400 hover:scale-105 transition-all duration-300"
+                  className="flex flex-col items-center p-5 rounded-2xl bg-pink-500/5 border border-pink-500/10 text-pink-400 hover:bg-pink-500/10 hover:border-pink-400 hover:scale-105 hover:shadow-[0_0_15px_rgba(236,72,153,0.2)] transition-all duration-300"
                   target="_blank"
                   rel="noopener noreferrer"
                 >
                   <i className="fab fa-instagram text-3xl mb-3"></i>
-                  <span className="text-xs font-bold uppercase tracking-wider font-outfit">Instagram</span>
+                  <span className="text-[10px] font-bold uppercase tracking-wider font-outfit">Instagram</span>
                 </a>
               </div>
             </div>
           </div>
         </section>
       </main>
+
+      {/* CRM Dynamic Toast */}
+      {waToast && (
+        <div className="fixed bottom-6 right-6 z-50 p-4 bg-[#0b141a] border border-[#202c33] text-gray-200 rounded-2xl text-xs font-mono max-w-sm shadow-2xl flex items-center gap-3 animate-slide-up">
+          <div className="w-6 h-6 rounded-full bg-indigo-600 flex items-center justify-center text-white text-[10px]">
+            <i className="fa-solid fa-bell"></i>
+          </div>
+          <span>{waToast}</span>
+        </div>
+      )}
 
       {/* Footer */}
       <footer className="border-t border-white/[0.08] bg-[#02050c] text-white py-12 px-6 relative z-10">
@@ -1938,10 +1884,10 @@ export default function Home() {
               &copy; {new Date().getFullYear()} Reynald Abner Tananda
             </p>
             <p className="text-xs text-gray-500 mt-1">
-              Crafting premium solutions with Next.js, TypeScript, & Tailwind CSS.
+              Crafted beautifully using Astro, React, & Tailwind CSS. Hosted on Vercel.
             </p>
           </div>
-          <div className="flex gap-4 text-xs text-gray-400">
+          <div className="flex gap-4 text-xs text-gray-400 font-semibold font-mono">
             <span>Makassar, ID</span>
             <span>•</span>
             <span>Secured Dev</span>
