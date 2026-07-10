@@ -644,7 +644,7 @@ export default function Home() {
         <div className="flex flex-col items-center justify-center w-full max-w-4xl mx-auto my-auto space-y-6">
           {/* Glowing badge */}
           <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-indigo-500/30 bg-indigo-500/5 text-indigo-300 text-xs font-semibold tracking-wide uppercase mb-2 animate-pulse">
-            <span className="w-2 h-2 rounded-full bg-indigo-400"></span> Available for Freelance & Custom E-Commerce Projects
+            <span className="w-2 h-2 rounded-full bg-indigo-400"></span> Available for Freelance & Custom Software Projects
           </div>
           
           {/* Profile Picture */}
@@ -671,10 +671,10 @@ export default function Home() {
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 to-cyan-400">
               <Typewriter
                 words={[
-                  "Web Store & POS Developer ⚙️",
-                  "Custom E-Commerce Systems 🛒",
-                  "Payment Gateway Integrator 💳",
-                  "WhatsApp API Automation Specialist 💬"
+                  "Full-Stack Software Engineer 💻",
+                  "Web & Mobile Developer 📱",
+                  "Custom E-Commerce & POS Builder 🛒",
+                  "Cybersecurity & Automation Specialist 🛡️"
                 ]}
                 loop={0}
                 cursor
@@ -686,8 +686,8 @@ export default function Home() {
             </span>
           </h2>
           
-          <p className="text-lg text-gray-400 max-w-xl mx-auto leading-relaxed mb-6">
-            Spesialis pembuatan sistem toko online kustom, kasir (POS), integrasi payment gateway otomatis (Midtrans/Xendit), dan otomatisasi WhatsApp API untuk kelancaran bisnis Anda.
+          <p className="text-lg text-gray-400 max-w-2xl mx-auto leading-relaxed mb-6">
+            Software Engineer dengan spesialisasi full-stack development dan keamanan siber. Menyediakan jasa pembuatan website kustom, sistem e-commerce & kasir (POS), integrasi API, serta otomatisasi bisnis.
           </p>
           
           <div className="flex flex-col sm:flex-row items-center gap-4 pt-2">
@@ -791,37 +791,37 @@ export default function Home() {
             <div className="text-center space-y-3">
               <span className="text-xs font-bold uppercase tracking-widest text-indigo-400 font-outfit text-glow">02 / Services</span>
               <h2 className="text-4xl sm:text-5xl font-black tracking-tight font-outfit text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">
-                Layanan & Jasa Pembuatan Website
+                Layanan & Solusi Kustom
               </h2>
               <div className="w-16 h-1 bg-gradient-to-r from-indigo-500 to-cyan-500 rounded-full mx-auto"></div>
               <p className="text-gray-400 text-base max-w-xl mx-auto pt-2 leading-relaxed">
-                Solusi digital terintegrasi untuk mendigitalkan bisnis Anda melalui sistem toko online, kasir kustom, dan otomasi.
+                Solusi rekayasa perangkat lunak dan digitalisasi bisnis kustom untuk mengoptimalkan proses kerja Anda.
               </p>
             </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
                 {
-                  title: "E-Commerce Kustom",
-                  desc: "Desain storefront modern dan responsif menggunakan Next.js / Laravel dengan optimasi SEO terintegrasi agar mudah ditemukan di Google.",
-                  icon: "fa-solid fa-cart-shopping",
+                  title: "Web & App Development",
+                  desc: "Pembuatan website kustom, landing page, dan sistem e-commerce responsif menggunakan Next.js / Laravel dengan optimasi SEO modern.",
+                  icon: "fa-solid fa-laptop-code",
                   glow: "cyber-card-glow-indigo"
                 },
                 {
-                  title: "Payment Gateway",
-                  desc: "Integrasi pembayaran otomatis via QRIS, Gopay, OVO, Virtual Account, Transfer Bank, dan Kartu Kredit menggunakan API Midtrans atau Xendit.",
+                  title: "API & Payment Integration",
+                  desc: "Koneksi sistem dengan payment gateway (Midtrans/Xendit) untuk pembayaran QRIS/VA otomatis, serta integrasi RESTful API eksternal.",
                   icon: "fa-solid fa-credit-card",
                   glow: "cyber-card-glow-cyan"
                 },
                 {
-                  title: "Sistem POS & Inventaris",
-                  desc: "Dashboard back-office kustom untuk manajemen stok barang otomatis, laporan sales harian/bulanan, dan pembagian hak akses admin/kasir.",
+                  title: "Custom Dashboards & POS",
+                  desc: "Sistem back-office kustom untuk manajemen inventaris, dashboard analitik, laporan transaksi harian/bulanan, dan hak akses admin.",
                   icon: "fa-solid fa-chart-line",
                   glow: "cyber-card-glow-pink"
                 },
                 {
-                  title: "Otomatisasi WhatsApp",
-                  desc: "Pengiriman nota belanja/invoice otomatis dikirim langsung ke WhatsApp pembeli secara instan setelah pembayaran dikonfirmasi gateway.",
+                  title: "Otomatisasi & Integrasi",
+                  desc: "Otomasi notifikasi real-time, pengiriman OTP, broadcast, dan invoice otomatis yang terhubung langsung ke WhatsApp API.",
                   icon: "fa-solid fa-message",
                   glow: "cyber-card-glow-green"
                 }
@@ -844,11 +844,11 @@ export default function Home() {
             <div className="text-center space-y-3">
               <span className="text-xs font-bold uppercase tracking-widest text-indigo-400 font-outfit text-glow">03 / Demo</span>
               <h2 className="text-4xl sm:text-5xl font-black tracking-tight font-outfit text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">
-                Interactive Store Checkout Simulator
+                Interactive System Integration Simulator
               </h2>
               <div className="w-16 h-1 bg-gradient-to-r from-indigo-500 to-cyan-500 rounded-full mx-auto"></div>
               <p className="text-gray-400 text-base max-w-xl mx-auto pt-2 leading-relaxed">
-                Uji langsung alur sistem toko online kustom. Tambahkan produk, jalankan checkout, simulasikan pembayaran QRIS Midtrans, dan terima invoice WhatsApp otomatis.
+                Uji langsung integrasi sistem. Tambahkan produk, jalankan checkout, simulasikan callback webhook payment gateway (Midtrans), dan terima invoice WhatsApp otomatis.
               </p>
             </div>
 
@@ -1154,7 +1154,7 @@ export default function Home() {
                       <div className="space-y-1">
                         <h4 className="font-extrabold text-white text-lg font-outfit">Pembayaran Berhasil!</h4>
                         <p className="text-xs text-gray-400 max-w-[280px]">
-                          Midtrans Gateway telah meneruskan webhook pembayaran lunas ke sistem toko.
+                          Midtrans Gateway telah meneruskan webhook pembayaran lunas ke sistem backend.
                         </p>
                       </div>
                       <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-500/5 border border-indigo-500/20 text-indigo-300 text-[10px] animate-pulse">
