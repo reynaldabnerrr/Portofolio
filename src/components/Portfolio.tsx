@@ -821,18 +821,19 @@ export default function Portfolio() {
       {/* Navigation Bar */}
       <nav className={`fixed top-0 left-0 right-0 z-40 transition-all duration-500 ${
         isScrolled 
-          ? 'bg-[var(--background)]/75 backdrop-blur-xl border-b border-white/[0.08] shadow-2xl py-3.5' 
-          : 'bg-transparent py-6'
+          ? 'bg-[var(--background)]/75 backdrop-blur-xl border-b border-white/[0.08] shadow-2xl py-3' 
+          : 'bg-transparent py-4'
       }`}>
-        <div className="max-w-6xl mx-auto px-6 sm:px-8 flex items-center justify-between">
+        <div className="max-w-6xl mx-auto px-4 sm:px-8 flex items-center justify-between gap-3">
           <button 
             onClick={() => scrollToSection('home')}
-            className="text-white font-extrabold text-2xl tracking-widest hover:opacity-85 transition-opacity"
+            className="text-white font-extrabold text-xl tracking-widest hover:opacity-85 transition-opacity"
           >
             <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-cyan-400 to-indigo-400 font-outfit text-glow">DON NETO</span>
           </button>
           
-          <div className="hidden md:flex items-center space-x-1.5">
+          {/* Desktop nav links — only visible ≥1024px */}
+          <div className="hidden lg:flex items-center space-x-1.5">
             {[
               { id: 'home', label: 'Home' },
               { id: 'about', label: 'About' },
@@ -872,28 +873,28 @@ export default function Portfolio() {
             </button>
           </div>
 
-          {/* Mobile menu button */}
-          <div className="md:hidden flex items-center gap-1.5">
+          {/* Mobile/Tablet right-side action buttons — visible <1024px */}
+          <div className="lg:hidden flex items-center gap-1.5 shrink-0">
             <button
               onClick={() => setIsLightMode(!isLightMode)}
-              className="text-indigo-400 p-2 rounded-xl bg-white/[0.04] border border-white/[0.08] hover:bg-white/[0.08] transition-colors"
+              className="text-indigo-400 w-9 h-9 flex items-center justify-center rounded-xl bg-white/[0.05] border border-white/[0.1] hover:bg-white/[0.1] transition-colors"
               aria-label="Toggle Theme"
             >
               <i className={`fa-solid ${isLightMode ? 'fa-moon' : 'fa-sun'} text-xs`}></i>
             </button>
             <button
               onClick={() => setIsTerminalOpen(true)}
-              className="text-indigo-400 p-2 rounded-xl bg-white/[0.04] border border-white/[0.08] hover:bg-white/[0.08] transition-colors"
+              className="text-indigo-400 w-9 h-9 flex items-center justify-center rounded-xl bg-white/[0.05] border border-white/[0.1] hover:bg-white/[0.1] transition-colors"
               aria-label="Developer Console"
             >
               <i className="fa-solid fa-terminal text-xs"></i>
             </button>
             <button 
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-              className="text-white p-2 rounded-xl bg-white/[0.04] border border-white/[0.08] hover:bg-white/[0.08] transition-colors"
+              className="text-white w-9 h-9 flex items-center justify-center rounded-xl bg-white/[0.05] border border-white/[0.1] hover:bg-white/[0.1] transition-colors"
               aria-label="Toggle menu"
             >
-              <svg className={`w-5 h-5 transition-transform duration-300 ${isMobileMenuOpen ? 'rotate-90' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className={`w-4.5 h-4.5 transition-transform duration-300 ${isMobileMenuOpen ? 'rotate-90' : ''}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 {isMobileMenuOpen ? (
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
                 ) : (
@@ -903,46 +904,75 @@ export default function Portfolio() {
             </button>
           </div>
         </div>
-        
-        {/* Mobile Menu Dropdown */}
-        <div className={`md:hidden absolute top-full left-0 right-0 border-b border-white/[0.08] bg-[var(--background)]/95 backdrop-blur-2xl transition-all duration-300 ease-in-out ${
-          isMobileMenuOpen ? 'opacity-100 max-h-screen visible py-4' : 'opacity-0 max-h-0 invisible overflow-hidden'
-        }`}>
-          <div className="px-6 space-y-1">
-            {[
-              { id: 'home', label: 'Home' },
-              { id: 'about', label: 'About' },
-              { id: 'services', label: 'Services' },
-              { id: 'simulator', label: 'Live Demo' },
-              { id: 'skills', label: 'Skills' },
-              { id: 'projects', label: 'Projects' },
-              { id: 'achievements', label: 'Achievements' },
-              { id: 'github', label: 'GitHub Activity' },
-              { id: 'contact', label: 'Contact' }
-            ].map((item) => (
-              <button
-                key={item.id}
-                onClick={() => {
-                  scrollToSection(item.id);
-                  setIsMobileMenuOpen(false);
-                }}
-                className={`block w-full text-left px-4 py-3.5 rounded-xl transition-all ${
-                  activeSection === item.id 
-                    ? 'bg-indigo-600/10 border border-indigo-500/20 text-indigo-400' 
-                    : 'text-gray-400 hover:text-white hover:bg-white/[0.04]'
-                }`}
-              >
-                {item.label}
-              </button>
-            ))}
-          </div>
-        </div>
       </nav>
 
+      {/* Mobile/Tablet Menu — Full-screen Overlay Drawer */}
+      {isMobileMenuOpen && (
+        <div
+          className="lg:hidden fixed inset-0 z-[60]"
+          aria-modal="true"
+          onClick={() => setIsMobileMenuOpen(false)}
+        >
+          {/* Slide-in Panel — stops click propagation, backdrop-blur blurs real page content */}
+          <div
+            className="mobile-drawer-panel absolute top-0 left-0 right-0 backdrop-blur-2xl border-b border-white/[0.08] shadow-2xl animate-slide-down"
+            onClick={e => e.stopPropagation()}
+          >
+            {/* Panel Header */}
+            <div className="flex items-center justify-between px-5 py-4 border-b border-white/[0.06]">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-cyan-400 to-indigo-400 font-outfit font-extrabold text-xl tracking-widest">DON NETO</span>
+              <button
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="text-gray-400 hover:text-white p-2 rounded-xl bg-white/[0.04] border border-white/[0.08] transition-colors"
+                aria-label="Close menu"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </div>
+            {/* Nav Items */}
+            <div className="px-5 py-4 space-y-1">
+              {[
+                { id: 'home', label: 'Home', icon: 'fa-house' },
+                { id: 'about', label: 'About', icon: 'fa-user' },
+                { id: 'services', label: 'Services', icon: 'fa-briefcase' },
+                { id: 'simulator', label: 'Live Demo', icon: 'fa-play' },
+                { id: 'skills', label: 'Skills', icon: 'fa-code' },
+                { id: 'projects', label: 'Projects', icon: 'fa-folder-open' },
+                { id: 'achievements', label: 'Achievements', icon: 'fa-trophy' },
+                { id: 'github', label: 'GitHub Activity', icon: 'fa-chart-bar' },
+                { id: 'contact', label: 'Contact', icon: 'fa-envelope' }
+              ].map((item) => (
+                <button
+                  key={item.id}
+                  onClick={() => {
+                    scrollToSection(item.id);
+                    setIsMobileMenuOpen(false);
+                  }}
+                  className={`flex items-center gap-3 w-full text-left px-4 py-3.5 rounded-xl text-sm font-semibold transition-all duration-200 ${
+                    activeSection === item.id 
+                      ? 'bg-indigo-600/15 border border-indigo-500/30 text-indigo-400' 
+                      : 'text-gray-300 hover:text-white hover:bg-white/[0.05]'
+                  }`}
+                >
+                  <i className={`fa-solid ${item.icon} w-4 text-center text-xs ${activeSection === item.id ? 'text-indigo-400' : 'text-gray-500'}`}></i>
+                  {item.label}
+                  {activeSection === item.id && (
+                    <span className="ml-auto w-1.5 h-1.5 rounded-full bg-indigo-400"></span>
+                  )}
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+      )}
+
+
+
       {/* Hero Section */}
-      <header id="home" className="relative min-h-screen flex flex-col items-center justify-between text-center px-6 py-12 sm:py-24 z-10">
+      <header id="home" className="relative min-h-screen flex flex-col items-center justify-between text-center px-6 pt-20 pb-12 sm:pt-32 sm:pb-24 z-10">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(99,102,241,0.06),transparent_60%)] pointer-events-none"></div>
-        <div className="h-4 sm:h-8"></div>
         
         <div className="flex flex-col items-center justify-center w-full max-w-4xl mx-auto my-auto space-y-8">
           {/* Glowing badge */}

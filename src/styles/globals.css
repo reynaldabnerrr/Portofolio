@@ -141,6 +141,42 @@
   color: #1e293b !important;
 }
 
+/* Mobile Drawer Light Mode */
+.light .mobile-drawer-backdrop {
+  background-color: rgba(15, 23, 42, 0.2) !important;
+}
+.light .mobile-drawer-panel {
+  border-bottom-color: rgba(15, 23, 42, 0.1) !important;
+  box-shadow: 0 8px 32px rgba(15, 23, 42, 0.08) !important;
+}
+.light .mobile-drawer-panel .border-white\/\[0\.06\] {
+  border-color: rgba(15, 23, 42, 0.08) !important;
+}
+.light .mobile-drawer-panel .border-white\/\[0\.08\] {
+  border-color: rgba(15, 23, 42, 0.1) !important;
+}
+.light .mobile-drawer-panel .text-gray-300 {
+  color: #334155 !important;
+}
+.light .mobile-drawer-panel .text-gray-400 {
+  color: #64748b !important;
+}
+.light .mobile-drawer-panel .text-gray-500 {
+  color: #94a3b8 !important;
+}
+.light .mobile-drawer-panel .hover\:text-white:hover {
+  color: #0f172a !important;
+}
+.light .mobile-drawer-panel .hover\:bg-white\/\[0\.05\]:hover {
+  background-color: rgba(15, 23, 42, 0.06) !important;
+}
+.light .mobile-drawer-panel .bg-white\/\[0\.04\] {
+  background-color: rgba(15, 23, 42, 0.05) !important;
+}
+.light .mobile-drawer-panel .border-white\/\[0\.08\] {
+  border-color: rgba(15, 23, 42, 0.1) !important;
+}
+
 /* Additional specific overrides */
 .light .cyber-grid {
   background-image: 
@@ -419,8 +455,17 @@ body {
   to { transform: translateY(0); opacity: 1; }
 }
 
+@keyframes slide-down {
+  from { transform: translateY(-20px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
 .animate-slide-up {
   animation: slide-up 0.4s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-slide-down {
+  animation: slide-down 0.3s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
 /* Custom Glow Orbs for Hero section */
