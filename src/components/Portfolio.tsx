@@ -2,6 +2,71 @@ import React, { useState, useEffect, useRef } from "react";
 import { GitHubCalendar } from "react-github-calendar";
 import { Typewriter } from "react-simple-typewriter";
 
+const MatrixRain = () => {
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const ctx = canvas.getContext("2d");
+    if (!ctx) return;
+
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+
+    const columns = Math.floor(canvas.width / 20);
+    const yPositions = Array(columns).fill(0);
+
+    let animationFrameId: number;
+
+    const draw = () => {
+      ctx.fillStyle = "rgba(3, 7, 18, 0.15)";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      ctx.fillStyle = "#22c55e";
+      ctx.font = "15px monospace";
+
+      yPositions.forEach((y, index) => {
+        const text = String.fromCharCode(Math.floor(Math.random() * 96) + 33);
+        const x = index * 20;
+        ctx.fillText(text, x, y);
+
+        if (y > 100 + Math.random() * 10000) {
+          yPositions[index] = 0;
+        } else {
+          yPositions[index] = y + 20;
+        }
+      });
+    };
+
+    const render = () => {
+      draw();
+      animationFrameId = requestAnimationFrame(render);
+    };
+
+    render();
+
+    const handleResize = () => {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    };
+
+    window.addEventListener("resize", handleResize);
+
+    return () => {
+      cancelAnimationFrame(animationFrameId);
+      window.removeEventListener("resize", handleResize);
+    };
+  }, []);
+
+  return (
+    <canvas
+      ref={canvasRef}
+      className="fixed inset-0 z-[100] w-full h-full pointer-events-none"
+    />
+  );
+};
+
 interface Project {
   id: number;
   title: string;
@@ -29,6 +94,150 @@ export default function Portfolio() {
   const [selectedProject, setSelectedProject] = useState<Project | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const isManualScrollRef = useRef(false);
+
+  // Premium Features States
+  const [isLightMode, setIsLightMode] = useState(false);
+  const [activeSkillTab, setActiveSkillTab] = useState(0);
+  
+  // Terminal console states
+  const [isTerminalOpen, setIsTerminalOpen] = useState(false);
+  const [terminalInput, setTerminalInput] = useState("");
+  const [terminalLogs, setTerminalLogs] = useState<string[]>([
+    "Don Neto Developer Terminal [Version 1.0.0]",
+    "Type 'help' to view all available commands.",
+    "guest@donneto:~$ "
+  ]);
+  const [isHacking, setIsHacking] = useState(false);
+
+  // Chatbot states
+  const [isChatbotOpen, setIsChatbotOpen] = useState(false);
+  const [chatbotInput, setChatbotInput] = useState("");
+  const [chatbotMessages, setChatbotMessages] = useState<Array<{ sender: "bot" | "user"; text: string }>>([
+    { sender: "bot", text: "Hello! 👋 I'm Reynald's virtual assistant. How can I help you today? Ask me about projects, skills, or contact info." }
+  ]);
+  const [chatbotTyping, setChatbotTyping] = useState(false);
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('light', isLightMode);
+  }, [isLightMode]);
+
+  const handleTerminalSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const cmd = terminalInput.trim().toLowerCase();
+    if (!cmd) return;
+
+    let newLogs = [...terminalLogs];
+    if (newLogs[newLogs.length - 1] === "guest@donneto:~$ ") {
+      newLogs[newLogs.length - 1] = `guest@donneto:~$ ${terminalInput}`;
+    } else {
+      newLogs.push(`guest@donneto:~$ ${terminalInput}`);
+    }
+
+    switch (cmd) {
+      case "help":
+        newLogs.push(
+          "Available commands:",
+          "  about        - View Reynald's bio",
+          "  projects     - List showcase projects and links",
+          "  skills       - Show technical stack details",
+          "  contact      - Display professional email and networks",
+          "  achievements - List CTF competition rewards",
+          "  hack         - Execute automated matrix decryption sequence",
+          "  clear        - Clear console history"
+        );
+        break;
+      case "about":
+        newLogs.push(
+          "Reynald Abner Tananda is a Computer Science student at Hasanuddin University",
+          "focusing on Software Engineering, Laravel REST APIs, Flutter UI, and cybersecurity forensics."
+        );
+        break;
+      case "projects":
+        newLogs.push(
+          "Featured Projects:",
+          "  1. Topcell CRM (Laravel enterprise portal)",
+          "  2. ANTEKHUB (Flutter student networking)",
+          "  3. Jokka Web (Next.js culture explorer)",
+          "  4. Topcell Corporate (Next.js responsive landing page)"
+        );
+        break;
+      case "skills":
+        newLogs.push(
+          "Programming: Python, PHP, JS, Kotlin, Dart",
+          "Web: Laravel, React, Next.js, Nginx, REST APIs",
+          "Mobile/DS: Flutter, Machine Learning, Deep Learning, NLP",
+          "Tools: Git, Linux, Docker, Tailwind CSS, SQL databases"
+        );
+        break;
+      case "contact":
+        newLogs.push(
+          "Direct contact details:",
+          "  Email    : reynald030685@gmail.com",
+          "  GitHub   : github.com/reynaldabnerrr",
+          "  LinkedIn : linkedin.com/in/reynald-abner-tananda"
+        );
+        break;
+      case "achievements":
+        newLogs.push(
+          "Achievements Milestones:",
+          "  - GEMASTIK XVIII Cyber Security Finalist (2025)",
+          "  - Pragyan CTF 2025 NIT India Winner (1st Student Category)",
+          "  - Interfest CTF Top 6 (2024)",
+          "  - Cyber Jawara International Top 11 (2024)"
+        );
+        break;
+      case "clear":
+        newLogs = [];
+        break;
+      case "hack":
+        setIsHacking(true);
+        setTimeout(() => {
+          setIsHacking(false);
+          setTerminalLogs((prev) => [
+            ...prev,
+            "> Hacking simulator complete. Target database successfully decrypted."
+          ]);
+        }, 3000);
+        break;
+      default:
+        newLogs.push(`Command not found: '${cmd}'. Type 'help' to see options.`);
+    }
+
+    if (cmd !== "clear") {
+      newLogs.push("guest@donneto:~$ ");
+    } else {
+      newLogs = ["guest@donneto:~$ "];
+    }
+
+    setTerminalLogs(newLogs);
+    setTerminalInput("");
+  };
+
+  const handleChatbotSend = (text: string) => {
+    if (!text.trim()) return;
+    
+    setChatbotMessages((prev) => [...prev, { sender: "user", text }]);
+    setChatbotInput("");
+    setChatbotTyping(true);
+
+    setTimeout(() => {
+      setChatbotTyping(false);
+      const query = text.toLowerCase();
+      let response = "I'm not sure about that. Try selecting one of the quick options below or ask about 'projects', 'skills', or 'hire'.";
+      
+      if (query.includes("project") || query.includes("work")) {
+        response = "Reynald has developed outstanding systems like Topcell CRM, ANTEKHUB (Flutter mobile app), and Jokka Web ( Makasar tourism planner). You can inspect them in the Projects section!";
+      } else if (query.includes("skill") || query.includes("stack") || query.includes("tech")) {
+        response = "His core stack includes Laravel, Next.js, React, Tailwind CSS, Flutter, Firebase, Docker, Nginx, and Cybersecurity Incident Response.";
+      } else if (query.includes("hire") || query.includes("contact") || query.includes("email") || query.includes("phone")) {
+        response = "You can contact Reynald directly via email at reynald030685@gmail.com or hit the Contact cards to message him on LinkedIn/WhatsApp!";
+      } else if (query.includes("hello") || query.includes("hi ") || query.includes("hey")) {
+        response = "Hello! Let me know what you'd like to discover about Reynald's engineering stack or custom software services.";
+      }
+
+      setChatbotMessages((prev) => [...prev, { sender: "bot", text: response }]);
+    }, 750);
+  };
   
   // E-Commerce Checkout Simulator states
   const [simCart, setSimCart] = useState<Array<{ id: number; name: string; price: number; image: string; quantity: number }>>([]);
@@ -592,7 +801,7 @@ export default function Portfolio() {
   }
 
   return (
-    <div className="min-h-screen w-full bg-[#030712] text-gray-100 selection:bg-indigo-500/30 selection:text-indigo-200 relative overflow-hidden">
+    <div className="min-h-screen w-full bg-[var(--background)] text-[var(--foreground)] selection:bg-indigo-500/30 selection:text-indigo-200 relative overflow-hidden">
       
       {/* High-tech tech grid pattern background overlay */}
       <div className="cyber-grid" />
@@ -612,7 +821,7 @@ export default function Portfolio() {
       {/* Navigation Bar */}
       <nav className={`fixed top-0 left-0 right-0 z-40 transition-all duration-500 ${
         isScrolled 
-          ? 'bg-[#030712]/75 backdrop-blur-xl border-b border-white/[0.08] shadow-2xl py-3.5' 
+          ? 'bg-[var(--background)]/75 backdrop-blur-xl border-b border-white/[0.08] shadow-2xl py-3.5' 
           : 'bg-transparent py-6'
       }`}>
         <div className="max-w-6xl mx-auto px-6 sm:px-8 flex items-center justify-between">
@@ -647,10 +856,38 @@ export default function Portfolio() {
                 {item.label}
               </button>
             ))}
+            <button
+              onClick={() => setIsLightMode(!isLightMode)}
+              className="text-indigo-400 hover:text-white p-2 rounded-full hover:bg-white/[0.04] border border-transparent hover:border-white/[0.08] transition-all ml-2"
+              aria-label="Toggle Theme"
+            >
+              <i className={`fa-solid ${isLightMode ? 'fa-moon' : 'fa-sun'} text-xs`}></i>
+            </button>
+            <button
+              onClick={() => setIsTerminalOpen(true)}
+              className="text-indigo-400 hover:text-white p-2 rounded-full hover:bg-white/[0.04] border border-transparent hover:border-white/[0.08] transition-all ml-1"
+              aria-label="Developer Console"
+            >
+              <i className="fa-solid fa-terminal text-xs"></i>
+            </button>
           </div>
 
           {/* Mobile menu button */}
-          <div className="md:hidden">
+          <div className="md:hidden flex items-center gap-1.5">
+            <button
+              onClick={() => setIsLightMode(!isLightMode)}
+              className="text-indigo-400 p-2 rounded-xl bg-white/[0.04] border border-white/[0.08] hover:bg-white/[0.08] transition-colors"
+              aria-label="Toggle Theme"
+            >
+              <i className={`fa-solid ${isLightMode ? 'fa-moon' : 'fa-sun'} text-xs`}></i>
+            </button>
+            <button
+              onClick={() => setIsTerminalOpen(true)}
+              className="text-indigo-400 p-2 rounded-xl bg-white/[0.04] border border-white/[0.08] hover:bg-white/[0.08] transition-colors"
+              aria-label="Developer Console"
+            >
+              <i className="fa-solid fa-terminal text-xs"></i>
+            </button>
             <button 
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
               className="text-white p-2 rounded-xl bg-white/[0.04] border border-white/[0.08] hover:bg-white/[0.08] transition-colors"
@@ -668,7 +905,7 @@ export default function Portfolio() {
         </div>
         
         {/* Mobile Menu Dropdown */}
-        <div className={`md:hidden absolute top-full left-0 right-0 border-b border-white/[0.08] bg-[#030712]/95 backdrop-blur-2xl transition-all duration-300 ease-in-out ${
+        <div className={`md:hidden absolute top-full left-0 right-0 border-b border-white/[0.08] bg-[var(--background)]/95 backdrop-blur-2xl transition-all duration-300 ease-in-out ${
           isMobileMenuOpen ? 'opacity-100 max-h-screen visible py-4' : 'opacity-0 max-h-0 invisible overflow-hidden'
         }`}>
           <div className="px-6 space-y-1">
@@ -1303,6 +1540,116 @@ export default function Portfolio() {
               <h2 className="text-4xl sm:text-5xl font-black tracking-tight font-outfit">Skills & Core Stack</h2>
               <div className="w-16 h-1.5 bg-gradient-to-r from-indigo-500 to-cyan-500 rounded-full mx-auto"></div>
             </div>
+
+            {/* SVG Interactive Skills Network Graph */}
+            <div className="cyber-card p-6 sm:p-8 rounded-3xl border border-white/[0.04] bg-[#070b13]/60 backdrop-blur-xl relative overflow-hidden flex flex-col items-center">
+              
+              {/* Category Tab buttons */}
+              <div className="flex flex-wrap gap-2 justify-center mb-8 w-full border-b border-white/[0.06] pb-4 z-10">
+                {[
+                  { label: "Programming", icon: "fa-solid fa-code" },
+                  { label: "Web & Backend", icon: "fa-solid fa-server" },
+                  { label: "Mobile & DS", icon: "fa-solid fa-brain" },
+                  { label: "Databases & DevOps", icon: "fa-solid fa-database" }
+                ].map((tab, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setActiveSkillTab(idx)}
+                    className={`flex items-center gap-2 px-4 py-2 rounded-full text-xs font-bold transition-all border ${
+                      activeSkillTab === idx 
+                        ? "bg-indigo-600 border-indigo-500 text-white shadow-lg shadow-indigo-600/20" 
+                        : "bg-white/[0.02] border-white/[0.06] text-gray-400 hover:text-white hover:bg-white/[0.04]"
+                    }`}
+                  >
+                    <i className={tab.icon}></i>
+                    {tab.label}
+                  </button>
+                ))}
+              </div>
+
+              {/* Connected Nodes Canvas */}
+              <div className="w-full relative h-[250px] flex items-center justify-center">
+                <svg className="absolute inset-0 w-full h-full z-0 pointer-events-none">
+                  <defs>
+                    <linearGradient id="laser" x1="0%" y1="0%" x2="100%" y2="100%">
+                      <stop offset="0%" stopColor="#6366f1" stopOpacity="0.8" />
+                      <stop offset="100%" stopColor="#06b6d4" stopOpacity="0.8" />
+                    </linearGradient>
+                    <filter id="glow-laser">
+                      <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                      <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                      </feMerge>
+                    </filter>
+                  </defs>
+
+                  {/* Pulsing laser lines linking center to satellite nodes */}
+                  <line x1="50%" y1="120" x2="50%" y2="35" stroke="url(#laser)" strokeWidth="2" filter="url(#glow-laser)" strokeDasharray="6,6" className="animate-[dash_3s_linear_infinite]" />
+                  <line x1="50%" y1="120" x2="78%" y2="80" stroke="url(#laser)" strokeWidth="2" filter="url(#glow-laser)" strokeDasharray="6,6" className="animate-[dash_3s_linear_infinite]" />
+                  <line x1="50%" y1="120" x2="70%" y2="185" stroke="url(#laser)" strokeWidth="2" filter="url(#glow-laser)" strokeDasharray="6,6" className="animate-[dash_3s_linear_infinite]" />
+                  <line x1="50%" y1="120" x2="30%" y2="185" stroke="url(#laser)" strokeWidth="2" filter="url(#glow-laser)" strokeDasharray="6,6" className="animate-[dash_3s_linear_infinite]" />
+                  <line x1="50%" y1="120" x2="22%" y2="80" stroke="url(#laser)" strokeWidth="2" filter="url(#glow-laser)" strokeDasharray="6,6" className="animate-[dash_3s_linear_infinite]" />
+                </svg>
+
+                {/* Central Category Node */}
+                <div className="absolute left-1/2 top-[120px] -translate-x-1/2 -translate-y-1/2 z-10">
+                  <div className="w-24 h-24 rounded-full bg-gradient-to-tr from-indigo-600 to-cyan-500 p-[2px] shadow-lg shadow-indigo-600/30 animate-pulse">
+                    <div className="w-full h-full rounded-full bg-[#070b13] flex flex-col items-center justify-center text-center p-2">
+                      <span className="text-[10px] font-black text-indigo-300 uppercase tracking-wider font-mono">Core Hub</span>
+                      <span className="text-[11px] font-extrabold text-white leading-tight font-outfit mt-0.5">
+                        {[
+                          "Programming",
+                          "Web & Backend",
+                          "Mobile & DS",
+                          "DevOps & DB"
+                        ][activeSkillTab]}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Satellite Skill Nodes */}
+                {[
+                  { x: "left-1/2 top-[35px] -translate-x-1/2 -translate-y-1/2", skill: [
+                    ["Python", "PHP", "JavaScript", "Kotlin", "Dart"],
+                    ["Laravel", "React", "Next.js", "RESTful API", "Nginx"],
+                    ["Flutter", "Machine Learning", "Deep Learning", "NLP", "Data Analysis"],
+                    ["MySQL", "Firebase", "Nginx Configs", "VPS Deployments", "Git"]
+                  ][activeSkillTab][0] },
+                  { x: "left-[78%] top-[80px] -translate-x-1/2 -translate-y-1/2", skill: [
+                    ["Python", "PHP", "JavaScript", "Kotlin", "Dart"],
+                    ["Laravel", "React", "Next.js", "RESTful API", "Nginx"],
+                    ["Flutter", "Machine Learning", "Deep Learning", "NLP", "Data Analysis"],
+                    ["MySQL", "Firebase", "Nginx Configs", "VPS Deployments", "Git"]
+                  ][activeSkillTab][1] },
+                  { x: "left-[70%] top-[185px] -translate-x-1/2 -translate-y-1/2", skill: [
+                    ["Python", "PHP", "JavaScript", "Kotlin", "Dart"],
+                    ["Laravel", "React", "Next.js", "RESTful API", "Nginx"],
+                    ["Flutter", "Machine Learning", "Deep Learning", "NLP", "Data Analysis"],
+                    ["MySQL", "Firebase", "Nginx Configs", "VPS Deployments", "Git"]
+                  ][activeSkillTab][2] },
+                  { x: "left-[30%] top-[185px] -translate-x-1/2 -translate-y-1/2", skill: [
+                    ["Python", "PHP", "JavaScript", "Kotlin", "Dart"],
+                    ["Laravel", "React", "Next.js", "RESTful API", "Nginx"],
+                    ["Flutter", "Machine Learning", "Deep Learning", "NLP", "Data Analysis"],
+                    ["MySQL", "Firebase", "Nginx Configs", "VPS Deployments", "Git"]
+                  ][activeSkillTab][3] },
+                  { x: "left-[22%] top-[80px] -translate-x-1/2 -translate-y-1/2", skill: [
+                    ["Python", "PHP", "JavaScript", "Kotlin", "Dart"],
+                    ["Laravel", "React", "Next.js", "RESTful API", "Nginx"],
+                    ["Flutter", "Machine Learning", "Deep Learning", "NLP", "Data Analysis"],
+                    ["MySQL", "Firebase", "Nginx Configs", "VPS Deployments", "Git"]
+                  ][activeSkillTab][4] }
+                ].map((node, nIdx) => (
+                  <div key={nIdx} className={`absolute ${node.x} z-10 group`}>
+                    <div className="px-3.5 py-2 rounded-xl bg-[#090e18]/90 border border-white/[0.08] shadow-md group-hover:border-indigo-400 group-hover:shadow-[0_0_15px_rgba(99,102,241,0.25)] transition-all duration-300 flex items-center justify-center min-w-[80px]">
+                      <span className="text-[10px] font-bold text-white group-hover:text-indigo-300 transition-colors font-mono">{node.skill}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
             
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
               {[
@@ -1411,7 +1758,22 @@ export default function Portfolio() {
               {projects.map((project) => (
                 <div 
                   key={project.id} 
-                  className="cyber-card rounded-3xl overflow-hidden group flex flex-col justify-between border border-white/[0.04] shadow-lg"
+                  className="cyber-card rounded-3xl overflow-hidden group flex flex-col justify-between border border-white/[0.04] shadow-lg transition-transform duration-300 ease-out"
+                  onMouseMove={(e) => {
+                    const card = e.currentTarget;
+                    const rect = card.getBoundingClientRect();
+                    const x = e.clientX - rect.left;
+                    const y = e.clientY - rect.top;
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    const rotateX = ((centerY - y) / centerY) * 10;
+                    const rotateY = ((x - centerX) / centerX) * 10;
+                    card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-4px)`;
+                  }}
+                  onMouseLeave={(e) => {
+                    const card = e.currentTarget;
+                    card.style.transform = `perspective(1000px) rotateX(0deg) rotateY(0deg) translateY(0px)`;
+                  }}
                 >
                   <div>
                     <div className="relative h-48 bg-gradient-to-br from-indigo-950 via-[#0a0f1d] to-[#030712] flex items-center justify-center border-b border-white/[0.05] overflow-hidden">
@@ -1483,294 +1845,7 @@ export default function Portfolio() {
           </div>
         </section>
 
-        {/* Project Detail Modal with interactive CRM widget */}
-        {selectedProject && (
-          <div className="fixed inset-0 z-50 overflow-y-auto bg-[#030712]/92 backdrop-blur-md flex justify-center items-start p-4 sm:p-10 animate-slide-up">
-            <div className="cyber-card rounded-3xl max-w-4xl w-full border border-white/[0.08] shadow-2xl my-auto">
-              {/* Modal Banner */}
-              <div className="relative h-48 sm:h-56 bg-gradient-to-br from-indigo-950 via-[#0d1326] to-[#030712] flex items-center justify-center border-b border-white/[0.08]">
-                <button
-                  onClick={() => setSelectedProject(null)}
-                  className="absolute top-4 right-4 w-10 h-10 bg-white/[0.05] hover:bg-white/[0.1] rounded-full flex items-center justify-center text-white border border-white/[0.08] transition-colors z-20"
-                >
-                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
-                  </svg>
-                </button>
-                <div className={`absolute inset-0 bg-gradient-to-tr ${selectedProject.color} opacity-20 filter blur-2xl`}></div>
-                <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-3xl bg-white/5 border border-white/10 flex items-center justify-center text-4xl sm:text-5xl text-white relative z-10 shadow-2xl">
-                  <i className={selectedProject.image}></i>
-                </div>
-                
-                <div className="absolute bottom-4 left-6">
-                  <span className="px-4 py-1.5 bg-white/[0.05] border border-white/[0.08] text-indigo-300 rounded-full text-xs font-bold uppercase tracking-wider">
-                    {selectedProject.category}
-                  </span>
-                </div>
-              </div>
-              
-              <div className="p-6 sm:p-8 space-y-8 max-h-[70vh] overflow-y-auto">
-                <div className="space-y-3">
-                  <h2 className="text-3xl sm:text-4xl font-black text-white font-outfit tracking-tight">{selectedProject.title}</h2>
-                  <p className="text-gray-300 text-sm sm:text-base leading-relaxed font-medium">{selectedProject.longDescription}</p>
-                </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
-                  {/* Left Column: Features */}
-                  <div className="md:col-span-7 space-y-4">
-                    <h3 className="text-lg font-bold text-white font-outfit border-b border-white/[0.05] pb-2 flex items-center gap-2">
-                      <span className="w-2.5 h-2.5 bg-indigo-500 rounded-full"></span> Key Features & Architecture
-                    </h3>
-                    <ul className="space-y-3">
-                      {selectedProject.features.map((feature, index) => (
-                        <li key={index} className="flex items-start text-xs sm:text-sm text-gray-300">
-                          <svg className="w-5 h-5 text-indigo-400 mr-2.5 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                          </svg>
-                          <span>{feature}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                  
-                  {/* Right Column: Tech & Resources */}
-                  <div className="md:col-span-5 space-y-6">
-                    <div className="space-y-3">
-                      <h3 className="text-lg font-bold text-white font-outfit border-b border-white/[0.05] pb-2 flex items-center gap-2">
-                        <span className="w-2.5 h-2.5 bg-cyan-400 rounded-full"></span> Tech Stack
-                      </h3>
-                      <div className="flex flex-wrap gap-2">
-                        {selectedProject.technologies.map((tech) => (
-                          <span key={tech} className="px-3 py-1.5 bg-white/[0.04] border border-white/[0.06] text-gray-300 rounded-lg text-xs font-semibold">
-                            {tech}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                    
-                    <div className="space-y-3">
-                      <h3 className="text-lg font-bold text-white font-outfit border-b border-white/[0.05] pb-2 flex items-center gap-2">
-                        <span className="w-2.5 h-2.5 bg-pink-400 rounded-full"></span> Project Links
-                      </h3>
-                      <div className="flex flex-col gap-2">
-                        <a
-                          href={selectedProject.github}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center justify-between p-3 bg-white/[0.02] border border-white/[0.05] hover:bg-white/[0.05] hover:border-white/10 rounded-xl text-xs font-bold text-gray-300 transition-colors"
-                        >
-                          <span>GitHub Repository</span>
-                          <i className="fab fa-github text-sm"></i>
-                        </a>
-                        {selectedProject.demo && (
-                          <a
-                            href={selectedProject.demo}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="flex items-center justify-between p-3 bg-indigo-600/10 border border-indigo-500/20 hover:bg-indigo-600 hover:text-white rounded-xl text-xs font-bold text-indigo-300 transition-all duration-300"
-                          >
-                            <span>Live Application Demo</span>
-                            <i className="fa-solid fa-arrow-up-right-from-square text-xs"></i>
-                          </a>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                {/* PROJECT-SPECIFIC INTERACTIVE DEMOS inside modal */}
-                {selectedProject.id === 4 && (
-                  <div className="border-t border-white/[0.08] pt-8 space-y-6">
-                    <div className="space-y-2">
-                      <h4 className="text-lg font-extrabold text-white font-outfit flex items-center gap-2">
-                        <i className="fa-solid fa-terminal text-indigo-400 text-xs"></i> Interactive CRM Mock Dashboard
-                      </h4>
-                      <p className="text-xs text-gray-400">
-                        Simulate the Topcell CRM dashboard. Manage Qontak API OAuth tokens virtually and monitor client follow-up milestone checkpoints.
-                      </p>
-                    </div>
-
-                    <div className="mock-window border border-white/[0.08]">
-                      {/* Window Tab Controller */}
-                      <div className="flex border-b border-white/[0.06] bg-white/[0.01]">
-                        <button type="button" onClick={() => setCrmMockTab("dashboard")} className={`px-5 py-3 text-xs font-bold transition-colors ${crmMockTab === "dashboard" ? "mock-tab-active" : "text-gray-500 hover:text-gray-300"}`}>
-                          Dashboard Overview
-                        </button>
-                        <button type="button" onClick={() => setCrmMockTab("whatsapp")} className={`px-5 py-3 text-xs font-bold transition-colors ${crmMockTab === "whatsapp" ? "mock-tab-active" : "text-gray-500 hover:text-gray-300"}`}>
-                          WhatsApp Config
-                        </button>
-                        <button type="button" onClick={() => setCrmMockTab("aftercare")} className={`px-5 py-3 text-xs font-bold transition-colors ${crmMockTab === "aftercare" ? "mock-tab-active" : "text-gray-500 hover:text-gray-300"}`}>
-                          Checkpoints Pipeline
-                        </button>
-                      </div>
-
-                      <div className="p-5">
-                        {crmMockTab === "dashboard" && (
-                          <div className="space-y-4">
-                            <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-                              <div className="bg-white/[0.02] border border-white/[0.04] p-3.5 rounded-xl">
-                                <span className="text-gray-500 block uppercase tracking-wider text-[9px] font-bold">Total Clients Ledgers</span>
-                                <span className="text-2xl font-black text-white font-outfit">1,402</span>
-                              </div>
-                              <div className="bg-white/[0.02] border border-white/[0.04] p-3.5 rounded-xl">
-                                <span className="text-gray-500 block uppercase tracking-wider text-[9px] font-bold">Pending Follow-ups</span>
-                                <span className="text-2xl font-black text-indigo-400 font-outfit">18 Today</span>
-                              </div>
-                              <div className="bg-white/[0.02] border border-white/[0.04] p-3.5 rounded-xl col-span-2 sm:col-span-1">
-                                <span className="text-gray-500 block uppercase tracking-wider text-[9px] font-bold">Qontak API Connection</span>
-                                <span className="text-xs font-black text-green-400 font-outfit flex items-center gap-1.5 mt-1">
-                                  <span className="w-2 h-2 rounded-full bg-green-500 animate-ping"></span> ONLINE
-                                </span>
-                              </div>
-                            </div>
-                            
-                            <div className="bg-white/[0.02] border border-white/[0.04] p-4 rounded-xl space-y-2.5">
-                              <h5 className="font-bold text-white text-xs">Follow-up Activity Chart Preview</h5>
-                              <div className="h-16 flex items-end gap-2 pt-2 border-b border-white/10 pb-1">
-                                <div className="bg-indigo-500/50 w-full h-[60%] rounded-t"></div>
-                                <div className="bg-indigo-500 w-full h-[85%] rounded-t"></div>
-                                <div className="bg-indigo-500/50 w-full h-[40%] rounded-t"></div>
-                                <div className="bg-cyan-500 w-full h-[100%] rounded-t animate-pulse"></div>
-                                <div className="bg-indigo-500/70 w-full h-[70%] rounded-t"></div>
-                                <div className="bg-indigo-500 w-full h-[90%] rounded-t"></div>
-                                <div className="bg-pink-500 w-full h-[55%] rounded-t"></div>
-                              </div>
-                              <div className="flex justify-between text-[9px] text-gray-500 font-bold font-mono">
-                                <span>Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span><span>Sat</span><span>Sun</span>
-                              </div>
-                            </div>
-                          </div>
-                        )}
-
-                        {crmMockTab === "whatsapp" && (
-                          <div className="space-y-4 animate-slide-up">
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                              <div className="bg-white/[0.02] border border-white/[0.04] p-4 rounded-xl space-y-3">
-                                <h5 className="font-bold text-white text-xs font-outfit">Qontak credentials</h5>
-                                <div className="space-y-2">
-                                  <div>
-                                    <label className="text-[9px] text-gray-500 block">QONTAK_BASE_URL</label>
-                                    <input type="text" readOnly value="https://service.qontak.com/api/v1/templates" className="w-full bg-white/[0.03] border border-white/[0.06] text-gray-300 rounded px-2.5 py-1.5 focus:outline-none text-[10px] font-mono" />
-                                  </div>
-                                  <div>
-                                    <label className="text-[9px] text-gray-500 block">API ACCESS TOKEN</label>
-                                    <input type="password" readOnly value="••••••••••••••••••••••••••••••••••••••••" className="w-full bg-white/[0.03] border border-white/[0.06] text-gray-300 rounded px-2.5 py-1.5 focus:outline-none text-[10px]" />
-                                  </div>
-                                </div>
-                                <button 
-                                  onClick={triggerQontakTokenRefresh}
-                                  disabled={qontakTokenStatus === "refreshing"}
-                                  className="w-full py-2 bg-indigo-600 hover:bg-indigo-500 font-bold rounded-lg text-white text-xs transition-colors"
-                                >
-                                  {qontakTokenStatus === "refreshing" ? "Syncing credentials..." : "Refresh Qontak OAuth Token"}
-                                </button>
-                              </div>
-
-                              <div className="bg-white/[0.02] border border-white/[0.04] p-4 rounded-xl space-y-3">
-                                <h5 className="font-bold text-white text-xs font-outfit">Synced WhatsApp Templates</h5>
-                                <div className="space-y-2">
-                                  <div className="p-2.5 bg-white/[0.03] border border-white/[0.04] rounded-lg">
-                                    <span className="font-semibold text-white block text-[11px]">followup_h1_customer</span>
-                                    <p className="text-gray-400 text-[9px] mt-1 font-mono">{"Hello {{1}}, thank you for shopping at Topcell. How is..."}</p>
-                                  </div>
-                                  <div className="p-2.5 bg-white/[0.03] border border-white/[0.04] rounded-lg">
-                                    <span className="font-semibold text-white block text-[11px]">followup_h7_aftercare</span>
-                                    <p className="text-gray-400 text-[9px] mt-1 font-mono">{"Hello {{1}}, your product {{2}} is now 1 week old. If..."}</p>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                        )}
-
-                        {crmMockTab === "aftercare" && (
-                          <div className="space-y-4 animate-slide-up">
-                            <div className="flex justify-between items-center bg-white/[0.02] p-2.5 border border-white/[0.04] rounded-xl flex-wrap gap-2">
-                              <span className="font-bold text-white text-xs font-outfit">Aftercare Ledger Milestones</span>
-                              <button 
-                                onClick={() => showWaToast("Broadcast dispatch queue sent to Qontak API!")}
-                                className="px-3 py-1 bg-green-600 hover:bg-green-500 rounded text-white font-bold text-[10px] transition-colors"
-                              >
-                                Broadcast All Pending
-                              </button>
-                            </div>
-                            
-                            <div className="overflow-x-auto">
-                              <table className="w-full text-left text-xs">
-                                <thead>
-                                  <tr className="border-b border-white/[0.06] text-gray-500 text-[10px] uppercase font-bold">
-                                    <th className="pb-2 font-mono">Name</th>
-                                    <th className="pb-2 font-mono">H+1</th>
-                                    <th className="pb-2 font-mono">H+7</th>
-                                    <th className="pb-2 font-mono">1-Month</th>
-                                    <th className="pb-2 text-right font-mono">Action</th>
-                                  </tr>
-                                </thead>
-                                <tbody className="divide-y divide-white/[0.04]">
-                                  {crmCustomers.map((cust, index) => (
-                                    <tr key={index} className="text-gray-300 font-medium">
-                                      <td className="py-2.5 text-white">{cust.name}</td>
-                                      
-                                      <td className="py-2.5">
-                                        <button 
-                                          onClick={() => handleUpdateCrmStatus(index, "h1", cust.h1 === "done" ? "pending" : "done")}
-                                          className={`px-1.5 py-0.5 rounded text-[9px] font-bold ${cust.h1 === "done" ? "bg-green-500/10 text-green-400 border border-green-500/20" : "bg-yellow-500/10 text-yellow-400 border border-yellow-500/20"}`}
-                                        >
-                                          {cust.h1}
-                                        </button>
-                                      </td>
-
-                                      <td className="py-2.5">
-                                        <button 
-                                          onClick={() => handleUpdateCrmStatus(index, "h7", cust.h7 === "done" ? "pending" : "done")}
-                                          className={`px-1.5 py-0.5 rounded text-[9px] font-bold ${cust.h7 === "done" ? "bg-green-500/10 text-green-400 border border-green-500/20" : "bg-yellow-500/10 text-yellow-400 border border-yellow-500/20"}`}
-                                        >
-                                          {cust.h7}
-                                        </button>
-                                      </td>
-
-                                      <td className="py-2.5">
-                                        <button 
-                                          onClick={() => handleUpdateCrmStatus(index, "month", cust.month === "done" ? "pending" : "done")}
-                                          className={`px-1.5 py-0.5 rounded text-[9px] font-bold ${cust.month === "done" ? "bg-green-500/10 text-green-400 border border-green-500/20" : "bg-yellow-500/10 text-yellow-400 border border-yellow-500/20"}`}
-                                        >
-                                          {cust.month}
-                                        </button>
-                                      </td>
-
-                                      <td className="py-2.5 text-right">
-                                        <button 
-                                          onClick={() => showWaToast(`WA message sent via Qontak API to ${cust.name} (${cust.phone})`)}
-                                          className="px-2 py-1 bg-white/[0.04] border border-white/[0.08] hover:bg-indigo-600 hover:text-white rounded text-[10px] text-gray-300 font-bold transition-all"
-                                        >
-                                          Send WA
-                                        </button>
-                                      </td>
-                                    </tr>
-                                  ))}
-                                </tbody>
-                              </table>
-                            </div>
-                          </div>
-                        )}
-                      </div>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {/* Close Button in Footer */}
-              <div className="p-6 border-t border-white/[0.08] flex justify-end">
-                <button
-                  onClick={() => setSelectedProject(null)}
-                  className="px-6 py-2.5 bg-white/[0.03] border border-white/[0.08] hover:bg-white/[0.08] hover:border-gray-500 text-white rounded-xl text-xs font-bold transition-colors"
-                >
-                  Close Window
-                </button>
-              </div>
-            </div>
-          </div>
-        )}
 
         {/* Experience Timeline Section */}
         <section className="scroll-mt-24">
@@ -1948,6 +2023,284 @@ export default function Portfolio() {
         </section>
       </main>
 
+      {/* Matrix rain overlay simulation */}
+      {isHacking && <MatrixRain />}
+
+      {/* Project Detail Modal with interactive CRM widget */}
+      {selectedProject && (
+        <>
+          {/* Full-screen Backdrop Blur */}
+          <div 
+            className="fixed inset-0 z-50 bg-[var(--background)]/80 backdrop-blur-xl transition-all duration-300 pointer-events-auto"
+            onClick={() => setSelectedProject(null)}
+          />
+          
+          {/* Scrollable Modal Container wrapper */}
+          <div className="fixed inset-0 z-50 overflow-y-auto flex items-center justify-center p-4 sm:p-10 pointer-events-none">
+            <div className="cyber-card rounded-3xl max-w-4xl w-full border border-white/[0.08] shadow-2xl my-auto pointer-events-auto animate-slide-up">
+              {/* Modal Banner */}
+              <div className="relative h-48 sm:h-56 bg-gradient-to-br from-indigo-950 via-[#0d1326] to-[#030712] flex items-center justify-center border-b border-white/[0.08]">
+                <button
+                  onClick={() => setSelectedProject(null)}
+                  className="absolute top-4 right-4 w-10 h-10 bg-white/[0.05] hover:bg-white/[0.1] rounded-full flex items-center justify-center text-white border border-white/[0.08] transition-colors z-20 pointer-events-auto"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+                <div className={`absolute inset-0 bg-gradient-to-tr ${selectedProject.color} opacity-20 filter blur-2xl`}></div>
+                <div className="w-20 h-20 sm:w-24 sm:h-24 rounded-3xl bg-white/5 border border-white/10 flex items-center justify-center text-4xl sm:text-5xl text-white relative z-10 shadow-2xl">
+                  <i className={selectedProject.image}></i>
+                </div>
+                
+                <div className="absolute bottom-4 left-6">
+                  <span className="px-4 py-1.5 bg-white/[0.05] border border-white/[0.08] text-indigo-300 rounded-full text-xs font-bold uppercase tracking-wider">
+                    {selectedProject.category}
+                  </span>
+                </div>
+              </div>
+              
+              <div className="p-6 sm:p-8 space-y-8 max-h-[70vh] overflow-y-auto">
+                <div className="space-y-3">
+                  <h2 className="text-3xl sm:text-4xl font-black text-white font-outfit tracking-tight">{selectedProject.title}</h2>
+                  <p className="text-gray-300 text-sm sm:text-base leading-relaxed font-medium">{selectedProject.longDescription}</p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-12 gap-8">
+                  {/* Left Column: Features */}
+                  <div className="md:col-span-7 space-y-4">
+                    <h3 className="text-lg font-bold text-white font-outfit border-b border-white/[0.05] pb-2 flex items-center gap-2">
+                      <span className="w-2.5 h-2.5 bg-indigo-500 rounded-full"></span> Key Features & Architecture
+                    </h3>
+                    <ul className="space-y-3">
+                      {selectedProject.features.map((feature, index) => (
+                        <li key={index} className="flex items-start text-xs sm:text-sm text-gray-300">
+                          <svg className="w-5 h-5 text-indigo-400 mr-2.5 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                          </svg>
+                          <span>{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                  
+                  {/* Right Column: Tech & Resources */}
+                  <div className="md:col-span-5 space-y-6">
+                    <div className="space-y-3">
+                      <h3 className="text-lg font-bold text-white font-outfit border-b border-white/[0.05] pb-2 flex items-center gap-2">
+                        <span className="w-2.5 h-2.5 bg-cyan-400 rounded-full"></span> Tech Stack
+                      </h3>
+                      <div className="flex flex-wrap gap-2">
+                        {selectedProject.technologies.map((tech) => (
+                          <span key={tech} className="px-3 py-1.5 bg-white/[0.04] border border-white/[0.06] text-gray-300 rounded-lg text-xs font-semibold">
+                            {tech}
+                          </span>
+                        ))}
+                      </div>
+                    </div>
+
+                    <div className="space-y-3">
+                      <h3 className="text-lg font-bold text-white font-outfit border-b border-white/[0.05] pb-2 flex items-center gap-2">
+                        <span className="w-2.5 h-2.5 bg-pink-500 rounded-full"></span> Project Links
+                      </h3>
+                      <div className="flex flex-col gap-2.5">
+                        <a
+                          href={selectedProject.github}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="flex items-center justify-between p-3 bg-white/[0.02] border border-white/[0.05] hover:bg-white/[0.05] hover:border-white/10 rounded-xl text-xs font-bold text-gray-300 transition-colors pointer-events-auto"
+                        >
+                          <span>GitHub Repository</span>
+                          <i className="fab fa-github text-sm"></i>
+                        </a>
+                        {selectedProject.demo && (
+                          <a
+                            href={selectedProject.demo}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center justify-between p-3 bg-indigo-600/10 border border-indigo-500/20 hover:bg-indigo-600 hover:text-white rounded-xl text-xs font-bold text-indigo-300 transition-all duration-300 pointer-events-auto"
+                          >
+                            <span>Live Application Demo</span>
+                            <i className="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+                          </a>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+
+              </div>
+
+              {/* Close Button in Footer */}
+              <div className="p-6 border-t border-white/[0.08] flex justify-end pointer-events-auto">
+                <button
+                  onClick={() => setSelectedProject(null)}
+                  className="px-6 py-2.5 bg-white/[0.03] border border-white/[0.08] hover:bg-white/[0.08] hover:border-gray-500 text-white rounded-xl text-xs font-bold transition-colors pointer-events-auto"
+                >
+                  Close Window
+                </button>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
+
+      {/* Matrix rain overlay simulation */}
+      {isHacking && <MatrixRain />}
+
+      {/* Developer Terminal Console Modal */}
+      {isTerminalOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
+          <div className="cyber-card w-full max-w-2xl rounded-2xl border border-white/[0.08] bg-[#070c14]/90 overflow-hidden shadow-2xl flex flex-col h-[400px]">
+            {/* Terminal Title Bar */}
+            <div className="flex items-center justify-between bg-white/[0.02] border-b border-white/[0.06] px-4 py-3 select-none">
+              <div className="flex items-center gap-2">
+                <div className="w-2.5 h-2.5 rounded-full bg-red-500/80 cursor-pointer animate-pulse" onClick={() => setIsTerminalOpen(false)}></div>
+                <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/80"></div>
+                <div className="w-2.5 h-2.5 rounded-full bg-green-500/80"></div>
+                <span className="text-[10px] text-gray-400 font-mono ml-2 uppercase font-bold tracking-wider flex items-center gap-1.5">
+                  <i className="fa-solid fa-terminal text-indigo-400"></i> guest@donneto: ~
+                </span>
+              </div>
+              <button 
+                onClick={() => setIsTerminalOpen(false)}
+                className="text-gray-500 hover:text-white text-xs font-bold font-mono px-2 py-0.5 rounded hover:bg-white/5"
+              >
+                ESC
+              </button>
+            </div>
+
+            {/* Logs Area */}
+            <div className="flex-1 p-4 overflow-y-auto font-mono text-xs text-green-400 space-y-1.5 scrollbar-thin">
+              {terminalLogs.map((log, index) => (
+                <div key={index} className="whitespace-pre-wrap leading-relaxed">
+                  {log}
+                </div>
+              ))}
+            </div>
+
+            {/* Input Line Form */}
+            <form onSubmit={handleTerminalSubmit} className="bg-[#05080e]/60 border-t border-white/[0.05] p-3 flex items-center gap-2">
+              <span className="font-mono text-xs text-indigo-400 font-bold">guest@donneto:~$</span>
+              <input
+                type="text"
+                autoFocus
+                value={terminalInput}
+                onChange={(e) => setTerminalInput(e.target.value)}
+                placeholder="Type 'help' and press Enter..."
+                className="flex-1 bg-transparent text-xs font-mono text-green-300 focus:outline-none placeholder:text-gray-700"
+              />
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* Floating Chatbot Widget */}
+      <div className="fixed bottom-6 right-6 z-40 flex flex-col items-end">
+        {/* Chat Window Box */}
+        {isChatbotOpen && (
+          <div className="cyber-card w-[320px] sm:w-[350px] h-[450px] rounded-3xl border border-white/[0.08] bg-[#0d141d]/90 overflow-hidden shadow-2xl flex flex-col justify-between mb-4 animate-slide-up">
+            
+            {/* Header info */}
+            <div className="bg-[#075e54] p-4 flex items-center gap-3 text-white">
+              <div className="relative">
+                <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center border border-white/20 text-lg">
+                  <i className="fa-solid fa-robot"></i>
+                </div>
+                <div className="w-2.5 h-2.5 bg-green-400 rounded-full absolute bottom-0 right-0 border border-[#075e54] animate-pulse"></div>
+              </div>
+              <div>
+                <span className="font-bold text-sm block font-outfit">Don Neto Assistant</span>
+                <span className="text-[10px] text-green-200">Online</span>
+              </div>
+            </div>
+
+            {/* Messages body */}
+            <div className="flex-1 p-4 bg-[#0b141a]/95 overflow-y-auto space-y-3.5 scrollbar-thin">
+              {chatbotMessages.map((msg, index) => (
+                <div key={index} className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}>
+                  <div className={`p-3 rounded-2xl text-xs max-w-[85%] font-medium relative shadow ${
+                    msg.sender === "user" 
+                      ? "bg-[#005c4b] text-white rounded-tr-none" 
+                      : "bg-[#202c33] text-gray-200 rounded-tl-none"
+                  }`}>
+                    {msg.text}
+                  </div>
+                </div>
+              ))}
+
+              {chatbotTyping && (
+                <div className="flex justify-start">
+                  <div className="p-3 bg-[#202c33] text-gray-400 rounded-2xl rounded-tl-none text-xs flex items-center gap-1">
+                    <span className="w-1.5 h-1.5 bg-gray-500 rounded-full animate-bounce"></span>
+                    <span className="w-1.5 h-1.5 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></span>
+                    <span className="w-1.5 h-1.5 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></span>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Quick Action Pills */}
+            <div className="px-4 py-2 bg-white/[0.01] border-t border-white/[0.04] flex flex-wrap gap-1.5">
+              {[
+                { label: "📁 View Projects", val: "Show Projects" },
+                { label: "🛠️ Core Stack", val: "Check Core Stack" },
+                { label: "💼 Contact Info", val: "Hire Reynald" }
+              ].map((pill, pIdx) => (
+                <button
+                  key={pIdx}
+                  type="button"
+                  onClick={() => handleChatbotSend(pill.val)}
+                  className="px-2.5 py-1 bg-white/5 border border-white/10 hover:border-indigo-500/30 rounded-full text-[10px] text-gray-300 transition-colors"
+                >
+                  {pill.label}
+                </button>
+              ))}
+            </div>
+
+            {/* Input field */}
+            <form 
+              onSubmit={(e) => {
+                e.preventDefault();
+                handleChatbotSend(chatbotInput);
+              }}
+              className="bg-[#1f2c34] p-3 flex items-center gap-2"
+            >
+              <input
+                type="text"
+                value={chatbotInput}
+                onChange={(e) => setChatbotInput(e.target.value)}
+                placeholder="Type a message..."
+                className="flex-1 bg-white/[0.04] border border-white/[0.08] rounded-full px-4 py-2 text-xs text-white focus:outline-none placeholder:text-gray-500"
+              />
+              <button
+                type="submit"
+                className="w-8 h-8 rounded-full bg-[#00a884] hover:bg-[#008f72] flex items-center justify-center text-white text-xs transition-colors"
+              >
+                <i className="fa-solid fa-paper-plane"></i>
+              </button>
+            </form>
+          </div>
+        )}
+
+        {/* Floating Trigger icon */}
+        <button
+          onClick={() => setIsChatbotOpen(!isChatbotOpen)}
+          className="w-14 h-14 bg-green-600 hover:bg-green-500 rounded-full flex items-center justify-center text-white text-2xl shadow-lg hover:scale-110 active:scale-95 transition-all shadow-green-600/20 z-40 relative animate-bounce"
+          aria-label="Chatbot Assistant"
+        >
+          {isChatbotOpen ? (
+            <i className="fa-solid fa-xmark"></i>
+          ) : (
+            <>
+              <i className="fab fa-whatsapp"></i>
+              <span className="absolute -top-1 -right-1 w-4.5 h-4.5 bg-red-500 rounded-full border-2 border-[#030712] flex items-center justify-center text-[9px] font-bold text-white animate-pulse">1</span>
+            </>
+          )}
+        </button>
+      </div>
+
       {/* CRM Dynamic Toast */}
       {waToast && (
         <div className="fixed bottom-6 right-6 z-50 p-4 bg-[#0b141a] border border-[#202c33] text-gray-200 rounded-2xl text-xs font-mono max-w-sm shadow-2xl flex items-center gap-3 animate-slide-up">
@@ -1959,7 +2312,7 @@ export default function Portfolio() {
       )}
 
       {/* Footer */}
-      <footer className="border-t border-white/[0.08] bg-[#02050c] text-white py-12 px-6 relative z-10">
+      <footer className="border-t border-white/[0.08] bg-[var(--background)] text-[var(--foreground)] py-12 px-6 relative z-10">
         <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
           <div>
             <p className="text-base font-bold font-outfit">

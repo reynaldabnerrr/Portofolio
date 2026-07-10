@@ -17,6 +17,151 @@
   --glow-secondary: rgba(6, 182, 212, 0.2);
 }
 
+.light {
+  --background: #f8fafc;
+  --foreground: #0f172a;
+  --primary: #4f46e5;
+  --secondary: #0891b2;
+  --accent: #db2777;
+  --card-bg: rgba(255, 255, 255, 0.65);
+  --card-border: rgba(15, 23, 42, 0.08);
+  --glow-primary: rgba(79, 70, 229, 0.1);
+  --glow-secondary: rgba(8, 145, 178, 0.1);
+}
+
+.light .text-gray-400 {
+  color: #475569; /* Slate 600 */
+}
+.light .text-gray-500 {
+  color: #64748b; /* Slate 500 */
+}
+.light .text-gray-300 {
+  color: #1e293b; /* Slate 800 */
+}
+.light .text-gray-200 {
+  color: #1e293b; /* Slate 800 */
+}
+.light .text-gray-100 {
+  color: #0f172a; /* Slate 900 */
+}
+.light .text-white {
+  color: #0f172a; /* Slate 900 */
+}
+.light .text-indigo-300 {
+  color: #4f46e5 !important;
+}
+.light .text-cyan-300 {
+  color: #0891b2 !important;
+}
+.light .text-pink-300 {
+  color: #db2777 !important;
+}
+
+/* Background overrides for cards, panels and icons */
+.light .bg-white\/5 {
+  background-color: rgba(15, 23, 42, 0.05);
+}
+.light .bg-white\/\[0\.02\] {
+  background-color: rgba(15, 23, 42, 0.02);
+}
+.light .bg-white\/\[0\.04\] {
+  background-color: rgba(15, 23, 42, 0.04);
+}
+.light .bg-white\/\[0\.03\] {
+  background-color: rgba(15, 23, 42, 0.03);
+}
+.light .border-white\/\[0\.05\] {
+  border-color: rgba(15, 23, 42, 0.06);
+}
+.light .border-white\/\[0\.06\] {
+  border-color: rgba(15, 23, 42, 0.08);
+}
+.light .border-white\/\[0\.08\] {
+  border-color: rgba(15, 23, 42, 0.1);
+}
+.light .border-white\/10 {
+  border-color: rgba(15, 23, 42, 0.12);
+}
+.light .border-white\/20 {
+  border-color: rgba(15, 23, 42, 0.2);
+}
+
+/* Project Card Gradient Headers & Shadow Overlay */
+.light .bg-gradient-to-br.from-indigo-950.via-\[\#0a0f1d\].to-\[\#030712\] {
+  background-image: linear-gradient(to bottom right, #e0e7ff, #f1f5f9, #e2e8f0) !important;
+}
+.light .bg-gradient-to-br.from-indigo-950.via-\[\#0d1326\].to-\[\#030712\] {
+  background-image: linear-gradient(to bottom right, #e0e7ff, #f1f5f9, #e2e8f0) !important;
+}
+.light .bg-gradient-to-t.from-\[\#030712\] {
+  background-image: linear-gradient(to top, #ffffff, transparent) !important;
+}
+
+/* Chatbot Light Mode Styles */
+.light .bg-\[\#0d141d\]\/90 {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  border-color: rgba(15, 23, 42, 0.1) !important;
+}
+.light .bg-\[\#0b141a\]\/95 {
+  background-color: #efeae2 !important; /* WhatsApp standard light chat BG */
+}
+.light .bg-\[\#202c33\] {
+  background-color: #ffffff !important;
+  color: #0f172a !important;
+  border: 1px solid rgba(15, 23, 42, 0.08) !important;
+}
+.light .bg-\[\#1f2c34\] {
+  background-color: #f0f2f5 !important;
+  border-top: 1px solid rgba(15, 23, 42, 0.08) !important;
+}
+
+/* Skills Network Nodes Light Mode Styles */
+.light .bg-\[\#090e18\]\/90 {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  border-color: rgba(15, 23, 42, 0.1) !important;
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.05) !important;
+}
+.light .bg-\[\#070b13\] {
+  background-color: #ffffff !important;
+}
+
+/* Terminal Console Light Mode Styles */
+.light .bg-\[\#070c14\]\/90 {
+  background-color: rgba(255, 255, 255, 0.95) !important;
+  border-color: rgba(15, 23, 42, 0.1) !important;
+}
+.light .bg-\[\#05080e\]\/60 {
+  background-color: #f1f5f9 !important;
+  border-top: 1px solid rgba(15, 23, 42, 0.05) !important;
+}
+.light .text-green-400 {
+  color: #0f172a !important;
+}
+.light .text-green-300 {
+  color: #1e293b !important;
+}
+
+/* Additional specific overrides */
+.light .cyber-grid {
+  background-image: 
+    linear-gradient(rgba(15, 23, 42, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(15, 23, 42, 0.05) 1px, transparent 1px);
+}
+.light .mock-window {
+  background: #f1f5f9;
+  border-color: rgba(15, 23, 42, 0.1);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+}
+.light .mock-tab-active {
+  background: rgba(15, 23, 42, 0.04);
+  color: #0f172a;
+}
+.light .text-transparent.bg-gradient-to-r.from-white {
+  background-image: linear-gradient(to right, #0f172a, #475569);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
 * {
   scroll-behavior: smooth;
   box-sizing: border-box;
@@ -288,4 +433,10 @@ body {
   filter: blur(50px);
   pointer-events: none;
   z-index: 0;
+}
+
+@keyframes dash {
+  to {
+    stroke-dashoffset: -40;
+  }
 }
