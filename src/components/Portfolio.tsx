@@ -327,7 +327,7 @@ export default function Portfolio() {
   };
 
   useEffect(() => {
-    let interval: NodeJS.Timeout;
+    let interval: ReturnType<typeof setInterval>;
     if (simStep === "qris") {
       interval = setInterval(() => {
         setSimTimer((prev) => {
@@ -391,7 +391,7 @@ export default function Portfolio() {
       description: "Flutter-based mobile application frontend for alumni, students, and professional networking. Supports job searches and mentorship.",
       longDescription: "Developed the frontend of ANTEKHUB, a Flutter app to facilitate networking among alumni, students, and professionals. Designed responsive UI for user comfort, directory features, mentorship portal, job listings, and RESTful API integration.",
       technologies: ["Flutter", "Dart", "Firebase", "RESTful API", "Git"],
-      github: "https://github.com/reynaldabnerrr",
+      github: "https://github.com/reynaldabnerrr/AntekHub.git",
       demo: null,
       image: "fa-solid fa-mobile-screen-button",
       color: "from-blue-600 to-purple-600",
