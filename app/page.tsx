@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import GitHubCalendar from "react-github-calendar";
+import { GitHubCalendar } from "react-github-calendar";
 import { Typewriter } from "react-simple-typewriter";
 import { useState, useEffect, useRef } from "react";
 
@@ -59,7 +59,7 @@ export default function Home() {
       description: "Travel platform showcasing Makassar's rich culture and attractions. Features event exploration, destination discovery, and culinary experiences with intuitive interface for seamless travel planning.",
       longDescription: "A comprehensive travel and cultural exploration platform for Makassar city. The website provides detailed information about local attractions, cultural events, traditional cuisine, and travel guides. Features an interactive map, event calendar, restaurant finder, and user review system.",
       technologies: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Vercel", "API Integration"],
-      github: "https://github.com/reynaldabnerrr/Jokka-Web.git",
+      github: "https://github.com/reynaldabnerrr/Jokka.git",
       demo: "https://jokka-1d960.firebaseapp.com",
       image: "🌐",
       color: "from-green-600 to-blue-600",
