@@ -2,12 +2,60 @@
 interface Props {
   title: string;
   description?: string;
+  image?: string;
 }
 
 const { 
   title, 
-  description = "Reynald Abner Tananda - Full-Stack Software Engineer portfolio focusing on Web, Mobile, API, and Cybersecurity integrations." 
+  description = "Reynald Abner Tananda - Full-Stack Software Engineer & Cyber Security Specialist portfolio focusing on Web, Mobile, API, and Cybersecurity integrations.",
+  image = "/assets/profile.jpg"
 } = Astro.props;
+
+const siteUrl = "https://www.abner.my.id";
+const canonicalURL = new URL(Astro.url.pathname, siteUrl).href;
+const ogImageUrl = new URL(image, siteUrl).href;
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Person",
+      "@id": `${siteUrl}/#person`,
+      "name": "Reynald Abner Tananda",
+      "alternateName": ["Reynald Abner", "Reynald Abner Tananda Portfolio"],
+      "url": `${siteUrl}/`,
+      "image": ogImageUrl,
+      "jobTitle": "Full-Stack Software Engineer & Cyber Security Specialist",
+      "email": "mailto:reynald030685@gmail.com",
+      "sameAs": [
+        "https://github.com/reynaldabnerrr",
+        "https://www.linkedin.com/in/reynald-abner-tananda-a060b4227/",
+        "https://www.instagram.com/reynaldabnerr/"
+      ],
+      "knowsAbout": [
+        "Software Engineering",
+        "Full-Stack Web Development",
+        "Cyber Security",
+        "React",
+        "TypeScript",
+        "Astro",
+        "Node.js",
+        "API Security & Development"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": `${siteUrl}/#website`,
+      "url": `${siteUrl}/`,
+      "name": "Reynald Abner Tananda Portfolio",
+      "description": description,
+      "publisher": {
+        "@id": `${siteUrl}/#person`
+      },
+      "inLanguage": ["id", "en"]
+    }
+  ]
+};
 ---
 
 <!doctype html>
@@ -18,22 +66,39 @@ const {
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
     <meta name="generator" content={Astro.generator} />
     
+    <!-- Canonical URL -->
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- Google Search Verification -->
+    <meta name="google-site-verification" content="google16393af97fa05edd" />
+    
     <!-- Primary Meta Tags -->
     <title>{title}</title>
     <meta name="title" content={title} />
     <meta name="description" content={description} />
     <meta name="author" content="Reynald Abner Tananda" />
-    
+    <meta name="keywords" content="Reynald Abner Tananda, Reynald Abner, Full-Stack Software Engineer, Cyber Security Specialist, Web Developer Indonesia, React Developer, Astro Developer, Software Engineer Portfolio, Cybersecurity, Web Development" />
+    <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
+    <meta name="theme-color" content="#030712" />
+
     <!-- Open Graph / Facebook -->
     <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://www.abner.my.id/" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:site_name" content="Reynald Abner Tananda Portfolio" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImageUrl} />
+    <meta property="og:locale" content="id_ID" />
     
     <!-- Twitter -->
     <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={canonicalURL} />
     <meta property="twitter:title" content={title} />
     <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={ogImageUrl} />
+
+    <!-- JSON-LD Structured Data -->
+    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
