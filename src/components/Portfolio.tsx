@@ -2,8 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import { Typewriter } from "react-simple-typewriter";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "./ui/card";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "./ui/dialog";
+
 
 const Cyber3DCanvas = React.lazy(() => import("./Cyber3DCanvas"));
 const TerminalModal = React.lazy(() => import("./TerminalModal"));

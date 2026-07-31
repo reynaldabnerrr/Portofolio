@@ -1,4 +1,11 @@
 {
   "css.lint.unknownAtRules": "ignore",
-  "css.lint.importNoFiles": "ignore"
+  "css.lint.importNoFiles": "ignore",
+  "search.exclude": {
+    "**/dist": true
+  },
+  "files.watcherExclude": {
+    "**/dist/**": true
+  }
 }
+

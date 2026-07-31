@@ -15,6 +15,7 @@ export default defineConfig({
   vite: {
     build: {
       sourcemap: true,
+      chunkSizeWarningLimit: 1000,
       rollupOptions: {
         output: {
           manualChunks: {
