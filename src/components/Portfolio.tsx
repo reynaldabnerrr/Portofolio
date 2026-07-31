@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Typewriter } from "react-simple-typewriter";
+import Cyber3DCanvas from "./Cyber3DCanvas";
 
 const GitHubCalendarLazy = React.lazy(() => import("react-github-calendar").then(m => ({ default: m.GitHubCalendar })));
 
@@ -75,7 +76,7 @@ interface Project {
   description: string;
   longDescription: string;
   technologies: string[];
-  github: string;
+  github: string | null;
   demo: string | null;
   image: string;
   color: string;
@@ -122,7 +123,7 @@ export default function Portfolio() {
     document.documentElement.classList.toggle('light', isLightMode);
   }, [isLightMode]);
 
-  const handleTerminalSubmit = (e: React.FormEvent) => {
+  const handleTerminalSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     const cmd = terminalInput.trim().toLowerCase();
     if (!cmd) return;
@@ -156,10 +157,11 @@ export default function Portfolio() {
       case "projects":
         newLogs.push(
           "Featured Projects:",
-          "  1. Topcell CRM (Laravel enterprise portal)",
-          "  2. ANTEKHUB (Flutter student networking)",
-          "  3. Jokka Web (Next.js culture explorer)",
-          "  4. Topcell Corporate (Next.js responsive landing page)"
+          "  1. E-Logbook Radiology UNHAS (Laravel & PWA medical platform)",
+          "  2. Topcell CRM (Laravel enterprise portal)",
+          "  3. ANTEKHUB (Flutter student networking)",
+          "  4. Jokka Web (Next.js culture explorer)",
+          "  5. Topcell Company Profile (Next.js responsive landing page)"
         );
         break;
       case "skills":
@@ -282,7 +284,7 @@ export default function Portfolio() {
     setSimStep("checkout");
   };
 
-  const handleSubmitPayment = (e: React.FormEvent) => {
+  const handleSubmitPayment = (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (!simName || !simPhone) return;
     setSimOrderId(Math.floor(Math.random() * 90000 + 10000));
@@ -350,20 +352,35 @@ export default function Portfolio() {
     return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
   };
   
-  // Interactive CRM states
-  const [crmMockTab, setCrmMockTab] = useState<"dashboard" | "whatsapp" | "aftercare">("dashboard");
-  const [qontakTokenStatus, setQontakTokenStatus] = useState<"idle" | "refreshing" | "success">("idle");
-  const [crmCustomers, setCrmCustomers] = useState([
-    { name: "John Doe", phone: "628123456789", h1: "pending", h7: "pending", month: "pending", type: "H+1 Today" },
-    { name: "Jane Smith", phone: "628987654321", h1: "done", h7: "pending", month: "pending", type: "H+7 Pending" },
-    { name: "Reynald Abner", phone: "628555123456", h1: "done", h7: "done", month: "pending", type: "1-Month Pending" },
-    { name: "Alice Brown", phone: "628777999888", h1: "done", h7: "done", month: "done", type: "Completed" }
-  ]);
-  const [waToast, setWaToast] = useState<string | null>(null);
+  // Interactive Toast state
+  const [waToast] = useState<string | null>(null);
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const projects: Project[] = [
+    {
+      id: 5,
+      title: "E-Logbook Radiology UNHAS",
+      category: "Academic & Medical Platform",
+      description: "A web-based academic monitoring and digital logbook system developed for the Radiology Specialist Medical Education Program at Hasanuddin University.",
+      longDescription: "A comprehensive web-based academic monitoring and digital logbook platform developed for the Radiology Specialist Medical Education Program at Hasanuddin University (UNHAS). The system enables residents to log clinical procedures, track curriculum milestones, manage academic portfolios, and receive supervisor approvals and feedback seamlessly.",
+      technologies: ["Laravel", "PHP", "MySQL", "JavaScript", "HTML", "CSS", "Bootstrap", "REST API", "PWA"],
+      github: null,
+      demo: "https://radiologiunhas.cloud/",
+      image: "fa-solid fa-notes-medical",
+      color: "from-cyan-600 via-blue-600 to-indigo-600",
+      features: [
+        "Digital clinical activity and learning logbook",
+        "Resident academic progress monitoring & milestones",
+        "Supervisor approval and feedback system",
+        "Clinical case and supporting document management",
+        "Study plan and course management pipelines",
+        "Role-based access control for residents, supervisors, and admins",
+        "Integrated dashboard analytics and reporting system",
+        "Progressive Web App (PWA) installation support"
+      ],
+      status: "Completed"
+    },
     {
       id: 4,
       title: "Topcell CRM",
@@ -428,7 +445,7 @@ export default function Portfolio() {
     },
     {
       id: 3,
-      title: "Topcell Portfolio",
+      title: "Topcell Company Profile",
       category: "Corporate Website",
       description: "Modern corporate profile website for Topcell, presenting services, vision, and digital solutions interactively and elegantly.",
       longDescription: "Professional corporate profile website designed to display Topcell's services, vision, mission, and brand identity. Built using Next.js and Tailwind CSS with smooth animations and a modern layout on both desktop and mobile.",
@@ -732,29 +749,7 @@ export default function Portfolio() {
     }
   };
 
-  // Mock CRM actions
-  const triggerQontakTokenRefresh = () => {
-    setQontakTokenStatus("refreshing");
-    setTimeout(() => {
-      setQontakTokenStatus("success");
-      showWaToast("Qontak Token Refreshed Successfully! (OAuth 2.0 Synced)");
-      setTimeout(() => setQontakTokenStatus("idle"), 3000);
-    }, 1200);
-  };
 
-  const showWaToast = (message: string) => {
-    setWaToast(message);
-    setTimeout(() => setWaToast(null), 3000);
-  };
-
-  const handleUpdateCrmStatus = (index: number, checkpoint: "h1" | "h7" | "month", newStatus: string) => {
-    const updated = [...crmCustomers];
-    if (checkpoint === "h1") updated[index].h1 = newStatus;
-    if (checkpoint === "h7") updated[index].h7 = newStatus;
-    if (checkpoint === "month") updated[index].month = newStatus;
-    setCrmCustomers(updated);
-    showWaToast(`Updated status for ${updated[index].name} to ${newStatus.toUpperCase()}`);
-  };
 
   return (
     <div className="min-h-screen w-full bg-[var(--background)] text-[var(--foreground)] selection:bg-indigo-500/30 selection:text-indigo-200 relative overflow-hidden">
@@ -816,18 +811,61 @@ export default function Portfolio() {
         style={{ opacity: 0.85 }}
       />
       
+      {/* Tactical Cyber Telemetry Header Bar */}
+      <div className="fixed top-0 left-0 right-0 z-50 bg-[#030712]/90 backdrop-blur-md border-b border-white/[0.06] text-[10px] font-mono py-1.5 px-4 hidden md:flex items-center justify-between text-gray-400 select-none">
+        <div className="flex items-center space-x-4">
+          <div className="flex items-center gap-1.5 text-emerald-400 font-bold">
+            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span>DEV_ENV: ONLINE</span>
+          </div>
+          <span className="text-white/20">|</span>
+          <span>LATENCY: <span className="text-cyan-400">12ms</span></span>
+          <span className="text-white/20">|</span>
+          <span>STACK: <span className="text-indigo-400">LARAVEL / REACT / FLUTTER</span></span>
+          <span className="text-white/20">|</span>
+          <span className="hidden lg:inline">NODE: <span className="text-purple-400">IDN-JKT-01</span></span>
+        </div>
+        <div className="flex items-center space-x-3">
+          <button
+            onClick={() => setIsHacking(!isHacking)}
+            className={`px-2 py-0.5 rounded border transition-all ${isHacking ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-300' : 'border-white/10 hover:border-white/20 text-gray-400'}`}
+          >
+            <i className="fa-solid fa-code text-[9px] mr-1"></i>
+            {isHacking ? 'MATRIX: ON' : 'MATRIX: OFF'}
+          </button>
+          <button
+            onClick={() => setIsTerminalOpen(true)}
+            className="px-2 py-0.5 rounded border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20 transition-all"
+          >
+            <i className="fa-solid fa-terminal text-[9px] mr-1"></i>
+            TERMINAL [CTRL+K]
+          </button>
+          {simCart.length > 0 && (
+            <button
+              onClick={() => scrollToSection('simulator')}
+              className="px-2 py-0.5 rounded border border-pink-500/40 bg-pink-500/15 text-pink-300 animate-pulse font-bold"
+            >
+              <i className="fa-solid fa-cart-shopping text-[9px] mr-1"></i>
+              CART ({simCart.reduce((sum, item) => sum + item.quantity, 0)})
+            </button>
+          )}
+        </div>
+      </div>
+
       {/* Navigation Bar */}
-      <nav className={`fixed top-0 left-0 right-0 z-40 transition-all duration-500 ${
+      <nav className={`fixed top-0 md:top-7 left-0 right-0 z-40 transition-all duration-500 ${
         isScrolled 
-          ? 'bg-[var(--background)]/75 backdrop-blur-xl border-b border-white/[0.08] shadow-2xl py-3' 
+          ? 'bg-[var(--background)]/85 backdrop-blur-xl border-b border-white/[0.08] shadow-2xl py-3' 
           : 'bg-transparent py-4'
       }`}>
         <div className="max-w-6xl mx-auto px-4 sm:px-8 flex items-center justify-between gap-3">
           <button 
             onClick={() => scrollToSection('home')}
-            className="text-white font-extrabold text-xl tracking-widest hover:opacity-85 transition-opacity"
+            className="text-white font-extrabold text-xl tracking-widest hover:opacity-85 transition-opacity flex items-center gap-2 group"
           >
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-cyan-400 to-indigo-400 font-outfit text-glow">DON NETO</span>
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-cyan-400 to-indigo-400 font-outfit font-extrabold text-xl tracking-widest text-glow">
+              DON NETO
+            </span>
           </button>
           
           {/* Desktop nav links — only visible ≥1024px */}
@@ -848,8 +886,8 @@ export default function Portfolio() {
                 onClick={() => scrollToSection(item.id)}
                 className={`text-xs px-3.5 py-2 rounded-full font-semibold transition-all duration-300 relative ${
                   activeSection === item.id 
-                    ? 'text-white bg-white/[0.08] border border-white/[0.12] shadow-inner shadow-white/5' 
-                    : 'text-gray-400 hover:text-white hover:bg-white/[0.03]'
+                    ? 'text-white bg-indigo-500/20 border border-indigo-500/40 shadow-[0_0_12px_rgba(99,102,241,0.25)]' 
+                    : 'text-gray-400 hover:text-white hover:bg-white/[0.04]'
                 }`}
               >
                 {item.label}
@@ -859,6 +897,7 @@ export default function Portfolio() {
               onClick={() => setIsLightMode(!isLightMode)}
               className="text-indigo-400 hover:text-white p-2 rounded-full hover:bg-white/[0.04] border border-transparent hover:border-white/[0.08] transition-all ml-2"
               aria-label="Toggle Theme"
+              title="Toggle Light/Dark Theme"
             >
               <i className={`fa-solid ${isLightMode ? 'fa-moon' : 'fa-sun'} text-xs`}></i>
             </button>
@@ -866,6 +905,7 @@ export default function Portfolio() {
               onClick={() => setIsTerminalOpen(true)}
               className="text-indigo-400 hover:text-white p-2 rounded-full hover:bg-white/[0.04] border border-transparent hover:border-white/[0.08] transition-all ml-1"
               aria-label="Developer Console"
+              title="Open Terminal Console"
             >
               <i className="fa-solid fa-terminal text-xs"></i>
             </button>
@@ -968,81 +1008,132 @@ export default function Portfolio() {
 
 
 
-      {/* Hero Section */}
-      <header id="home" className="relative min-h-screen flex flex-col items-center justify-between text-center px-6 pt-20 pb-12 sm:pt-32 sm:pb-24 z-10">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(99,102,241,0.06),transparent_60%)] pointer-events-none"></div>
+      {/* Hero Section with Interactive 3D Canvas */}
+      <header id="home" className="relative min-h-screen flex flex-col items-center justify-between text-center px-6 pt-24 pb-12 sm:pt-32 sm:pb-24 z-10 overflow-hidden">
+        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,rgba(99,102,241,0.1),transparent_65%)] pointer-events-none"></div>
         
-        <div className="flex flex-col items-center justify-center w-full max-w-4xl mx-auto my-auto space-y-8">
-          {/* Glowing badge */}
-          <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-indigo-500/30 bg-indigo-500/5 text-indigo-300 text-xs font-semibold tracking-wide uppercase mb-2 shadow-[0_0_15px_rgba(99,102,241,0.1)]">
-            <span className="w-2 h-2 rounded-full bg-cyan-400 animate-ping"></span> Available for Freelance & Custom Software Projects
+        <div className="flex flex-col lg:flex-row items-center justify-between w-full max-w-6xl mx-auto my-auto gap-8 text-left z-10">
+          
+          {/* Left Column: Bio & Hero Copy */}
+          <div className="flex flex-col items-start w-full lg:w-7/12 space-y-6">
+            {/* Glowing badge */}
+            <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full border border-cyan-500/30 bg-cyan-500/10 text-cyan-300 text-xs font-mono font-semibold tracking-wide uppercase shadow-[0_0_20px_rgba(0,240,255,0.15)]">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+              <span>FULL-STACK SOFTWARE ENGINEER & MOBILE DEVELOPER</span>
+            </div>
+            
+            <h1 className="text-4xl sm:text-6xl lg:text-7xl font-extrabold tracking-tight font-syne leading-none">
+              <span className="block text-gray-400 text-base sm:text-lg font-mono mb-2 tracking-widest uppercase">Reynald Abner Tananda, S.T.</span>
+              <span className="text-gradient-cyber block font-outfit">
+                Engineering Web Apps, Mobile & Modern Systems
+              </span>
+            </h1>
+            
+            <h2 className="text-lg sm:text-2xl font-bold text-gray-300 min-h-[45px] font-outfit">
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-cyan-400 to-pink-400">
+                <Typewriter
+                  words={[
+                    "Full-Stack Software Engineer 💻",
+                    "Web & Mobile Application Developer 📱",
+                    "Laravel, React & Flutter Specialist ⚙️",
+                    "Competitive CTF Player (Hobby & Enthusiast) 🛡️"
+                  ]}
+                  loop={0}
+                  cursor
+                  cursorStyle="|"
+                  typeSpeed={60}
+                  deleteSpeed={45}
+                  delaySpeed={1800}
+                />
+              </span>
+            </h2>
+            
+            <p className="text-base sm:text-lg text-gray-400 max-w-xl leading-relaxed font-medium">
+              Building high-performance web applications, mobile apps in Flutter, automated CRM systems, and RESTful API backends with clean code and robust software architecture.
+            </p>
+
+            {/* Key Metrics Banner */}
+            <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 w-full my-2">
+              <div className="p-3.5 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-md text-center">
+                <div className="text-2xl font-black text-indigo-400 font-mono tracking-tight">3.80</div>
+                <div className="text-[10px] text-gray-400 uppercase font-bold tracking-wider mt-0.5">GPA CS UNHAS</div>
+              </div>
+              <div className="p-3.5 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-md text-center">
+                <div className="text-2xl font-black text-cyan-400 font-mono tracking-tight">15+ Apps</div>
+                <div className="text-[10px] text-gray-400 uppercase font-bold tracking-wider mt-0.5">Built & Deployed</div>
+              </div>
+              <div className="p-3.5 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-md text-center">
+                <div className="text-2xl font-black text-emerald-400 font-mono tracking-tight">1st Place</div>
+                <div className="text-[10px] text-gray-400 uppercase font-bold tracking-wider mt-0.5">Pragyan CTF '25</div>
+              </div>
+              <div className="p-3.5 rounded-2xl bg-white/[0.03] border border-white/[0.08] backdrop-blur-md text-center">
+                <div className="text-2xl font-black text-pink-400 font-mono tracking-tight">Finalist</div>
+                <div className="text-[10px] text-gray-400 uppercase font-bold tracking-wider mt-0.5">GEMASTIK XVIII</div>
+              </div>
+            </div>
+            
+            <div className="flex flex-wrap items-center gap-3 pt-2 w-full">
+              <button 
+                onClick={() => scrollToSection('projects')}
+                className="px-7 py-3.5 bg-gradient-to-r from-indigo-600 to-cyan-600 hover:from-indigo-500 hover:to-cyan-500 rounded-full text-white font-bold tracking-wide transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(99,102,241,0.5)] flex items-center gap-2 cyber-button"
+              >
+                Explore Projects
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+              </button>
+              <button 
+                onClick={() => setIsTerminalOpen(true)}
+                className="px-6 py-3.5 bg-white/[0.04] border border-indigo-500/30 hover:bg-indigo-500/10 rounded-full text-indigo-300 font-bold tracking-wide transition-all duration-300 hover:scale-105 flex items-center gap-2 font-mono text-sm"
+              >
+                <i className="fa-solid fa-terminal text-xs"></i> Launch Terminal
+              </button>
+              <button 
+                onClick={() => scrollToSection('simulator')}
+                className="px-6 py-3.5 bg-white/[0.04] border border-pink-500/30 hover:bg-pink-500/10 rounded-full text-pink-300 font-bold tracking-wide transition-all duration-300 hover:scale-105 flex items-center gap-2 text-sm"
+              >
+                <i className="fa-solid fa-play text-xs"></i> Live Demo
+              </button>
+            </div>
           </div>
-          
-          {/* Profile Picture with modern glowing layout */}
-          <div className="relative mb-3 group">
-            <div className="absolute inset-0 rounded-full bg-gradient-to-tr from-indigo-500 via-pink-500 to-cyan-400 blur-2xl opacity-40 scale-110 group-hover:opacity-60 transition-opacity duration-500 animate-float-medium"></div>
-            <div className="absolute -inset-1.5 rounded-full bg-gradient-to-r from-indigo-500 to-cyan-400 opacity-30 blur-sm scale-95 group-hover:scale-100 group-hover:opacity-65 transition-all duration-500"></div>
-            <img
-              src="/assets/profile.jpg"
-              alt="Reynald Abner Tananda"
-              width={160}
-              height={160}
-              className="rounded-full relative z-10 border-2 border-white/20 shadow-2xl scale-95 transition-all duration-500 hover:scale-100 hover:border-indigo-400/50"
-            />
+
+          {/* Right Column: 3D Interactive WebGL Canvas Core */}
+          <div className="w-full lg:w-5/12 relative flex flex-col items-center justify-center">
+            {/* Holographic Card Frame for Profile & 3D Core */}
+            <div className="relative w-full max-w-[310px] sm:max-w-md aspect-square rounded-3xl border border-cyan-500/30 bg-[#070c18]/80 backdrop-blur-2xl p-6 shadow-[0_0_50px_rgba(0,240,255,0.15)] flex flex-col items-center justify-center overflow-hidden group">
+              {/* Interactive 3D Three.js Component */}
+              <div className="absolute inset-0 z-0 opacity-80 group-hover:opacity-100 transition-opacity">
+                <Cyber3DCanvas isLightMode={isLightMode} />
+              </div>
+
+              {/* Centered Profile Avatar Badge */}
+              <div className="relative z-10 flex flex-col items-center space-y-3 pointer-events-none">
+                <div className="relative">
+                  <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-indigo-500 via-cyan-400 to-pink-500 opacity-60 blur-md animate-pulse"></div>
+                  <img
+                    src="/assets/profile.jpg"
+                    alt="Reynald Abner Tananda"
+                    width={130}
+                    height={130}
+                    className="rounded-full relative z-10 border-2 border-white/30 shadow-2xl object-cover"
+                  />
+                </div>
+                <div className="bg-[#030712]/90 border border-cyan-500/40 rounded-full px-4 py-1.5 backdrop-blur-md flex items-center gap-2">
+                  <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                  <span className="text-[11px] font-mono font-bold text-white tracking-wider">AVAILABLE FOR DEV PROJECTS</span>
+                </div>
+              </div>
+            </div>
+            <p className="text-[10px] font-mono text-gray-400 mt-3 text-center tracking-widest uppercase">
+              <i className="fa-solid fa-hand-pointer text-cyan-400 mr-1.5 animate-bounce"></i> Interactive 3D Matrix — Move Cursor to Rotate
+            </p>
           </div>
-          
-          <h1 className="text-4xl sm:text-6xl md:text-7xl font-extrabold tracking-tight mb-2 font-outfit max-w-4xl">
-            <span className="block text-gray-400 text-xl sm:text-2xl font-light mb-3 tracking-wide">Hello, World! 👋 I'm</span>
-            <span className="text-gradient-cyber leading-tight block">
-              Reynald Abner Tananda
-            </span>
-          </h1>
-          
-          <h2 className="text-xl sm:text-2xl md:text-3xl font-bold mb-3 text-gray-300 min-h-[50px] font-outfit">
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-cyan-400 to-pink-400">
-              <Typewriter
-                words={[
-                  "Full-Stack Software Engineer 💻",
-                  "Web & Mobile Developer 📱",
-                  "Custom E-Commerce & POS Builder 🛒",
-                  "Cybersecurity & Automation Specialist 🛡️"
-                ]}
-                loop={0}
-                cursor
-                cursorStyle="|"
-                typeSpeed={60}
-                deleteSpeed={45}
-                delaySpeed={1800}
-              />
-            </span>
-          </h2>
-          
-          <p className="text-base sm:text-lg text-gray-400 max-w-2xl mx-auto leading-relaxed mb-6 font-medium">
-            Software Engineer specializing in full-stack development and cybersecurity. Providing custom website creation, e-commerce & POS systems, API integration, and business automation.
-          </p>
-          
-          <div className="flex flex-col sm:flex-row items-center gap-4 pt-2 w-full sm:w-auto">
-            <button 
-              onClick={() => scrollToSection('projects')}
-              className="w-full sm:w-auto px-8 py-4 bg-indigo-600 hover:bg-indigo-500 rounded-full text-white font-bold tracking-wide transition-all duration-300 hover:scale-105 hover:shadow-[0_0_25px_rgba(99,102,241,0.5)] flex items-center justify-center gap-2 cyber-button"
-            >
-              Explore Projects
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
-              </svg>
-            </button>
-            <button 
-              onClick={() => scrollToSection('contact')}
-              className="w-full sm:w-auto px-8 py-4 bg-white/[0.04] border border-white/[0.08] hover:bg-white/[0.08] rounded-full text-gray-200 font-bold tracking-wide transition-all duration-300 hover:scale-105 hover:border-gray-500 flex items-center justify-center"
-            >
-              Get in Touch
-            </button>
-          </div>
+
         </div>
         
-        {/* Floating Indicator */}
-        <div className="flex flex-col items-center opacity-65 mt-10">
-          <span className="text-[10px] uppercase tracking-widest text-indigo-400/90 mb-2.5 font-bold font-outfit">Scroll</span>
+        {/* Floating Scroll Indicator */}
+        <div className="flex flex-col items-center opacity-65 mt-8">
+          <span className="text-[10px] uppercase tracking-widest text-indigo-400/90 mb-2 font-bold font-outfit">Scroll</span>
           <div className="w-5.5 h-9 border-2 border-white/20 rounded-full flex justify-center p-1">
             <div className="w-1.5 h-2 bg-indigo-400 rounded-full animate-bounce"></div>
           </div>
@@ -1058,7 +1149,7 @@ export default function Portfolio() {
             {/* Column 1: Info text */}
             <div className="lg:col-span-7 space-y-6">
               <div className="space-y-2">
-                <span className="text-xs font-bold uppercase tracking-widest text-indigo-400 font-outfit">01 / Profile</span>
+                <span className="text-xs font-mono font-bold uppercase tracking-widest text-indigo-400">[PROFILE_SUMMARY]</span>
                 <h2 className="text-4xl sm:text-5xl font-black tracking-tight font-outfit text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">
                   About Me
                 </h2>
@@ -1067,25 +1158,25 @@ export default function Portfolio() {
               
               <div className="space-y-4.5 text-gray-400 text-base leading-relaxed font-medium">
                 <p>
-                  Hi! I'm <span className="text-indigo-400 font-bold">Reynald Abner Tananda</span>, a final-year Computer Science student at <span className="text-white font-bold">Universitas Hasanuddin</span>. I specialize in Software Engineering and cybersecurity architectures, maintaining a <span className="text-cyan-400 font-black">GPA of 3.78/4.00</span>.
+                  Hi! I'm <span className="text-indigo-400 font-bold">Reynald Abner Tananda, S.T.</span>, a <span className="text-emerald-400 font-bold">Fresh Graduate in Computer Science</span> from <span className="text-white font-bold">Universitas Hasanuddin</span> specializing in Software Engineering and Mobile Development with a <span className="text-cyan-400 font-black">GPA of 3.80/4.00</span>.
                 </p>
                 <p>
-                  I am experienced in building high-performance systems, having served as a backend developer intern for hospital logbooks and a teaching assistant for mobile application programming (Flutter).
+                  I have hands-on experience developing full-stack web platforms and mobile applications, including backend engineering for hospital logbook systems (RS UNHAS) and serving as a Teaching Assistant for Mobile Programming (Flutter).
                 </p>
                 <p>
-                  Outside of programming, I actively lead the cybersecurity division as the <span className="text-pink-400 font-bold">Head of Digital Forensics at ICC UH</span>, designing training modules for digital forensics, OSINT, reverse engineering, and cyber defense.
+                  As an active hobby, I enjoy participating in competitive CTF (Capture The Flag) challenges, leading the Digital Forensics division at <span className="text-pink-400 font-bold">ICC UNHAS</span>, and sharing cybersecurity learning modules with peers.
                 </p>
               </div>
               
               {/* Quick statistics styled nicely */}
               <div className="grid grid-cols-3 gap-4 pt-4">
                 <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/[0.05] text-center shadow-md shadow-black/25">
-                  <span className="block text-3xl font-black text-indigo-400 tracking-tight font-outfit">3.78</span>
+                  <span className="block text-3xl font-black text-indigo-400 tracking-tight font-outfit">3.80</span>
                   <span className="text-[10px] uppercase text-gray-400 tracking-wider font-bold block mt-1">GPA Score</span>
                 </div>
                 <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/[0.05] text-center shadow-md shadow-black/25">
-                  <span className="block text-3xl font-black text-cyan-400 tracking-tight font-outfit">7+</span>
-                  <span className="text-[10px] uppercase text-gray-400 tracking-wider font-bold block mt-1">CTF Awards</span>
+                  <span className="block text-3xl font-black text-cyan-400 tracking-tight font-outfit">15+</span>
+                  <span className="text-[10px] uppercase text-gray-400 tracking-wider font-bold block mt-1">Apps & Projects</span>
                 </div>
                 <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/[0.05] text-center shadow-md shadow-black/25">
                   <span className="block text-3xl font-black text-pink-400 tracking-tight font-outfit">3+</span>
@@ -1095,12 +1186,12 @@ export default function Portfolio() {
             </div>
             
             {/* Column 2: Highlights Grid */}
-            <div className="lg:col-span-5 grid grid-cols-2 gap-4">
+            <div className="lg:col-span-5 grid grid-cols-1 sm:grid-cols-2 gap-4">
               {[
-                { title: "Software Engineer", desc: "Laravel Backend, REST APIs, hospital databases", icon: "fa-solid fa-laptop-code text-indigo-400", color: "cyber-card-glow-indigo" },
-                { title: "Mobile Specialist", desc: "Flutter layouts, Android concepts, TA tutoring", icon: "fa-solid fa-mobile-screen-button text-cyan-400", color: "cyber-card-glow-cyan" },
-                { title: "Digital Forensic", desc: "OSINT workflow, incident response structures", icon: "fa-solid fa-user-shield text-pink-400", color: "cyber-card-glow-pink" },
-                { title: "Competitive CTF", desc: "Pragyan CTF winner, Gemastik national finalist", icon: "fa-solid fa-trophy text-emerald-400", color: "cyber-card-glow-green" }
+                { title: "Software Engineer", desc: "Laravel Backend, REST APIs, MySQL databases", icon: "fa-solid fa-laptop-code text-indigo-400", color: "cyber-card-glow-indigo" },
+                { title: "Mobile Specialist", desc: "Flutter UI, Android concepts, TA tutoring", icon: "fa-solid fa-mobile-screen-button text-cyan-400", color: "cyber-card-glow-cyan" },
+                { title: "Web Architecture", desc: "React, Next.js, Astro & PWA solutions", icon: "fa-solid fa-layer-group text-pink-400", color: "cyber-card-glow-pink" },
+                { title: "CTF Enthusiast", desc: "Pragyan CTF winner, Gemastik national finalist", icon: "fa-solid fa-trophy text-emerald-400", color: "cyber-card-glow-green" }
               ].map((item, idx) => (
                 <div key={idx} className={`cyber-card p-5 rounded-3xl flex flex-col justify-between h-44 shadow-lg shadow-black/10 ${item.color}`}>
                   <div className="w-12 h-12 rounded-2xl bg-white/5 border border-white/10 flex items-center justify-center text-2xl">
@@ -1120,7 +1211,7 @@ export default function Portfolio() {
         <section id="services" className="scroll-mt-24">
           <div className="space-y-12">
             <div className="text-center space-y-3">
-              <span className="text-xs font-bold uppercase tracking-widest text-indigo-400 font-outfit text-glow">02 / Services</span>
+              <span className="text-xs font-mono font-bold uppercase tracking-widest text-indigo-400 text-glow">[CAPABILITIES]</span>
               <h2 className="text-4xl sm:text-5xl font-black tracking-tight font-outfit text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">
                 Services & Custom Solutions
               </h2>
@@ -1175,7 +1266,7 @@ export default function Portfolio() {
         <section id="simulator" className="scroll-mt-24">
           <div className="space-y-12">
             <div className="text-center space-y-3">
-              <span className="text-xs font-bold uppercase tracking-widest text-indigo-400 font-outfit text-glow">03 / Demo</span>
+              <span className="text-xs font-mono font-bold uppercase tracking-widest text-indigo-400 text-glow">[INTERACTIVE_DEMO]</span>
               <h2 className="text-4xl sm:text-5xl font-black tracking-tight font-outfit text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">
                 Interactive System Simulator
               </h2>
@@ -1564,7 +1655,7 @@ export default function Portfolio() {
         <section id="skills" className="scroll-mt-24">
           <div className="space-y-12">
             <div className="text-center space-y-3">
-              <span className="text-xs font-bold uppercase tracking-widest text-indigo-400 font-outfit text-glow">04 / Stack</span>
+              <span className="text-xs font-mono font-bold uppercase tracking-widest text-indigo-400 text-glow">[TECHNICAL_STACK]</span>
               <h2 className="text-4xl sm:text-5xl font-black tracking-tight font-outfit">Skills & Core Stack</h2>
               <div className="w-16 h-1.5 bg-gradient-to-r from-indigo-500 to-cyan-500 rounded-full mx-auto"></div>
             </div>
@@ -1774,7 +1865,7 @@ export default function Portfolio() {
         <section id="projects" className="scroll-mt-24">
           <div className="space-y-12">
             <div className="text-center space-y-3">
-              <span className="text-xs font-bold uppercase tracking-widest text-indigo-400 font-outfit text-glow">05 / Works</span>
+              <span className="text-xs font-mono font-bold uppercase tracking-widest text-indigo-400 text-glow">[FEATURED_PROJECTS]</span>
               <h2 className="text-4xl sm:text-5xl font-black tracking-tight font-outfit">Featured Projects</h2>
               <div className="w-16 h-1.5 bg-gradient-to-r from-indigo-500 to-cyan-500 rounded-full mx-auto"></div>
               <p className="text-gray-400 text-sm sm:text-base max-w-xl mx-auto pt-2 leading-relaxed">
@@ -1857,15 +1948,29 @@ export default function Portfolio() {
                       View Details
                     </button>
                     
-                    <a
-                      href={project.github}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="px-5 py-2.5 bg-white/[0.03] hover:bg-white/[0.08] text-gray-200 border border-white/[0.06] rounded-xl transition-all duration-300 flex items-center justify-center text-xs font-bold gap-2"
-                    >
-                      <i className="fab fa-github text-sm"></i>
-                      GitHub
-                    </a>
+                    {project.demo && (
+                      <a
+                        href={project.demo}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-5 py-2.5 bg-gradient-to-r from-cyan-600/30 to-indigo-600/30 hover:from-cyan-600/50 hover:to-indigo-600/50 text-cyan-300 border border-cyan-500/40 rounded-xl transition-all duration-300 flex items-center justify-center text-xs font-bold gap-2"
+                      >
+                        <i className="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+                        Live Demo
+                      </a>
+                    )}
+
+                    {project.github && (
+                      <a
+                        href={project.github}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="px-5 py-2.5 bg-white/[0.03] hover:bg-white/[0.08] text-gray-200 border border-white/[0.06] rounded-xl transition-all duration-300 flex items-center justify-center text-xs font-bold gap-2"
+                      >
+                        <i className="fab fa-github text-sm"></i>
+                        GitHub
+                      </a>
+                    )}
                   </div>
                 </div>
               ))}
@@ -1940,7 +2045,7 @@ export default function Portfolio() {
         <section id="achievements" className="scroll-mt-24">
           <div className="space-y-12">
             <div className="text-center space-y-3">
-              <span className="text-xs font-bold uppercase tracking-widest text-indigo-400 font-outfit text-glow">06 / Awards</span>
+              <span className="text-xs font-mono font-bold uppercase tracking-widest text-indigo-400 text-glow">[ACHIEVEMENTS_INDEX]</span>
               <h2 className="text-4xl sm:text-5xl font-black tracking-tight font-outfit">Competitions & Achievements</h2>
               <div className="w-16 h-1.5 bg-gradient-to-r from-indigo-500 to-cyan-500 rounded-full mx-auto"></div>
             </div>
@@ -1971,7 +2076,7 @@ export default function Portfolio() {
         <section id="github" className="scroll-mt-24">
           <div className="space-y-12">
             <div className="text-center space-y-3">
-              <span className="text-xs font-bold uppercase tracking-widest text-indigo-400 font-outfit text-glow">07 / Code</span>
+              <span className="text-xs font-mono font-bold uppercase tracking-widest text-indigo-400 text-glow">[DEVELOPER_ACTIVITY]</span>
               <h2 className="text-4xl sm:text-5xl font-black tracking-tight font-outfit">GitHub Activity</h2>
               <div className="w-16 h-1.5 bg-gradient-to-r from-indigo-500 to-cyan-500 rounded-full mx-auto"></div>
             </div>
@@ -1998,7 +2103,7 @@ export default function Portfolio() {
         <section id="contact" className="scroll-mt-24">
           <div className="space-y-12">
             <div className="text-center space-y-3">
-              <span className="text-xs font-bold uppercase tracking-widest text-indigo-400 font-outfit text-glow">08 / Contact</span>
+              <span className="text-xs font-mono font-bold uppercase tracking-widest text-indigo-400 text-glow">[GET_IN_TOUCH]</span>
               <h2 className="text-4xl sm:text-5xl font-black tracking-tight font-outfit">Get In Touch</h2>
               <div className="w-16 h-1.5 bg-gradient-to-r from-indigo-500 to-cyan-500 rounded-full mx-auto"></div>
               <p className="text-gray-400 text-sm sm:text-base max-w-xl mx-auto pt-2 leading-relaxed">
@@ -2134,15 +2239,17 @@ export default function Portfolio() {
                         <span className="w-2.5 h-2.5 bg-pink-500 rounded-full"></span> Project Links
                       </h3>
                       <div className="flex flex-col gap-2.5">
-                        <a
-                          href={selectedProject.github}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex items-center justify-between p-3 bg-white/[0.02] border border-white/[0.05] hover:bg-white/[0.05] hover:border-white/10 rounded-xl text-xs font-bold text-gray-300 transition-colors pointer-events-auto"
-                        >
-                          <span>GitHub Repository</span>
-                          <i className="fab fa-github text-sm"></i>
-                        </a>
+                        {selectedProject.github && (
+                          <a
+                            href={selectedProject.github}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex items-center justify-between p-3 bg-white/[0.02] border border-white/[0.05] hover:bg-white/[0.05] hover:border-white/10 rounded-xl text-xs font-bold text-gray-300 transition-colors pointer-events-auto"
+                          >
+                            <span>GitHub Repository</span>
+                            <i className="fab fa-github text-sm"></i>
+                          </a>
+                        )}
                         {selectedProject.demo && (
                           <a
                             href={selectedProject.demo}
