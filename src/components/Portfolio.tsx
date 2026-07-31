@@ -1,5 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Typewriter } from "react-simple-typewriter";
+import { Button } from "./ui/button";
+import { Badge } from "./ui/badge";
+import { Card, CardHeader, CardTitle, CardDescription, CardContent, CardFooter } from "./ui/card";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "./ui/dialog";
+
 const Cyber3DCanvas = React.lazy(() => import("./Cyber3DCanvas"));
 const TerminalModal = React.lazy(() => import("./TerminalModal"));
 const ChatbotWidget = React.lazy(() => import("./ChatbotWidget"));
@@ -953,27 +958,33 @@ export default function Portfolio() {
             </div>
             
             <div className="flex flex-wrap items-center gap-3 pt-2 w-full">
-              <button 
+              <Button 
+                variant="cyber"
+                size="lg"
                 onClick={() => scrollToSection('projects')}
-                className="px-7 py-3.5 bg-gradient-to-r from-indigo-600 to-cyan-600 hover:from-indigo-500 hover:to-cyan-500 rounded-full text-white font-bold tracking-wide transition-all duration-300 hover:scale-105 hover:shadow-[0_0_30px_rgba(99,102,241,0.5)] flex items-center gap-2 cyber-button"
+                className="gap-2 rounded-full font-bold shadow-indigo-500/30"
               >
                 Explore Projects
                 <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M14 5l7 7m0 0l-7 7m7-7H3" />
                 </svg>
-              </button>
-              <button 
+              </Button>
+              <Button 
+                variant="outline"
+                size="lg"
                 onClick={() => setIsTerminalOpen(true)}
-                className="px-6 py-3.5 bg-white/[0.04] border border-indigo-500/30 hover:bg-indigo-500/10 rounded-full text-indigo-300 font-bold tracking-wide transition-all duration-300 hover:scale-105 flex items-center gap-2 font-mono text-sm"
+                className="gap-2 rounded-full font-mono text-indigo-300 border-indigo-500/30 hover:border-indigo-400 hover:bg-indigo-500/10"
               >
                 <i className="fa-solid fa-terminal text-xs"></i> Launch Terminal
-              </button>
-              <button 
+              </Button>
+              <Button 
+                variant="outline"
+                size="lg"
                 onClick={() => scrollToSection('simulator')}
-                className="px-6 py-3.5 bg-white/[0.04] border border-pink-500/30 hover:bg-pink-500/10 rounded-full text-pink-300 font-bold tracking-wide transition-all duration-300 hover:scale-105 flex items-center gap-2 text-sm"
+                className="gap-2 rounded-full text-pink-300 border-pink-500/30 hover:border-pink-400 hover:bg-pink-500/10"
               >
                 <i className="fa-solid fa-play text-xs"></i> Live Demo
-              </button>
+              </Button>
             </div>
           </div>
 
@@ -1424,9 +1435,9 @@ export default function Portfolio() {
                       </div>
                       
                       <div className="absolute top-4 right-4">
-                        <span className="px-3.5 py-1 bg-white/[0.06] border border-white/[0.08] backdrop-blur-md text-indigo-300 rounded-full text-[10px] font-bold uppercase tracking-wider">
+                        <Badge variant="default" className="bg-white/[0.08] border-white/10 backdrop-blur-md uppercase tracking-wider text-[10px]">
                           {project.status}
-                        </span>
+                        </Badge>
                       </div>
                     </div>
                     
@@ -1441,41 +1452,48 @@ export default function Portfolio() {
                       
                       <div className="flex flex-wrap gap-2 pt-2">
                         {project.technologies.slice(0, 4).map((tech) => (
-                          <span key={tech} className="px-3 py-1 rounded-full text-[10px] font-bold bg-white/[0.04] border border-white/[0.06] text-gray-300">
+                          <Badge key={tech} variant="secondary" className="text-[10px] border-white/10">
                             {tech}
-                          </span>
+                          </Badge>
                         ))}
                         {project.technologies.length > 4 && (
-                          <span className="px-3 py-1 rounded-full text-[10px] font-bold bg-indigo-500/10 text-indigo-300">
+                          <Badge variant="purple" className="text-[10px]">
                             +{project.technologies.length - 4} more
-                          </span>
+                          </Badge>
                         )}
                       </div>
                     </div>
                   </div>
                   
                   <div className="p-8 pt-0 flex flex-wrap gap-3">
-                    <button
+                    <Button
+                      size="sm"
                       onClick={() => setSelectedProject(project)}
-                      className="px-5 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl transition-all duration-300 flex items-center justify-center text-xs font-bold tracking-wide gap-2 shadow-lg shadow-indigo-600/15"
+                      className="gap-2 text-xs font-bold"
                     >
                       <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
                       </svg>
                       View Details
-                    </button>
+                    </Button>
                     
                     {project.demo && (
-                      <a
-                        href={project.demo}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="px-5 py-2.5 bg-gradient-to-r from-cyan-600/30 to-indigo-600/30 hover:from-cyan-600/50 hover:to-indigo-600/50 text-cyan-300 border border-cyan-500/40 rounded-xl transition-all duration-300 flex items-center justify-center text-xs font-bold gap-2"
+                      <Button
+                        size="sm"
+                        variant="secondary"
+                        asChild
                       >
-                        <i className="fa-solid fa-arrow-up-right-from-square text-xs"></i>
-                        Live Demo
-                      </a>
+                        <a
+                          href={project.demo}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="gap-2 text-xs font-bold"
+                        >
+                          <i className="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+                          Live Demo
+                        </a>
+                      </Button>
                     )}
 
                     {project.github && (

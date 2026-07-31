@@ -49,7 +49,7 @@ export default function TerminalModal({
         break;
       case "about":
         newLogs.push(
-          "Reynald Abner Tananda is a Computer Science student at Hasanuddin University",
+          "Reynald Abner Tananda, S.T. is a Computer Science Graduate from Hasanuddin University",
           "focusing on Software Engineering, Laravel REST APIs, Flutter UI, and cybersecurity forensics."
         );
         break;
