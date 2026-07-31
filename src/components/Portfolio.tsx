@@ -1204,7 +1204,7 @@ export default function Portfolio() {
                         <span className="text-3xl bg-white/5 border border-white/10 w-12 h-12 rounded-xl flex items-center justify-center">{prod.image}</span>
                         <div>
                           <h4 className="font-bold text-white text-sm font-outfit">{prod.name}</h4>
-                          <p className="text-[10px] text-gray-500 leading-tight mb-1">{prod.desc}</p>
+                          <p className="text-[10px] text-gray-400 leading-tight mb-1">{prod.desc}</p>
                           <span className="text-xs font-semibold text-indigo-400">Rp {prod.price.toLocaleString("id-ID")}</span>
                         </div>
                       </div>
@@ -1253,8 +1253,8 @@ export default function Portfolio() {
                         </h4>
                         
                         {simCart.length === 0 ? (
-                          <div className="text-center py-12 text-gray-500">
-                            <i className="fa-solid fa-basket-shopping text-3xl mb-3 block text-gray-600"></i>
+                          <div className="text-center py-12 text-gray-400">
+                            <i className="fa-solid fa-basket-shopping text-3xl mb-3 block text-gray-400"></i>
                             <p className="text-xs font-medium">Your cart is empty. Please add products from the left column.</p>
                           </div>
                         ) : (
@@ -1265,7 +1265,7 @@ export default function Portfolio() {
                                   <span className="text-xl">{item.image}</span>
                                   <div>
                                     <span className="font-bold text-white block text-xs">{item.name}</span>
-                                    <span className="text-[10px] text-gray-500">Rp {item.price.toLocaleString("id-ID")}</span>
+                                    <span className="text-[10px] text-gray-400">Rp {item.price.toLocaleString("id-ID")}</span>
                                   </div>
                                 </div>
                                 <div className="flex items-center gap-2">
@@ -1410,7 +1410,7 @@ export default function Portfolio() {
                                 className="w-28 h-28 border border-gray-300 rounded"
                               />
                             </div>
-                            <span className="text-[10px] text-gray-500 font-bold mt-2 font-mono">ORDER-ID: DN-{simOrderId}</span>
+                            <span className="text-[10px] text-gray-700 font-bold mt-2 font-mono">ORDER-ID: DN-{simOrderId}</span>
                           </div>
                         ) : (
                           <div className="p-4 bg-[#090d16] border border-white/[0.06] rounded-2xl flex flex-col items-stretch text-left w-full space-y-3 shadow-md">
@@ -1420,7 +1420,7 @@ export default function Portfolio() {
                             </div>
                             
                             <div className="space-y-1.5">
-                              <label className="text-[9px] text-gray-500 block">VIRTUAL ACCOUNT NUMBER</label>
+                              <label className="text-[9px] text-gray-400 block font-semibold">VIRTUAL ACCOUNT NUMBER</label>
                               <div className="flex items-center justify-between bg-white/[0.04] border border-white/[0.06] rounded-lg p-2.5">
                                 <span className="font-mono text-xs text-white tracking-widest font-bold">88012{simPhone.replace(/\D/g, "").slice(-10).padStart(10, "0")}</span>
                                 <button
@@ -1467,7 +1467,7 @@ export default function Portfolio() {
                         <button
                           type="button"
                           onClick={() => setSimStep("checkout")}
-                          className="w-full py-2 bg-white/[0.01] hover:bg-white/[0.04] border border-white/[0.06] text-gray-500 hover:text-gray-300 rounded-xl text-[10px] transition-colors"
+                          className="w-full py-2 bg-white/[0.01] hover:bg-white/[0.04] border border-white/[0.06] text-gray-400 hover:text-gray-200 rounded-xl text-[10px] transition-colors"
                         >
                           Cancel Payment
                         </button>
@@ -1530,7 +1530,7 @@ export default function Portfolio() {
                                 </li>
                               ))}
                             </ul>
-                            <p className="pt-2 text-[10px] text-gray-500">Status: <span className="bg-green-500/10 text-green-400 px-1.5 py-0.5 rounded font-bold border border-green-500/20 uppercase text-[9px]">Paid via QRIS</span></p>
+                            <p className="pt-2 text-[10px] text-gray-400 font-medium">Status: <span className="bg-green-500/10 text-green-400 px-1.5 py-0.5 rounded font-bold border border-green-500/20 uppercase text-[9px]">Paid via QRIS</span></p>
                           </div>
                         </div>
                       </div>
@@ -1718,7 +1718,7 @@ export default function Portfolio() {
                       <li key={sIdx} className="flex flex-col gap-1.5">
                         <div className="flex justify-between text-xs text-gray-300 font-medium">
                           <span>{skill}</span>
-                          <span className="text-gray-500 font-bold">{(95 - sIdx * 5)}%</span>
+                          <span className="text-gray-400 font-bold">{(95 - sIdx * 5)}%</span>
                         </div>
                         <div className="w-full bg-white/[0.04] rounded-full h-1.5 overflow-hidden">
                           <div 
@@ -2348,11 +2348,11 @@ export default function Portfolio() {
             <p className="text-base font-bold font-outfit">
               &copy; {new Date().getFullYear()} Reynald Abner Tananda
             </p>
-            <p className="text-xs text-gray-500 mt-1">
+            <p className="text-xs text-gray-400 mt-1">
               Crafted beautifully using Astro, React, & Tailwind CSS. Hosted on Vercel.
             </p>
           </div>
-          <div className="flex gap-4 text-xs text-gray-400 font-semibold font-mono">
+          <div className="flex gap-4 text-xs text-gray-300 font-semibold font-mono">
             <span>Makassar, ID</span>
             <span>•</span>
             <span>Secured Dev</span>
