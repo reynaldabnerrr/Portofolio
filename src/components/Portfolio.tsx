@@ -756,53 +756,50 @@ export default function Portfolio() {
     showWaToast(`Updated status for ${updated[index].name} to ${newStatus.toUpperCase()}`);
   };
 
-  if (isLoading) {
-    return (
-      <div className={`fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#030712] overflow-hidden transition-all duration-500 ${fadeLoading ? 'opacity-0 scale-95 pointer-events-none' : 'opacity-100 scale-100'}`}>
-        <div className="cyber-grid absolute inset-0 opacity-40" />
-        <div className="absolute w-[400px] h-[400px] bg-indigo-500/10 rounded-full blur-[80px] -top-10 -left-10 pointer-events-none" />
-        <div className="absolute w-[400px] h-[400px] bg-cyan-500/10 rounded-full blur-[80px] -bottom-10 -right-10 pointer-events-none" />
-        
-        <div className="relative flex flex-col items-center justify-center p-8 max-w-sm w-full z-10 text-center">
-          <div className="relative flex items-center justify-center w-40 h-40 mb-10 select-none scale-110">
-            <div className="absolute w-36 h-36 border-2 border-dashed border-indigo-500/30 rounded-full animate-spin" style={{ animationDuration: '12s' }}></div>
-            <div className="absolute w-40 h-40 border-2 border-t-indigo-500 border-b-indigo-500 border-r-transparent border-l-transparent rounded-full animate-spin" style={{ animationDuration: '6s' }}></div>
-            <div className="absolute w-32 h-32 border-2 border-r-cyan-400 border-l-cyan-400 border-t-transparent border-b-transparent rounded-full animate-spin" style={{ animationDuration: '3s', animationDirection: 'reverse' }}></div>
-            <div className="absolute w-24 h-24 bg-gradient-to-tr from-indigo-500/10 to-cyan-500/10 rounded-full blur-md animate-pulse"></div>
-            <div className="flex flex-col items-center justify-center z-10">
-              <span className="text-3xl font-black text-white tracking-tighter font-outfit text-glow">{loadingProgress}%</span>
-              <span className="text-[9px] uppercase tracking-widest text-indigo-400 font-bold mt-1">LOADING</span>
-            </div>
-          </div>
-
-          <div className="cyber-card p-5 w-full rounded-2xl border border-white/[0.06] bg-[#070b13]/60 backdrop-blur-xl space-y-3.5 shadow-2xl relative">
-            <div className="flex items-center gap-1.5 border-b border-white/[0.06] pb-2">
-              <div className="w-2 h-2 rounded-full bg-red-500/80"></div>
-              <div className="w-2 h-2 rounded-full bg-yellow-500/80"></div>
-              <div className="w-2 h-2 rounded-full bg-green-500/80"></div>
-              <span className="text-[9px] text-gray-500 font-mono ml-1.5 uppercase font-bold tracking-wider">Workspace Loader</span>
-            </div>
-            
-            <div className="w-full bg-white/[0.04] border border-white/[0.08] rounded-full h-1.5 overflow-hidden p-[1px]">
-              <div 
-                className="bg-gradient-to-r from-indigo-500 via-cyan-400 to-pink-500 h-full rounded-full transition-all duration-300 ease-out shadow-[0_0_10px_rgba(99,102,241,0.5)]" 
-                style={{ width: `${loadingProgress}%` }}
-              />
+  return (
+    <div className="min-h-screen w-full bg-[var(--background)] text-[var(--foreground)] selection:bg-indigo-500/30 selection:text-indigo-200 relative overflow-hidden">
+      {isLoading && (
+        <div className={`fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#030712] overflow-hidden transition-all duration-500 ${fadeLoading ? 'opacity-0 scale-95 pointer-events-none' : 'opacity-100 scale-100'}`}>
+          <div className="cyber-grid absolute inset-0 opacity-40" />
+          <div className="absolute w-[400px] h-[400px] bg-indigo-500/10 rounded-full blur-[80px] -top-10 -left-10 pointer-events-none" />
+          <div className="absolute w-[400px] h-[400px] bg-cyan-500/10 rounded-full blur-[80px] -bottom-10 -right-10 pointer-events-none" />
+          
+          <div className="relative flex flex-col items-center justify-center p-8 max-w-sm w-full z-10 text-center">
+            <div className="relative flex items-center justify-center w-40 h-40 mb-10 select-none scale-110">
+              <div className="absolute w-36 h-36 border-2 border-dashed border-indigo-500/30 rounded-full animate-spin" style={{ animationDuration: '12s' }}></div>
+              <div className="absolute w-40 h-40 border-2 border-t-indigo-500 border-b-indigo-500 border-r-transparent border-l-transparent rounded-full animate-spin" style={{ animationDuration: '6s' }}></div>
+              <div className="absolute w-32 h-32 border-2 border-r-cyan-400 border-l-cyan-400 border-t-transparent border-b-transparent rounded-full animate-spin" style={{ animationDuration: '3s', animationDirection: 'reverse' }}></div>
+              <div className="absolute w-24 h-24 bg-gradient-to-tr from-indigo-500/10 to-cyan-500/10 rounded-full blur-md animate-pulse"></div>
+              <div className="flex flex-col items-center justify-center z-10">
+                <span className="text-3xl font-black text-white tracking-tighter font-outfit text-glow">{loadingProgress}%</span>
+                <span className="text-[9px] uppercase tracking-widest text-indigo-400 font-bold mt-1">LOADING</span>
+              </div>
             </div>
 
-            <div className="h-6 flex items-center justify-center">
-              <p className="text-[10px] font-mono text-gray-400 tracking-tight text-center font-semibold text-indigo-300/90 truncate w-full">
-                {loadingStatus}
-              </p>
+            <div className="cyber-card p-5 w-full rounded-2xl border border-white/[0.06] bg-[#070b13]/60 backdrop-blur-xl space-y-3.5 shadow-2xl relative">
+              <div className="flex items-center gap-1.5 border-b border-white/[0.06] pb-2">
+                <div className="w-2 h-2 rounded-full bg-red-500/80"></div>
+                <div className="w-2 h-2 rounded-full bg-yellow-500/80"></div>
+                <div className="w-2 h-2 rounded-full bg-green-500/80"></div>
+                <span className="text-[9px] text-gray-400 font-mono ml-1.5 uppercase font-bold tracking-wider">Workspace Loader</span>
+              </div>
+              
+              <div className="w-full bg-white/[0.04] border border-white/[0.08] rounded-full h-1.5 overflow-hidden p-[1px]">
+                <div 
+                  className="bg-gradient-to-r from-indigo-500 via-cyan-400 to-pink-500 h-full rounded-full transition-all duration-300 ease-out shadow-[0_0_10px_rgba(99,102,241,0.5)]" 
+                  style={{ width: `${loadingProgress}%` }}
+                />
+              </div>
+
+              <div className="h-6 flex items-center justify-center">
+                <p className="text-[10px] font-mono text-gray-400 tracking-tight text-center font-semibold text-indigo-300/90 truncate w-full">
+                  {loadingStatus}
+                </p>
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    );
-  }
-
-  return (
-    <div className="min-h-screen w-full bg-[var(--background)] text-[var(--foreground)] selection:bg-indigo-500/30 selection:text-indigo-200 relative overflow-hidden">
+      )}
       
       {/* High-tech tech grid pattern background overlay */}
       <div className="cyber-grid" />

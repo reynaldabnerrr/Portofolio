@@ -8,9 +8,5 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   site: 'https://www.abner.my.id',
   integrations: [react(), tailwind(), sitemap()],
-  adapter: vercel({
-    webAnalytics: {
-      enabled: true,
-    },
-  }),
+  adapter: vercel(),
 });
