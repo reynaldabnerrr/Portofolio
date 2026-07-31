@@ -9,6 +9,9 @@ export default defineConfig({
   site: 'https://www.abner.my.id',
   integrations: [react(), tailwind(), sitemap()],
   adapter: vercel(),
+  build: {
+    inlineStylesheets: 'always',
+  },
   vite: {
     build: {
       sourcemap: true,

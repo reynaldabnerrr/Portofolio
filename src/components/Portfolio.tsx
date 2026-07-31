@@ -91,7 +91,18 @@ export default function Portfolio() {
   const [activeSection, setActiveSection] = useState("home");
   const [isScrolled, setIsScrolled] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
+  const [load3D, setLoad3D] = useState(false);
   const [loadingProgress, setLoadingProgress] = useState(0);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      if ("requestIdleCallback" in window) {
+        (window as any).requestIdleCallback(() => setLoad3D(true));
+      } else {
+        setTimeout(() => setLoad3D(true), 300);
+      }
+    }
+  }, []);
   const [loadingStatus, setLoadingStatus] = useState("> BOOT: INITIATING SECURE ARCHITECTURE PROTOCOLS...");
   const [fadeLoading, setFadeLoading] = useState(false);
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
@@ -977,7 +988,7 @@ export default function Portfolio() {
               {/* Interactive 3D Three.js Component */}
               <div className="absolute inset-0 z-0 opacity-80 group-hover:opacity-100 transition-opacity">
                 <React.Suspense fallback={null}>
-                  <Cyber3DCanvas isLightMode={isLightMode} />
+                  {load3D && <Cyber3DCanvas isLightMode={isLightMode} />}
                 </React.Suspense>
               </div>
 
