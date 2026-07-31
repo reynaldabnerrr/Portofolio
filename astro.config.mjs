@@ -9,4 +9,17 @@ export default defineConfig({
   site: 'https://www.abner.my.id',
   integrations: [react(), tailwind(), sitemap()],
   adapter: vercel(),
+  vite: {
+    build: {
+      sourcemap: true,
+      rollupOptions: {
+        output: {
+          manualChunks: {
+            three: ['three'],
+            react: ['react', 'react-dom'],
+          },
+        },
+      },
+    },
+  },
 });

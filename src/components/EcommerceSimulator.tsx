@@ -432,6 +432,10 @@ export default function EcommerceSimulator({
                               "https://www.abner.my.id/"
                             )}`}
                             alt="QRIS Code"
+                            width={110}
+                            height={110}
+                            loading="lazy"
+                            decoding="async"
                             className="w-28 h-28 border border-gray-300 rounded"
                           />
                         </div>

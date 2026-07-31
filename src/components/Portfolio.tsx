@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Typewriter } from "react-simple-typewriter";
-import Cyber3DCanvas from "./Cyber3DCanvas";
-import TerminalModal from "./TerminalModal";
-import ChatbotWidget from "./ChatbotWidget";
-import EcommerceSimulator from "./EcommerceSimulator";
+const Cyber3DCanvas = React.lazy(() => import("./Cyber3DCanvas"));
+const TerminalModal = React.lazy(() => import("./TerminalModal"));
+const ChatbotWidget = React.lazy(() => import("./ChatbotWidget"));
+const EcommerceSimulator = React.lazy(() => import("./EcommerceSimulator"));
 
 const GitHubCalendarLazy = React.lazy(() => import("react-github-calendar").then(m => ({ default: m.GitHubCalendar })));
 
@@ -976,20 +976,27 @@ export default function Portfolio() {
             } backdrop-blur-2xl p-6 flex flex-col items-center justify-center overflow-hidden group`}>
               {/* Interactive 3D Three.js Component */}
               <div className="absolute inset-0 z-0 opacity-80 group-hover:opacity-100 transition-opacity">
-                <Cyber3DCanvas isLightMode={isLightMode} />
+                <React.Suspense fallback={null}>
+                  <Cyber3DCanvas isLightMode={isLightMode} />
+                </React.Suspense>
               </div>
 
               {/* Centered Profile Avatar Badge */}
               <div className="relative z-10 flex flex-col items-center space-y-3 pointer-events-none">
                 <div className="relative">
                   <div className="absolute -inset-2 rounded-full bg-gradient-to-r from-indigo-500 via-cyan-400 to-pink-500 opacity-60 blur-md animate-pulse"></div>
-                  <img
-                    src="/assets/profile.jpg"
-                    alt="Reynald Abner Tananda"
-                    width={130}
-                    height={130}
-                    className="rounded-full relative z-10 border-2 border-white/30 shadow-2xl object-cover"
-                  />
+                  <picture>
+                    <source srcSet="/assets/profile.webp" type="image/webp" />
+                    <img
+                      src="/assets/profile.jpg"
+                      alt="Reynald Abner Tananda"
+                      width={130}
+                      height={130}
+                      fetchPriority="high"
+                      decoding="async"
+                      className="rounded-full relative z-10 border-2 border-white/30 shadow-2xl object-cover"
+                    />
+                  </picture>
                 </div>
                 <div className={`border rounded-full px-4 py-1.5 backdrop-blur-md flex items-center gap-2 transition-all duration-300 ${
                   isLightMode
@@ -1142,12 +1149,14 @@ export default function Portfolio() {
         </section>
 
         {/* Live E-Commerce Checkout Simulator */}
-        <EcommerceSimulator
-          isLightMode={isLightMode}
-          simCart={simCart}
-          setSimCart={setSimCart}
-          scrollToSection={scrollToSection}
-        />
+        <React.Suspense fallback={null}>
+          <EcommerceSimulator
+            isLightMode={isLightMode}
+            simCart={simCart}
+            setSimCart={setSimCart}
+            scrollToSection={scrollToSection}
+          />
+        </React.Suspense>
 
         {/* Skills Section */}
         <section id="skills" className="scroll-mt-24">
@@ -1785,15 +1794,19 @@ export default function Portfolio() {
       {isHacking && <MatrixRain />}
 
       {/* Developer Terminal Console Modal */}
-      <TerminalModal
-        isOpen={isTerminalOpen}
-        onClose={() => setIsTerminalOpen(false)}
-        isHacking={isHacking}
-        setIsHacking={setIsHacking}
-      />
+      <React.Suspense fallback={null}>
+        <TerminalModal
+          isOpen={isTerminalOpen}
+          onClose={() => setIsTerminalOpen(false)}
+          isHacking={isHacking}
+          setIsHacking={setIsHacking}
+        />
+      </React.Suspense>
 
       {/* Floating Chatbot Widget */}
-      <ChatbotWidget isLightMode={isLightMode} />
+      <React.Suspense fallback={null}>
+        <ChatbotWidget isLightMode={isLightMode} />
+      </React.Suspense>
 
       {/* CRM Dynamic Toast */}
       {waToast && (
