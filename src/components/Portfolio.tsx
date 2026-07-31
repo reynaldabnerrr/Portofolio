@@ -1,6 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Typewriter } from "react-simple-typewriter";
 import Cyber3DCanvas from "./Cyber3DCanvas";
+import TerminalModal from "./TerminalModal";
+import ChatbotWidget from "./ChatbotWidget";
+import EcommerceSimulator from "./EcommerceSimulator";
 
 const GitHubCalendarLazy = React.lazy(() => import("react-github-calendar").then(m => ({ default: m.GitHubCalendar })));
 
@@ -98,260 +101,40 @@ export default function Portfolio() {
   const isManualScrollRef = useRef(false);
 
   // Premium Features States
-  const [isLightMode, setIsLightMode] = useState(false);
+  const [isLightMode, setIsLightMode] = useState<boolean>(() => {
+    if (typeof window !== "undefined") {
+      const savedTheme = localStorage.getItem("theme");
+      if (savedTheme === "light") return true;
+      if (savedTheme === "dark") return false;
+      return window.matchMedia("(prefers-color-scheme: light)").matches;
+    }
+    return false;
+  });
   const [activeSkillTab, setActiveSkillTab] = useState(0);
   
-  // Terminal console states
+  // Terminal console state flags
   const [isTerminalOpen, setIsTerminalOpen] = useState(false);
-  const [terminalInput, setTerminalInput] = useState("");
-  const [terminalLogs, setTerminalLogs] = useState<string[]>([
-    "Don Neto Developer Terminal [Version 1.0.0]",
-    "Type 'help' to view all available commands.",
-    "guest@donneto:~$ "
-  ]);
   const [isHacking, setIsHacking] = useState(false);
 
-  // Chatbot states
-  const [isChatbotOpen, setIsChatbotOpen] = useState(false);
-  const [chatbotInput, setChatbotInput] = useState("");
-  const [chatbotMessages, setChatbotMessages] = useState<Array<{ sender: "bot" | "user"; text: string }>>([
-    { sender: "bot", text: "Hello! 👋 I'm Reynald's virtual assistant. How can I help you today? Ask me about projects, skills, or contact info." }
-  ]);
-  const [chatbotTyping, setChatbotTyping] = useState(false);
+  // E-Commerce Checkout Simulator cart state (synced with Navbar)
+  const [simCart, setSimCart] = useState<Array<{ id: number; name: string; price: number; image: string; quantity: number }>>([]);
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const isLight = document.documentElement.classList.contains('light');
+      if (isLight !== isLightMode) {
+        setIsLightMode(isLight);
+      }
+    }
+  }, []);
 
   useEffect(() => {
     document.documentElement.classList.toggle('light', isLightMode);
+    if (typeof window !== "undefined") {
+      localStorage.setItem("theme", isLightMode ? "light" : "dark");
+    }
   }, [isLightMode]);
 
-  const handleTerminalSubmit = (e: React.SyntheticEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    const cmd = terminalInput.trim().toLowerCase();
-    if (!cmd) return;
-
-    let newLogs = [...terminalLogs];
-    if (newLogs[newLogs.length - 1] === "guest@donneto:~$ ") {
-      newLogs[newLogs.length - 1] = `guest@donneto:~$ ${terminalInput}`;
-    } else {
-      newLogs.push(`guest@donneto:~$ ${terminalInput}`);
-    }
-
-    switch (cmd) {
-      case "help":
-        newLogs.push(
-          "Available commands:",
-          "  about        - View Reynald's bio",
-          "  projects     - List showcase projects and links",
-          "  skills       - Show technical stack details",
-          "  contact      - Display professional email and networks",
-          "  achievements - List CTF competition rewards",
-          "  hack         - Execute automated matrix decryption sequence",
-          "  clear        - Clear console history"
-        );
-        break;
-      case "about":
-        newLogs.push(
-          "Reynald Abner Tananda is a Computer Science student at Hasanuddin University",
-          "focusing on Software Engineering, Laravel REST APIs, Flutter UI, and cybersecurity forensics."
-        );
-        break;
-      case "projects":
-        newLogs.push(
-          "Featured Projects:",
-          "  1. E-Logbook Radiology UNHAS (Laravel & PWA medical platform)",
-          "  2. Topcell CRM (Laravel enterprise portal)",
-          "  3. ANTEKHUB (Flutter student networking)",
-          "  4. Jokka Web (Next.js culture explorer)",
-          "  5. Topcell Company Profile (Next.js responsive landing page)"
-        );
-        break;
-      case "skills":
-        newLogs.push(
-          "Programming: Python, PHP, JS, Kotlin, Dart",
-          "Web: Laravel, React, Next.js, Nginx, REST APIs",
-          "Mobile/DS: Flutter, Machine Learning, Deep Learning, NLP",
-          "Tools: Git, Linux, Docker, Tailwind CSS, SQL databases"
-        );
-        break;
-      case "contact":
-        newLogs.push(
-          "Direct contact details:",
-          "  Email    : reynald030685@gmail.com",
-          "  GitHub   : github.com/reynaldabnerrr",
-          "  LinkedIn : linkedin.com/in/reynald-abner-tananda"
-        );
-        break;
-      case "achievements":
-        newLogs.push(
-          "Achievements Milestones:",
-          "  - GEMASTIK XVIII Cyber Security Finalist (2025)",
-          "  - Pragyan CTF 2025 NIT India Winner (1st Student Category)",
-          "  - Interfest CTF Top 6 (2024)",
-          "  - Cyber Jawara International Top 11 (2024)"
-        );
-        break;
-      case "clear":
-        newLogs = [];
-        break;
-      case "hack":
-        setIsHacking(true);
-        setTimeout(() => {
-          setIsHacking(false);
-          setTerminalLogs((prev) => [
-            ...prev,
-            "> Hacking simulator complete. Target database successfully decrypted."
-          ]);
-        }, 3000);
-        break;
-      default:
-        newLogs.push(`Command not found: '${cmd}'. Type 'help' to see options.`);
-    }
-
-    if (cmd !== "clear") {
-      newLogs.push("guest@donneto:~$ ");
-    } else {
-      newLogs = ["guest@donneto:~$ "];
-    }
-
-    setTerminalLogs(newLogs);
-    setTerminalInput("");
-  };
-
-  const handleChatbotSend = (text: string) => {
-    if (!text.trim()) return;
-    
-    setChatbotMessages((prev) => [...prev, { sender: "user", text }]);
-    setChatbotInput("");
-    setChatbotTyping(true);
-
-    setTimeout(() => {
-      setChatbotTyping(false);
-      const query = text.toLowerCase();
-      let response = "I'm not sure about that. Try selecting one of the quick options below or ask about 'projects', 'skills', or 'hire'.";
-      
-      if (query.includes("project") || query.includes("work")) {
-        response = "Reynald has developed outstanding systems like Topcell CRM, ANTEKHUB (Flutter mobile app), and Jokka Web ( Makasar tourism planner). You can inspect them in the Projects section!";
-      } else if (query.includes("skill") || query.includes("stack") || query.includes("tech")) {
-        response = "His core stack includes Laravel, Next.js, React, Tailwind CSS, Flutter, Firebase, Docker, Nginx, and Cybersecurity Incident Response.";
-      } else if (query.includes("hire") || query.includes("contact") || query.includes("email") || query.includes("phone")) {
-        response = "You can contact Reynald directly via email at reynald030685@gmail.com or hit the Contact cards to message him on LinkedIn/WhatsApp!";
-      } else if (query.includes("hello") || query.includes("hi ") || query.includes("hey")) {
-        response = "Hello! Let me know what you'd like to discover about Reynald's engineering stack or custom software services.";
-      }
-
-      setChatbotMessages((prev) => [...prev, { sender: "bot", text: response }]);
-    }, 750);
-  };
-  
-  // E-Commerce Checkout Simulator states
-  const [simCart, setSimCart] = useState<Array<{ id: number; name: string; price: number; image: string; quantity: number }>>([]);
-  const [simStep, setSimStep] = useState<"cart" | "checkout" | "qris" | "paid" | "notified">("cart");
-  const [simName, setSimName] = useState("");
-  const [simPhone, setSimPhone] = useState("");
-  const [simPaymentMethod, setSimPaymentMethod] = useState("qris");
-  const [simIsProcessing, setSimIsProcessing] = useState(false);
-  const [simSuccessToast, setSimSuccessToast] = useState<string | null>(null);
-  const [simOrderId, setSimOrderId] = useState(0);
-  const [simTimer, setSimTimer] = useState(900); // 15 minutes in seconds
-
-  const handleAddToCart = (product: { id: number; name: string; price: number; image: string }) => {
-    setSimCart((prev) => {
-      const existing = prev.find((item) => item.id === product.id);
-      if (existing) {
-        return prev.map((item) => item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item);
-      }
-      return [...prev, { id: product.id, name: product.name, price: product.price, image: product.image, quantity: 1 }];
-    });
-    setSimSuccessToast(`Added ${product.name} to cart!`);
-    setTimeout(() => setSimSuccessToast(null), 2500);
-  };
-
-  const handleUpdateQuantity = (id: number, delta: number) => {
-    setSimCart((prev) => prev.map((item) => {
-      if (item.id === id) {
-        const newQty = item.quantity + delta;
-        return newQty > 0 ? { ...item, quantity: newQty } : null;
-      }
-      return item;
-    }).filter(Boolean) as typeof simCart);
-  };
-
-  const calculateSubtotal = () => {
-    return simCart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  };
-
-  const handleStartCheckout = () => {
-    if (simCart.length === 0) return;
-    setSimStep("checkout");
-  };
-
-  const handleSubmitPayment = (e: React.SyntheticEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!simName || !simPhone) return;
-    setSimOrderId(Math.floor(Math.random() * 90000 + 10000));
-    setSimTimer(900); // Set timer here
-    setSimIsProcessing(true);
-    setTimeout(() => {
-      setSimIsProcessing(false);
-      setSimStep("qris");
-    }, 1200);
-  };
-
-  const handleSimulatePaymentSuccess = () => {
-    setSimIsProcessing(true);
-    setTimeout(() => {
-      setSimIsProcessing(false);
-      setSimStep("paid");
-      setTimeout(() => {
-        setSimStep("notified");
-      }, 2000);
-    }, 1200);
-  };
-
-  const handleResetSimulator = () => {
-    setSimCart([]);
-    setSimStep("cart");
-    setSimName("");
-    setSimPhone("");
-    setSimOrderId(0);
-  };
-
-  const handleSendRealWhatsApp = () => {
-    let cleanPhone = simPhone.replace(/\D/g, "");
-    if (cleanPhone.startsWith("0")) {
-      cleanPhone = "62" + cleanPhone.slice(1);
-    }
-    
-    const itemsText = simCart.map((item) => `- ${item.name} (x${item.quantity})`).join("\n");
-    const totalText = calculateSubtotal().toLocaleString("id-ID");
-    
-    const message = `Halo ${simName}!\n\nTerima kasih telah berbelanja di Don Neto Store.\n\nPembayaran sebesar *Rp ${totalText}* telah kami terima.\n\nRincian Pembelian:\n${itemsText}\n\nID Transaksi: #DN-${simOrderId}\nStatus: *LUNAS via QRIS (Midtrans)*\n\n_Nota ini dikirim otomatis oleh simulator website Don Neto._`;
-    const url = `https://api.whatsapp.com/send?phone=${cleanPhone}&text=${encodeURIComponent(message)}`;
-    window.open(url, "_blank");
-  };
-
-  useEffect(() => {
-    let interval: ReturnType<typeof setInterval>;
-    if (simStep === "qris") {
-      interval = setInterval(() => {
-        setSimTimer((prev) => {
-          if (prev <= 1) {
-            clearInterval(interval);
-            setSimStep("cart");
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
-    }
-    return () => clearInterval(interval);
-  }, [simStep]);
-
-  const formatTimer = (timeInSeconds: number) => {
-    const mins = Math.floor(timeInSeconds / 60);
-    const secs = timeInSeconds % 60;
-    return `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
-  };
-  
   // Interactive Toast state
   const [waToast] = useState<string | null>(null);
 
@@ -555,7 +338,7 @@ export default function Portfolio() {
           clearInterval(interval);
           return 100;
         }
-        const step = Math.floor(Math.random() * 8) + 4;
+        const step = Math.floor(Math.random() * 12) + 6;
         const next = Math.min(prev + step, 100);
         
         if (next < 25) {
@@ -571,21 +354,33 @@ export default function Portfolio() {
         }
         return next;
       });
-    }, 45);
+    }, 35);
 
-    return () => clearInterval(interval);
+    // Hard fallback safety: guarantee loading screen reaches 100% after max 1.5 seconds
+    const safetyTimer = setTimeout(() => {
+      setLoadingProgress(100);
+    }, 1500);
+
+    return () => {
+      clearInterval(interval);
+      clearTimeout(safetyTimer);
+    };
   }, []);
 
   useEffect(() => {
-    if (loadingProgress === 100) {
+    if (loadingProgress >= 100) {
       const fadeTimer = setTimeout(() => {
         setFadeLoading(true);
-        const exitTimer = setTimeout(() => {
-          setIsLoading(false);
-        }, 500);
-        return () => clearTimeout(exitTimer);
-      }, 500);
-      return () => clearTimeout(fadeTimer);
+      }, 300);
+
+      const exitTimer = setTimeout(() => {
+        setIsLoading(false);
+      }, 700);
+
+      return () => {
+        clearTimeout(fadeTimer);
+        clearTimeout(exitTimer);
+      };
     }
   }, [loadingProgress]);
 
@@ -754,44 +549,100 @@ export default function Portfolio() {
   return (
     <div className="min-h-screen w-full bg-[var(--background)] text-[var(--foreground)] selection:bg-indigo-500/30 selection:text-indigo-200 relative overflow-hidden">
       {isLoading && (
-        <div className={`fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#030712] overflow-hidden transition-all duration-500 ${fadeLoading ? 'opacity-0 scale-95 pointer-events-none' : 'opacity-100 scale-100'}`}>
-          <div className="cyber-grid absolute inset-0 opacity-40" />
-          <div className="absolute w-[400px] h-[400px] bg-indigo-500/10 rounded-full blur-[80px] -top-10 -left-10 pointer-events-none" />
-          <div className="absolute w-[400px] h-[400px] bg-cyan-500/10 rounded-full blur-[80px] -bottom-10 -right-10 pointer-events-none" />
+        <div className={`workspace-loader fixed inset-0 z-[9999] flex flex-col items-center justify-center transition-all duration-500 overflow-hidden ${
+          isLightMode ? 'bg-slate-50 text-slate-900' : 'bg-[#030712] text-white'
+        } ${fadeLoading ? 'opacity-0 scale-95 pointer-events-none' : 'opacity-100 scale-100'}`}>
+          <div className="cyber-grid absolute inset-0 opacity-30 pointer-events-none" />
           
-          <div className="relative flex flex-col items-center justify-center p-8 max-w-sm w-full z-10 text-center">
-            <div className="relative flex items-center justify-center w-40 h-40 mb-10 select-none scale-110">
-              <div className="absolute w-36 h-36 border-2 border-dashed border-indigo-500/30 rounded-full animate-spin" style={{ animationDuration: '12s' }}></div>
-              <div className="absolute w-40 h-40 border-2 border-t-indigo-500 border-b-indigo-500 border-r-transparent border-l-transparent rounded-full animate-spin" style={{ animationDuration: '6s' }}></div>
-              <div className="absolute w-32 h-32 border-2 border-r-cyan-400 border-l-cyan-400 border-t-transparent border-b-transparent rounded-full animate-spin" style={{ animationDuration: '3s', animationDirection: 'reverse' }}></div>
-              <div className="absolute w-24 h-24 bg-gradient-to-tr from-indigo-500/10 to-cyan-500/10 rounded-full blur-md animate-pulse"></div>
-              <div className="flex flex-col items-center justify-center z-10">
-                <span className="text-3xl font-black text-white tracking-tighter font-outfit text-glow">{loadingProgress}%</span>
-                <span className="text-[9px] uppercase tracking-widest text-indigo-400 font-bold mt-1">LOADING</span>
-              </div>
-            </div>
+          {/* Animated Ambient Light Blobs */}
+          <div className="absolute w-[500px] h-[500px] bg-indigo-500/15 rounded-full blur-[100px] -top-20 -left-20 pointer-events-none animate-pulse" />
+          <div className="absolute w-[500px] h-[500px] bg-cyan-500/15 rounded-full blur-[100px] -bottom-20 -right-20 pointer-events-none animate-pulse" style={{ animationDelay: '1s' }} />
 
-            <div className="cyber-card p-5 w-full rounded-2xl border border-white/[0.06] bg-[#070b13]/60 backdrop-blur-xl space-y-3.5 shadow-2xl relative">
-              <div className="flex items-center gap-1.5 border-b border-white/[0.06] pb-2">
-                <div className="w-2 h-2 rounded-full bg-red-500/80"></div>
-                <div className="w-2 h-2 rounded-full bg-yellow-500/80"></div>
-                <div className="w-2 h-2 rounded-full bg-green-500/80"></div>
-                <span className="text-[9px] text-gray-400 font-mono ml-1.5 uppercase font-bold tracking-wider">Workspace Loader</span>
-              </div>
+          <div className="relative flex flex-col items-center justify-center p-6 max-w-md w-full z-10 text-center space-y-8 select-none">
+            
+            {/* Centerpiece 3D Cyber Reactor Gauge */}
+            <div className="relative flex items-center justify-center w-48 h-48">
+              {/* Outer pulsing neon ring */}
+              <div className="absolute inset-0 rounded-full border border-indigo-500/20 blur-[1px] animate-ping" style={{ animationDuration: '3s' }} />
               
-              <div className="w-full bg-white/[0.04] border border-white/[0.08] rounded-full h-1.5 overflow-hidden p-[1px]">
-                <div 
-                  className="bg-gradient-to-r from-indigo-500 via-cyan-400 to-pink-500 h-full rounded-full transition-all duration-300 ease-out shadow-[0_0_10px_rgba(99,102,241,0.5)]" 
-                  style={{ width: `${loadingProgress}%` }}
-                />
-              </div>
-
-              <div className="h-6 flex items-center justify-center">
-                <p className="text-[10px] font-mono text-gray-400 tracking-tight text-center font-semibold text-indigo-300/90 truncate w-full">
-                  {loadingStatus}
-                </p>
+              {/* Segmented rotating spinners */}
+              <div className="absolute w-44 h-44 border-2 border-dashed border-indigo-500/40 rounded-full animate-spin" style={{ animationDuration: '14s' }} />
+              <div className="absolute w-48 h-48 border-2 border-t-indigo-500 border-b-cyan-400 border-r-transparent border-l-transparent rounded-full animate-spin" style={{ animationDuration: '5s' }} />
+              <div className="absolute w-36 h-36 border-2 border-r-pink-500 border-l-indigo-400 border-t-transparent border-b-transparent rounded-full animate-spin" style={{ animationDuration: '3s', animationDirection: 'reverse' }} />
+              
+              {/* Center Glow Core */}
+              <div className="absolute w-28 h-28 bg-gradient-to-tr from-indigo-600/20 via-cyan-500/20 to-pink-500/20 rounded-full blur-lg animate-pulse" />
+              
+              {/* Core Telemetry Text */}
+              <div className="relative z-10 flex flex-col items-center justify-center space-y-1">
+                <span className="text-4xl font-extrabold tracking-tighter font-outfit text-gradient bg-gradient-to-r from-indigo-500 via-cyan-400 to-pink-500 bg-clip-text text-transparent drop-shadow-md">
+                  {loadingProgress}%
+                </span>
+                <span className="text-[10px] uppercase font-mono font-bold tracking-widest text-indigo-500 px-2.5 py-0.5 rounded-full bg-indigo-500/10 border border-indigo-500/20">
+                  SYSTEM INITIALIZING
+                </span>
               </div>
             </div>
+
+            {/* Glassmorphism Loader Terminal Panel */}
+            <div className={`loader-card p-6 w-full rounded-3xl border backdrop-blur-2xl space-y-4 shadow-2xl relative transition-all duration-300 ${
+              isLightMode 
+                ? 'bg-white/85 border-slate-200/80 shadow-[0_20px_60px_rgba(79,70,229,0.12)] text-slate-800' 
+                : 'bg-[#070b13]/80 border-white/10 shadow-[0_0_50px_rgba(0,0,0,0.5)] text-white'
+            }`}>
+              {/* Terminal Window Bar */}
+              <div className={`flex items-center justify-between border-b pb-3 ${isLightMode ? 'border-slate-200' : 'border-white/10'}`}>
+                <div className="flex items-center gap-1.5">
+                  <div className="w-2.5 h-2.5 rounded-full bg-red-500/80"></div>
+                  <div className="w-2.5 h-2.5 rounded-full bg-amber-500/80"></div>
+                  <div className="w-2.5 h-2.5 rounded-full bg-emerald-500/80"></div>
+                </div>
+                <div className="flex items-center gap-1.5">
+                  <i className="fa-solid fa-terminal text-[10px] text-indigo-500"></i>
+                  <span className={`text-[10px] font-mono font-extrabold uppercase tracking-wider ${isLightMode ? 'text-slate-600' : 'text-gray-300'}`}>
+                    DON NETO // BOOTSTRAP PROTOCOL
+                  </span>
+                </div>
+              </div>
+
+              {/* Progress Bar Container */}
+              <div className="space-y-1.5">
+                <div className={`w-full border rounded-full h-2 overflow-hidden p-[1px] ${isLightMode ? 'bg-slate-100 border-slate-200' : 'bg-white/5 border-white/10'}`}>
+                  <div 
+                    className="bg-gradient-to-r from-indigo-600 via-cyan-400 to-pink-500 h-full rounded-full transition-all duration-300 ease-out shadow-[0_0_15px_rgba(99,102,241,0.6)] relative" 
+                    style={{ width: `${loadingProgress}%` }}
+                  >
+                    <div className="absolute right-0 top-0 bottom-0 w-2 bg-white rounded-full animate-pulse" />
+                  </div>
+                </div>
+                <div className="flex justify-between items-center text-[9px] font-mono text-gray-400 px-0.5">
+                  <span>0%</span>
+                  <span className="font-bold text-indigo-500">OPTIMIZING ASSETS</span>
+                  <span>100%</span>
+                </div>
+              </div>
+
+              {/* Dynamic Status Log Line */}
+              <div className={`p-2.5 rounded-xl border font-mono text-[11px] flex items-center justify-center transition-colors ${
+                isLightMode ? 'bg-slate-50 border-slate-200 text-indigo-600' : 'bg-[#030712]/70 border-white/5 text-cyan-400'
+              }`}>
+                <span className="truncate">{loadingStatus}</span>
+              </div>
+
+              {/* Tech Stack Indicator Badges */}
+              <div className="flex items-center justify-center gap-2 pt-1 flex-wrap">
+                <span className={`text-[9px] font-mono px-2.5 py-1 rounded-full border ${isLightMode ? 'bg-indigo-50 border-indigo-200 text-indigo-700' : 'bg-indigo-500/10 border-indigo-500/20 text-indigo-300'}`}>
+                  ⚡ ASTRO 5
+                </span>
+                <span className={`text-[9px] font-mono px-2.5 py-1 rounded-full border ${isLightMode ? 'bg-cyan-50 border-cyan-200 text-cyan-700' : 'bg-cyan-500/10 border-cyan-500/20 text-cyan-300'}`}>
+                  ⚛️ REACT 19
+                </span>
+                <span className={`text-[9px] font-mono px-2.5 py-1 rounded-full border ${isLightMode ? 'bg-pink-50 border-pink-200 text-pink-700' : 'bg-pink-500/10 border-pink-500/20 text-pink-300'}`}>
+                  🛡️ CYBERSEC
+                </span>
+              </div>
+            </div>
+
           </div>
         </div>
       )}
@@ -812,30 +663,44 @@ export default function Portfolio() {
       />
       
       {/* Tactical Cyber Telemetry Header Bar */}
-      <div className="fixed top-0 left-0 right-0 z-50 bg-[#030712]/90 backdrop-blur-md border-b border-white/[0.06] text-[10px] font-mono py-1.5 px-4 hidden md:flex items-center justify-between text-gray-400 select-none">
+      <div className={`telemetry-bar fixed top-0 left-0 right-0 z-50 text-[10px] font-mono py-1.5 px-4 hidden md:flex items-center justify-between transition-colors duration-300 select-none ${
+        isLightMode 
+          ? 'bg-slate-100/90 backdrop-blur-md border-b border-slate-200 text-slate-600' 
+          : 'bg-[#030712]/90 backdrop-blur-md border-b border-white/[0.06] text-gray-400'
+      }`}>
         <div className="flex items-center space-x-4">
-          <div className="flex items-center gap-1.5 text-emerald-400 font-bold">
-            <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <div className="flex items-center gap-1.5 text-emerald-500 font-bold">
+            <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
             <span>DEV_ENV: ONLINE</span>
           </div>
-          <span className="text-white/20">|</span>
-          <span>LATENCY: <span className="text-cyan-400">12ms</span></span>
-          <span className="text-white/20">|</span>
-          <span>STACK: <span className="text-indigo-400">LARAVEL / REACT / FLUTTER</span></span>
-          <span className="text-white/20">|</span>
-          <span className="hidden lg:inline">NODE: <span className="text-purple-400">IDN-JKT-01</span></span>
+          <span className={`telemetry-sep ${isLightMode ? "text-slate-300" : "text-white/20"}`}>|</span>
+          <span>LATENCY: <span className={isLightMode ? "text-cyan-600 font-bold" : "text-cyan-400"}>12ms</span></span>
+          <span className={`telemetry-sep ${isLightMode ? "text-slate-300" : "text-white/20"}`}>|</span>
+          <span>STACK: <span className={isLightMode ? "text-indigo-600 font-bold" : "text-indigo-400"}>LARAVEL / REACT / FLUTTER</span></span>
+          <span className={`telemetry-sep ${isLightMode ? "text-slate-300" : "text-white/20"}`}>|</span>
+          <span className="hidden lg:inline">NODE: <span className={isLightMode ? "text-purple-600 font-bold" : "text-purple-400"}>IDN-JKT-01</span></span>
         </div>
         <div className="flex items-center space-x-3">
           <button
             onClick={() => setIsHacking(!isHacking)}
-            className={`px-2 py-0.5 rounded border transition-all ${isHacking ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-300' : 'border-white/10 hover:border-white/20 text-gray-400'}`}
+            className={`px-2 py-0.5 rounded border transition-all ${
+              isHacking 
+                ? 'bg-emerald-500/20 border-emerald-500/50 text-emerald-600 font-bold' 
+                : isLightMode 
+                  ? 'border-slate-300 hover:bg-slate-200/60 text-slate-600 font-medium' 
+                  : 'border-white/10 hover:border-white/20 text-gray-400'
+            }`}
           >
             <i className="fa-solid fa-code text-[9px] mr-1"></i>
             {isHacking ? 'MATRIX: ON' : 'MATRIX: OFF'}
           </button>
           <button
             onClick={() => setIsTerminalOpen(true)}
-            className="px-2 py-0.5 rounded border border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20 transition-all"
+            className={`px-2 py-0.5 rounded border transition-all ${
+              isLightMode 
+                ? 'border-indigo-500/30 bg-indigo-50 text-indigo-700 hover:bg-indigo-100/70 font-semibold' 
+                : 'border-indigo-500/30 bg-indigo-500/10 text-indigo-300 hover:bg-indigo-500/20'
+            }`}
           >
             <i className="fa-solid fa-terminal text-[9px] mr-1"></i>
             TERMINAL [CTRL+K]
@@ -843,7 +708,11 @@ export default function Portfolio() {
           {simCart.length > 0 && (
             <button
               onClick={() => scrollToSection('simulator')}
-              className="px-2 py-0.5 rounded border border-pink-500/40 bg-pink-500/15 text-pink-300 animate-pulse font-bold"
+              className={`px-2 py-0.5 rounded border animate-pulse font-bold ${
+                isLightMode 
+                  ? 'border-pink-500/40 bg-pink-50 text-pink-700' 
+                  : 'border-pink-500/40 bg-pink-500/15 text-pink-300'
+              }`}
             >
               <i className="fa-solid fa-cart-shopping text-[9px] mr-1"></i>
               CART ({simCart.reduce((sum, item) => sum + item.quantity, 0)})
@@ -1100,7 +969,11 @@ export default function Portfolio() {
           {/* Right Column: 3D Interactive WebGL Canvas Core */}
           <div className="w-full lg:w-5/12 relative flex flex-col items-center justify-center">
             {/* Holographic Card Frame for Profile & 3D Core */}
-            <div className="relative w-full max-w-[310px] sm:max-w-md aspect-square rounded-3xl border border-cyan-500/30 bg-[#070c18]/80 backdrop-blur-2xl p-6 shadow-[0_0_50px_rgba(0,240,255,0.15)] flex flex-col items-center justify-center overflow-hidden group">
+            <div className={`hero-3d-card relative w-full max-w-[310px] sm:max-w-md aspect-square rounded-3xl border transition-all duration-300 ${
+              isLightMode 
+                ? 'border-indigo-500/20 bg-white/80 shadow-[0_20px_50px_rgba(79,70,229,0.12)]' 
+                : 'border-cyan-500/30 bg-[#070c18]/80 shadow-[0_0_50px_rgba(0,240,255,0.15)]'
+            } backdrop-blur-2xl p-6 flex flex-col items-center justify-center overflow-hidden group`}>
               {/* Interactive 3D Three.js Component */}
               <div className="absolute inset-0 z-0 opacity-80 group-hover:opacity-100 transition-opacity">
                 <Cyber3DCanvas isLightMode={isLightMode} />
@@ -1118,9 +991,15 @@ export default function Portfolio() {
                     className="rounded-full relative z-10 border-2 border-white/30 shadow-2xl object-cover"
                   />
                 </div>
-                <div className="bg-[#030712]/90 border border-cyan-500/40 rounded-full px-4 py-1.5 backdrop-blur-md flex items-center gap-2">
+                <div className={`border rounded-full px-4 py-1.5 backdrop-blur-md flex items-center gap-2 transition-all duration-300 ${
+                  isLightMode
+                    ? 'bg-white/90 border-indigo-500/30 text-slate-800 shadow-sm'
+                    : 'bg-[#030712]/90 border-cyan-500/40 text-white'
+                }`}>
                   <span className="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
-                  <span className="text-[11px] font-mono font-bold text-white tracking-wider">AVAILABLE FOR DEV PROJECTS</span>
+                  <span className={`text-[11px] font-mono font-bold tracking-wider ${isLightMode ? 'text-slate-800' : 'text-white'}`}>
+                    AVAILABLE FOR DEV PROJECTS
+                  </span>
                 </div>
               </div>
             </div>
@@ -1263,393 +1142,12 @@ export default function Portfolio() {
         </section>
 
         {/* Live E-Commerce Checkout Simulator */}
-        <section id="simulator" className="scroll-mt-24">
-          <div className="space-y-12">
-            <div className="text-center space-y-3">
-              <span className="text-xs font-mono font-bold uppercase tracking-widest text-indigo-400 text-glow">[INTERACTIVE_DEMO]</span>
-              <h2 className="text-4xl sm:text-5xl font-black tracking-tight font-outfit text-transparent bg-clip-text bg-gradient-to-r from-white to-gray-400">
-                Interactive System Simulator
-              </h2>
-              <div className="w-16 h-1.5 bg-gradient-to-r from-indigo-500 to-cyan-500 rounded-full mx-auto"></div>
-              <p className="text-gray-400 text-sm sm:text-base max-w-xl mx-auto pt-2 leading-relaxed">
-                Test system integration live. Add products, complete checkout, simulate a webhook callback from the payment gateway (Midtrans), and receive an automated WhatsApp invoice.
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-              {/* Left Column: Product Cards Grid */}
-              <div className="lg:col-span-5 space-y-4">
-                <h3 className="text-base font-bold text-white font-outfit pb-2 border-b border-white/[0.05] flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 bg-indigo-500 rounded-full animate-pulse"></span> 1. Select Simulation Product
-                </h3>
-                
-                {/* Product List */}
-                <div className="space-y-3">
-                  {[
-                    { id: 1, name: "Mechanical Keyboard RGB", price: 650000, image: "⌨️", desc: "Premium blue switches & double-shot keycaps." },
-                    { id: 2, name: "Wireless Ergonomic Mouse", price: 380000, image: "🖱️", desc: "Dual-mode Bluetooth with silent clicks." },
-                    { id: 3, name: "Minimalist Desk Mat (90x40)", price: 150000, image: "🌌", desc: "Smooth microfiber surface with stitched borders." }
-                  ].map((prod) => (
-                    <div key={prod.id} className="cyber-card p-4 rounded-2xl flex items-center justify-between border border-white/[0.04] gap-3">
-                      <div className="flex items-center gap-3">
-                        <span className="text-3xl bg-white/5 border border-white/10 w-12 h-12 rounded-xl flex items-center justify-center">{prod.image}</span>
-                        <div>
-                          <h4 className="font-bold text-white text-sm font-outfit">{prod.name}</h4>
-                          <p className="text-[10px] text-gray-400 leading-tight mb-1">{prod.desc}</p>
-                          <span className="text-xs font-semibold text-indigo-400">Rp {prod.price.toLocaleString("id-ID")}</span>
-                        </div>
-                      </div>
-                      <button
-                        type="button"
-                        onClick={() => handleAddToCart(prod)}
-                        className="px-3.5 py-2 bg-indigo-600/20 border border-indigo-500/30 hover:bg-indigo-600 rounded-xl text-xs font-bold text-indigo-300 hover:text-white transition-all duration-300"
-                      >
-                        + Cart
-                      </button>
-                    </div>
-                  ))}
-                </div>
-
-                {simSuccessToast && (
-                  <div className="p-3 bg-indigo-600/10 border border-indigo-500/25 text-indigo-300 rounded-xl text-xs font-semibold flex items-center gap-2 animate-pulse">
-                    <i className="fa-solid fa-circle-check"></i>
-                    <span>{simSuccessToast}</span>
-                  </div>
-                )}
-              </div>
-
-              {/* Right Column: Simulated Checkout Viewport */}
-              <div className="lg:col-span-7">
-                <div className="mock-window p-6 relative min-h-[400px] border border-white/[0.08] shadow-[0_0_50px_rgba(99,102,241,0.12)] flex flex-col justify-between">
-                  
-                  {/* Window Bar Header */}
-                  <div className="flex items-center justify-between border-b border-white/[0.06] pb-4 mb-4">
-                    <div className="flex items-center gap-2">
-                      <div className="w-2.5 h-2.5 rounded-full bg-red-500"></div>
-                      <div className="w-2.5 h-2.5 rounded-full bg-yellow-500"></div>
-                      <div className="w-2.5 h-2.5 rounded-full bg-green-500"></div>
-                      <span className="text-gray-400 text-[10px] ml-2 font-mono">checkout-gateway.test</span>
-                    </div>
-                    <span className="text-[9px] text-gray-400 bg-white/[0.04] border border-white/[0.08] px-2.5 py-0.5 rounded uppercase font-semibold font-mono">
-                      Step: {simStep.toUpperCase()}
-                    </span>
-                  </div>
-
-                  {/* SCREEN 1: CART DISPLAY */}
-                  {simStep === "cart" && (
-                    <div className="flex-1 flex flex-col justify-between animate-slide-up">
-                      <div className="space-y-4">
-                        <h4 className="font-bold text-white text-sm font-outfit flex items-center gap-2">
-                          <i className="fa-solid fa-cart-shopping text-indigo-400"></i> Your Shopping Cart
-                        </h4>
-                        
-                        {simCart.length === 0 ? (
-                          <div className="text-center py-12 text-gray-400">
-                            <i className="fa-solid fa-basket-shopping text-3xl mb-3 block text-gray-400"></i>
-                            <p className="text-xs font-medium">Your cart is empty. Please add products from the left column.</p>
-                          </div>
-                        ) : (
-                          <div className="space-y-2.5 max-h-[220px] overflow-y-auto pr-1">
-                            {simCart.map((item) => (
-                              <div key={item.id} className="flex items-center justify-between p-2.5 bg-white/[0.02] border border-white/[0.05] rounded-xl text-xs">
-                                <div className="flex items-center gap-3">
-                                  <span className="text-xl">{item.image}</span>
-                                  <div>
-                                    <span className="font-bold text-white block text-xs">{item.name}</span>
-                                    <span className="text-[10px] text-gray-400">Rp {item.price.toLocaleString("id-ID")}</span>
-                                  </div>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                  <button type="button" onClick={() => handleUpdateQuantity(item.id, -1)} className="w-5 h-5 bg-white/5 border border-white/10 rounded flex items-center justify-center font-bold text-gray-300 hover:bg-white/10">-</button>
-                                  <span className="font-bold text-white w-4 text-center">{item.quantity}</span>
-                                  <button type="button" onClick={() => handleUpdateQuantity(item.id, 1)} className="w-5 h-5 bg-white/5 border border-white/10 rounded flex items-center justify-center font-bold text-gray-300 hover:bg-white/10">+</button>
-                                </div>
-                              </div>
-                            ))}
-                          </div>
-                        )}
-                      </div>
-
-                      {simCart.length > 0 && (
-                        <div className="border-t border-white/[0.06] pt-4 mt-4 space-y-4">
-                          <div className="flex justify-between items-center text-xs font-bold text-white">
-                            <span>Total Tagihan:</span>
-                            <span className="text-indigo-400 text-sm">Rp {calculateSubtotal().toLocaleString("id-ID")}</span>
-                          </div>
-                          <button
-                            type="button"
-                            onClick={handleStartCheckout}
-                            className="w-full py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl text-xs transition-colors flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/20"
-                          >
-                            Isi Data Pengiriman <i className="fa-solid fa-arrow-right text-[10px]"></i>
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  )}
-
-                  {/* SCREEN 2: CHECKOUT FORM */}
-                  {simStep === "checkout" && (
-                    <form onSubmit={handleSubmitPayment} className="flex-1 flex flex-col justify-between animate-slide-up">
-                      <div className="space-y-4">
-                        <h4 className="font-bold text-white text-sm font-outfit flex items-center gap-2">
-                          <i className="fa-solid fa-address-card text-cyan-400"></i> Formulir Pengiriman & Pembayaran
-                        </h4>
-
-                        <div className="space-y-3">
-                          <div>
-                            <label className="text-[10px] text-gray-400 block mb-1 font-bold">NAMA PELANGGAN</label>
-                            <input
-                              type="text"
-                              required
-                              placeholder="Masukkan nama Anda (e.g. Budi)"
-                              value={simName}
-                              onChange={(e) => setSimName(e.target.value)}
-                              className="w-full bg-white/[0.03] border border-white/[0.08] text-white rounded-lg px-3 py-2.5 text-xs focus:outline-none focus:border-indigo-500 transition-colors placeholder:text-gray-400"
-                            />
-                          </div>
-
-                          <div>
-                            <label className="text-[10px] text-gray-400 block mb-1 font-bold">WHATSAPP NUMBER (Simulation Invoice)</label>
-                            <input
-                              type="tel"
-                              required
-                              placeholder="e.g. 08123456789"
-                              value={simPhone}
-                              onChange={(e) => setSimPhone(e.target.value)}
-                              className="w-full bg-white/[0.03] border border-white/[0.08] text-white rounded-lg px-3 py-2.5 text-xs focus:outline-none focus:border-indigo-500 transition-colors placeholder:text-gray-400"
-                            />
-                          </div>
-
-                          <div>
-                            <label className="text-[10px] text-gray-400 block mb-1 font-bold">PAYMENT METHOD</label>
-                            <div className="grid grid-cols-2 gap-2">
-                              <button
-                                type="button"
-                                onClick={() => setSimPaymentMethod("qris")}
-                                className={`p-2.5 rounded-lg border text-left flex items-center justify-between text-[11px] ${simPaymentMethod === "qris" ? "bg-indigo-600/10 border-indigo-500 text-indigo-300" : "bg-white/[0.02] border-white/[0.05] text-gray-400 hover:border-white/10"}`}
-                              >
-                                <span className="font-bold">QRIS (Automated)</span>
-                                <i className="fa-solid fa-qrcode text-xs"></i>
-                              </button>
-                              <button
-                                type="button"
-                                onClick={() => setSimPaymentMethod("va")}
-                                className={`p-2.5 rounded-lg border text-left flex items-center justify-between text-[11px] ${simPaymentMethod === "va" ? "bg-indigo-600/10 border-indigo-500 text-indigo-300" : "bg-white/[0.02] border-white/[0.05] text-gray-400 hover:border-white/10"}`}
-                              >
-                                <span className="font-bold">Virtual Account</span>
-                                <i className="fa-solid fa-building-columns text-xs"></i>
-                              </button>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="border-t border-white/[0.06] pt-4 mt-4 space-y-3">
-                        <div className="flex justify-between items-center text-xs font-bold text-white">
-                          <span>Total Invoice:</span>
-                          <span>Rp {calculateSubtotal().toLocaleString("id-ID")}</span>
-                        </div>
-                        <div className="flex gap-2">
-                          <button
-                            type="button"
-                            onClick={() => setSimStep("cart")}
-                            className="w-1/3 py-2.5 bg-white/[0.02] hover:bg-white/[0.05] border border-white/[0.08] text-gray-300 font-bold rounded-xl text-xs transition-colors"
-                          >
-                            Back
-                          </button>
-                          <button
-                            type="submit"
-                            disabled={simIsProcessing}
-                            className="w-2/3 py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-bold rounded-xl text-xs transition-colors flex items-center justify-center gap-2 shadow-lg shadow-indigo-600/20"
-                          >
-                            {simIsProcessing ? (
-                              <>
-                                <div className="w-3.5 h-3.5 border-2 border-t-transparent border-white rounded-full animate-spin"></div>
-                                Generating token...
-                              </>
-                            ) : (
-                              <>
-                                Generate Payment Invoice <i className="fa-solid fa-credit-card text-[10px]"></i>
-                              </>
-                            )}
-                          </button>
-                        </div>
-                      </div>
-                    </form>
-                  )}
-
-                  {/* SCREEN 3: MIDTRANS GATEWAY DISPLAY */}
-                  {simStep === "qris" && (
-                    <div className="flex-1 flex flex-col justify-between items-center text-center animate-slide-up py-3 font-outfit">
-                      <div className="space-y-3 w-full max-w-[280px]">
-                        <h4 className="font-bold text-white text-sm font-outfit">Simulated Midtrans Payment</h4>
-                        
-                        {/* Countdown Timer */}
-                        <div className="flex items-center justify-center gap-1.5 text-xs font-mono font-bold text-pink-500 animate-pulse pb-1">
-                          <i className="fa-solid fa-clock"></i>
-                          <span>Time Limit: {formatTimer(simTimer)}</span>
-                        </div>
-
-                        {simPaymentMethod === "qris" ? (
-                          <div className="p-4 bg-white rounded-2xl flex flex-col items-center justify-center border border-indigo-200/50 shadow-lg relative overflow-hidden w-full">
-                            <div className="w-36 h-36 border border-gray-200 rounded-lg flex items-center justify-center bg-gray-50 relative p-1.5 pt-3">
-                              <span className="absolute top-1 text-[9px] font-black text-blue-900 tracking-wider">QRIS</span>
-                              <img 
-                                src={`https://api.qrserver.com/v1/create-qr-code/?size=110x110&color=030712&data=${encodeURIComponent("https://www.abner.my.id/")}`}
-                                alt="QRIS Code" 
-                                className="w-28 h-28 border border-gray-300 rounded"
-                              />
-                            </div>
-                            <span className="text-[10px] text-gray-700 font-bold mt-2 font-mono">ORDER-ID: DN-{simOrderId}</span>
-                          </div>
-                        ) : (
-                          <div className="p-4 bg-[#090d16] border border-white/[0.06] rounded-2xl flex flex-col items-stretch text-left w-full space-y-3 shadow-md">
-                            <div className="flex items-center justify-between border-b border-white/[0.06] pb-2">
-                              <span className="font-bold text-white text-xs">Simulated Virtual Account</span>
-                              <span className="text-[10px] text-indigo-400 font-extrabold">BANK MANDIRI</span>
-                            </div>
-                            
-                            <div className="space-y-1.5">
-                              <label className="text-[9px] text-gray-400 block font-semibold">VIRTUAL ACCOUNT NUMBER</label>
-                              <div className="flex items-center justify-between bg-white/[0.04] border border-white/[0.06] rounded-lg p-2.5">
-                                <span className="font-mono text-xs text-white tracking-widest font-bold">88012{simPhone.replace(/\D/g, "").slice(-10).padStart(10, "0")}</span>
-                                <button
-                                  type="button"
-                                  onClick={() => {
-                                    const vaNum = `88012${simPhone.replace(/\D/g, "").slice(-10).padStart(10, "0")}`;
-                                    navigator.clipboard.writeText(vaNum);
-                                    setSimSuccessToast("Virtual Account copied!");
-                                    setTimeout(() => setSimSuccessToast(null), 2000);
-                                  }}
-                                  className="text-[9px] font-bold text-indigo-400 hover:text-indigo-300 px-2 py-1 bg-indigo-500/10 rounded border border-indigo-500/20 transition-colors"
-                                >
-                                  Copy
-                                </button>
-                              </div>
-                            </div>
-                            
-                            <p className="text-[9px] text-gray-400 leading-normal">
-                              Copy the Virtual Account number above and simulate a paid VA transfer by clicking the green button below.
-                            </p>
-                          </div>
-                        )}
-                        <p className="text-[10px] text-gray-400 leading-tight font-mono">Total Invoice: <span className="font-bold text-indigo-400">Rp {calculateSubtotal().toLocaleString("id-ID")}</span></p>
-                      </div>
-
-                      <div className="w-full mt-4 space-y-2">
-                        <button
-                          type="button"
-                          onClick={handleSimulatePaymentSuccess}
-                          disabled={simIsProcessing}
-                          className="w-full py-3 bg-green-600 hover:bg-green-500 text-white font-bold rounded-xl text-xs transition-colors flex items-center justify-center gap-2 glow-payment-success active:scale-[0.98]"
-                        >
-                          {simIsProcessing ? (
-                            <>
-                              <div className="w-3.5 h-3.5 border-2 border-t-transparent border-white rounded-full animate-spin"></div>
-                              Verifying Payment...
-                            </>
-                          ) : (
-                            <>
-                              <i className="fa-solid fa-circle-check"></i> {simPaymentMethod === "qris" ? "Simulate Successful Scan & Pay" : "Simulate Paid VA Transfer"}
-                            </>
-                          )}
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => setSimStep("checkout")}
-                          className="w-full py-2 bg-white/[0.01] hover:bg-white/[0.04] border border-white/[0.06] text-gray-400 hover:text-gray-200 rounded-xl text-[10px] transition-colors"
-                        >
-                          Cancel Payment
-                        </button>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* SCREEN 4: PAYMENT APPROVED */}
-                  {simStep === "paid" && (
-                    <div className="flex-1 flex flex-col items-center justify-center text-center animate-slide-up space-y-4">
-                      <div className="w-16 h-16 rounded-full bg-green-500/10 border border-green-500/20 flex items-center justify-center text-3xl text-green-400 animate-bounce shadow-lg shadow-green-500/10">
-                        <i className="fa-solid fa-check"></i>
-                      </div>
-                      <div className="space-y-1">
-                        <h4 className="font-extrabold text-white text-lg font-outfit">Payment Successful!</h4>
-                        <p className="text-xs text-gray-400 max-w-[280px] leading-relaxed">
-                          Midtrans Gateway has successfully forwarded the payment webhook to the backend system.
-                        </p>
-                      </div>
-                      <div className="flex items-center gap-2 px-3 py-1.5 rounded-full bg-indigo-500/5 border border-indigo-500/20 text-indigo-300 text-[10px] animate-pulse">
-                        <div className="w-1.5 h-1.5 rounded-full bg-indigo-400 animate-ping"></div>
-                        Sending Automated Invoice via WhatsApp...
-                      </div>
-                    </div>
-                  )}
-
-                  {/* SCREEN 5: SIMULATED WHATSAPP CHAT PREVIEW */}
-                  {simStep === "notified" && (
-                    <div className="flex-1 flex flex-col justify-between animate-slide-up">
-                      <div className="space-y-3.5">
-                        <div className="flex items-center gap-2.5 bg-green-950/20 border border-green-500/20 p-2.5 rounded-2xl">
-                          <div className="w-8 h-8 rounded-full bg-green-600 flex items-center justify-center text-white text-sm">
-                            <i className="fab fa-whatsapp"></i>
-                          </div>
-                          <div>
-                            <span className="font-bold text-white block text-xs">WhatsApp Notification Dispatch</span>
-                            <span className="text-[9px] text-green-400 font-mono">Invoice successfully sent to +{simPhone.replace(/\D/g, "").startsWith("0") ? "62" + simPhone.replace(/\D/g, "").slice(1) : simPhone.replace(/\D/g, "")}</span>
-                          </div>
-                        </div>
-
-                        {/* WhatsApp Message Box */}
-                        <div className="bg-[#0b141a] border border-[#202c33] rounded-2xl p-4 text-xs font-mono text-gray-200 relative shadow-2xl">
-                          <div className="absolute top-4 -left-2 w-0 h-0 border-t-[8px] border-t-transparent border-r-[10px] border-r-[#0b141a] border-b-[8px] border-b-transparent"></div>
-                          
-                          <div className="flex justify-between items-center text-[10px] text-green-400 font-bold mb-2">
-                            <span>💬 Don Neto Store - INVOICE</span>
-                            <span>{new Date().toLocaleTimeString("en-US", { hour: '2-digit', minute: '2-digit' })}</span>
-                          </div>
-                          <div className="border-b border-gray-800 pb-2 mb-2 text-[10px] text-gray-400">
-                            Transaction ID: <span className="text-white font-bold">#DN-{simOrderId}</span>
-                          </div>
-                          <div className="space-y-1 text-[11px] leading-relaxed">
-                            <p>Hello <span className="text-white font-bold">{simName}</span>!</p>
-                            <p>We have received your payment of <span className="text-green-400 font-bold">Rp {calculateSubtotal().toLocaleString("id-ID")}</span>.</p>
-                            <p className="pt-1.5 text-gray-400">Purchase Details:</p>
-                            <ul className="list-disc pl-4 text-gray-300">
-                              {simCart.map((item) => (
-                                <li key={item.id}>
-                                  {item.name} (x{item.quantity})
-                                </li>
-                              ))}
-                            </ul>
-                            <p className="pt-2 text-[10px] text-gray-400 font-medium">Status: <span className="bg-green-500/10 text-green-400 px-1.5 py-0.5 rounded font-bold border border-green-500/20 uppercase text-[9px]">Paid via QRIS</span></p>
-                          </div>
-                        </div>
-                      </div>
-
-                      <div className="flex flex-col sm:flex-row gap-2 mt-4">
-                        <button
-                          type="button"
-                          onClick={handleSendRealWhatsApp}
-                          className="w-full sm:w-2/3 py-3 bg-green-600 hover:bg-green-500 text-white font-bold rounded-xl text-xs transition-all duration-300 flex items-center justify-center gap-2 shadow-lg shadow-green-600/10 hover:shadow-green-600/20 active:scale-95"
-                        >
-                          <i className="fab fa-whatsapp"></i> Send to Real WhatsApp
-                        </button>
-                        <button
-                          type="button"
-                          onClick={handleResetSimulator}
-                          className="w-full sm:w-1/3 py-3 bg-white/[0.03] hover:bg-white/[0.06] border border-white/[0.08] text-gray-300 font-bold rounded-xl text-xs transition-all duration-300 flex items-center justify-center gap-2"
-                        >
-                          <i className="fa-solid fa-rotate-left"></i> Reset
-                        </button>
-                      </div>
-                    </div>
-                  )}
-
-                </div>
-              </div>
-            </div>
-          </div>
-        </section>
+        <EcommerceSimulator
+          isLightMode={isLightMode}
+          simCart={simCart}
+          setSimCart={setSimCart}
+          scrollToSection={scrollToSection}
+        />
 
         {/* Skills Section */}
         <section id="skills" className="scroll-mt-24">
@@ -2287,162 +1785,21 @@ export default function Portfolio() {
       {isHacking && <MatrixRain />}
 
       {/* Developer Terminal Console Modal */}
-      {isTerminalOpen && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
-          <div className="cyber-card w-full max-w-2xl rounded-2xl border border-white/[0.08] bg-[#070c14]/90 overflow-hidden shadow-2xl flex flex-col h-[400px]">
-            {/* Terminal Title Bar */}
-            <div className="flex items-center justify-between bg-white/[0.02] border-b border-white/[0.06] px-4 py-3 select-none">
-              <div className="flex items-center gap-2">
-                <div className="w-2.5 h-2.5 rounded-full bg-red-500/80 cursor-pointer animate-pulse" onClick={() => setIsTerminalOpen(false)}></div>
-                <div className="w-2.5 h-2.5 rounded-full bg-yellow-500/80"></div>
-                <div className="w-2.5 h-2.5 rounded-full bg-green-500/80"></div>
-                <span className="text-[10px] text-gray-400 font-mono ml-2 uppercase font-bold tracking-wider flex items-center gap-1.5">
-                  <i className="fa-solid fa-terminal text-indigo-400"></i> guest@donneto: ~
-                </span>
-              </div>
-              <button 
-                onClick={() => setIsTerminalOpen(false)}
-                className="text-gray-500 hover:text-white text-xs font-bold font-mono px-2 py-0.5 rounded hover:bg-white/5"
-              >
-                ESC
-              </button>
-            </div>
-
-            {/* Logs Area */}
-            <div className="flex-1 p-4 overflow-y-auto font-mono text-xs text-green-400 space-y-1.5 scrollbar-thin">
-              {terminalLogs.map((log, index) => (
-                <div key={index} className="whitespace-pre-wrap leading-relaxed">
-                  {log}
-                </div>
-              ))}
-            </div>
-
-            {/* Input Line Form */}
-            <form onSubmit={handleTerminalSubmit} className="bg-[#05080e]/60 border-t border-white/[0.05] p-3 flex items-center gap-2">
-              <span className="font-mono text-xs text-indigo-400 font-bold">guest@donneto:~$</span>
-              <input
-                type="text"
-                autoFocus
-                value={terminalInput}
-                onChange={(e) => setTerminalInput(e.target.value)}
-                placeholder="Type 'help' and press Enter..."
-                className="flex-1 bg-transparent text-xs font-mono text-green-300 focus:outline-none placeholder:text-gray-700"
-              />
-            </form>
-          </div>
-        </div>
-      )}
+      <TerminalModal
+        isOpen={isTerminalOpen}
+        onClose={() => setIsTerminalOpen(false)}
+        isHacking={isHacking}
+        setIsHacking={setIsHacking}
+      />
 
       {/* Floating Chatbot Widget */}
-      <div className="fixed bottom-6 right-6 z-40 flex flex-col items-end">
-        {/* Chat Window Box */}
-        {isChatbotOpen && (
-          <div className="cyber-card w-[320px] sm:w-[350px] h-[450px] rounded-3xl border border-white/[0.08] bg-[#0d141d]/90 overflow-hidden shadow-2xl flex flex-col justify-between mb-4 animate-slide-up">
-            
-            {/* Header info */}
-            <div className="bg-[#075e54] p-4 flex items-center gap-3 text-white">
-              <div className="relative">
-                <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center border border-white/20 text-lg">
-                  <i className="fa-solid fa-robot"></i>
-                </div>
-                <div className="w-2.5 h-2.5 bg-green-400 rounded-full absolute bottom-0 right-0 border border-[#075e54] animate-pulse"></div>
-              </div>
-              <div>
-                <span className="font-bold text-sm block font-outfit">Don Neto Assistant</span>
-                <span className="text-[10px] text-green-200">Online</span>
-              </div>
-            </div>
-
-            {/* Messages body */}
-            <div className="flex-1 p-4 bg-[#0b141a]/95 overflow-y-auto space-y-3.5 scrollbar-thin">
-              {chatbotMessages.map((msg, index) => (
-                <div key={index} className={`flex ${msg.sender === "user" ? "justify-end" : "justify-start"}`}>
-                  <div className={`p-3 rounded-2xl text-xs max-w-[85%] font-medium relative shadow ${
-                    msg.sender === "user" 
-                      ? "bg-[#005c4b] text-white rounded-tr-none" 
-                      : "bg-[#202c33] text-gray-200 rounded-tl-none"
-                  }`}>
-                    {msg.text}
-                  </div>
-                </div>
-              ))}
-
-              {chatbotTyping && (
-                <div className="flex justify-start">
-                  <div className="p-3 bg-[#202c33] text-gray-400 rounded-2xl rounded-tl-none text-xs flex items-center gap-1">
-                    <span className="w-1.5 h-1.5 bg-gray-500 rounded-full animate-bounce"></span>
-                    <span className="w-1.5 h-1.5 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></span>
-                    <span className="w-1.5 h-1.5 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0.4s' }}></span>
-                  </div>
-                </div>
-              )}
-            </div>
-
-            {/* Quick Action Pills */}
-            <div className="px-4 py-2 bg-white/[0.01] border-t border-white/[0.04] flex flex-wrap gap-1.5">
-              {[
-                { label: "📁 View Projects", val: "Show Projects" },
-                { label: "🛠️ Core Stack", val: "Check Core Stack" },
-                { label: "💼 Contact Info", val: "Hire Reynald" }
-              ].map((pill, pIdx) => (
-                <button
-                  key={pIdx}
-                  type="button"
-                  onClick={() => handleChatbotSend(pill.val)}
-                  className="px-2.5 py-1 bg-white/5 border border-white/10 hover:border-indigo-500/30 rounded-full text-[10px] text-gray-300 transition-colors"
-                >
-                  {pill.label}
-                </button>
-              ))}
-            </div>
-
-            {/* Input field */}
-            <form 
-              onSubmit={(e) => {
-                e.preventDefault();
-                handleChatbotSend(chatbotInput);
-              }}
-              className="bg-[#1f2c34] p-3 flex items-center gap-2"
-            >
-              <input
-                type="text"
-                value={chatbotInput}
-                onChange={(e) => setChatbotInput(e.target.value)}
-                placeholder="Type a message..."
-                className="flex-1 bg-white/[0.04] border border-white/[0.08] rounded-full px-4 py-2 text-xs text-white focus:outline-none placeholder:text-gray-400"
-              />
-              <button
-                type="submit"
-                className="w-8 h-8 rounded-full bg-[#00a884] hover:bg-[#008f72] flex items-center justify-center text-white text-xs transition-colors"
-              >
-                <i className="fa-solid fa-paper-plane"></i>
-              </button>
-            </form>
-          </div>
-        )}
-
-        {/* Floating Trigger icon */}
-        <button
-          onClick={() => setIsChatbotOpen(!isChatbotOpen)}
-          className="w-14 h-14 bg-green-600 hover:bg-green-500 rounded-full flex items-center justify-center text-white text-2xl shadow-lg hover:scale-110 active:scale-95 transition-all shadow-green-600/20 z-40 relative animate-bounce"
-          aria-label="Chatbot Assistant"
-        >
-          {isChatbotOpen ? (
-            <i className="fa-solid fa-xmark"></i>
-          ) : (
-            <>
-              <i className="fab fa-whatsapp"></i>
-              <span className="absolute -top-1 -right-1 w-4.5 h-4.5 bg-red-500 rounded-full border-2 border-[#030712] flex items-center justify-center text-[9px] font-bold text-white animate-pulse">1</span>
-            </>
-          )}
-        </button>
-      </div>
+      <ChatbotWidget isLightMode={isLightMode} />
 
       {/* CRM Dynamic Toast */}
       {waToast && (
-        <div className="fixed bottom-6 right-6 z-50 p-4 bg-[#0b141a] border border-[#202c33] text-gray-200 rounded-2xl text-xs font-mono max-w-sm shadow-2xl flex items-center gap-3 animate-slide-up">
+        <div className="fixed bottom-6 right-6 z-50 p-4 bg-[#0b141a] border border-[#202c33] text-gray-200 rounded-2xl text-xs font-mono max-w-sm shadow-2xl flex items-center gap-3 animate-slide-up" role="status" aria-live="polite">
           <div className="w-6 h-6 rounded-full bg-indigo-600 flex items-center justify-center text-white text-[10px]">
-            <i className="fa-solid fa-bell"></i>
+            <i className="fa-solid fa-bell" aria-hidden="true"></i>
           </div>
           <span>{waToast}</span>
         </div>

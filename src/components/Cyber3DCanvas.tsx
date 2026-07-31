@@ -6,7 +6,13 @@ interface Cyber3DCanvasProps {
 }
 
 // Helper function to create text + icon textures dynamically for each cube face
-function createTechFaceTexture(label: string, sublabel: string, colorHex: string, bgDark: string): THREE.CanvasTexture {
+function createTechFaceTexture(
+  label: string,
+  sublabel: string,
+  colorHex: string,
+  bgDark: string,
+  isLightMode: boolean = false
+): THREE.CanvasTexture {
   const canvas = document.createElement("canvas");
   canvas.width = 512;
   canvas.height = 512;
@@ -15,18 +21,23 @@ function createTechFaceTexture(label: string, sublabel: string, colorHex: string
   if (ctx) {
     // Background gradient
     const grad = ctx.createLinearGradient(0, 0, 512, 512);
-    grad.addColorStop(0, bgDark);
-    grad.addColorStop(1, "#040814");
+    if (isLightMode) {
+      grad.addColorStop(0, "#ffffff");
+      grad.addColorStop(1, "#f1f5f9");
+    } else {
+      grad.addColorStop(0, bgDark);
+      grad.addColorStop(1, "#040814");
+    }
     ctx.fillStyle = grad;
     ctx.fillRect(0, 0, 512, 512);
 
-    // Glowing border frame
-    ctx.strokeStyle = colorHex;
+    // Glowing/Clean border frame
+    ctx.strokeStyle = isLightMode ? (colorHex === "#6366f1" ? "#4f46e5" : colorHex) : colorHex;
     ctx.lineWidth = 16;
     ctx.strokeRect(16, 16, 480, 480);
 
     // Inner subtle grid lines
-    ctx.strokeStyle = "rgba(255, 255, 255, 0.08)";
+    ctx.strokeStyle = isLightMode ? "rgba(15, 23, 42, 0.07)" : "rgba(255, 255, 255, 0.08)";
     ctx.lineWidth = 2;
     for (let i = 64; i < 512; i += 64) {
       ctx.beginPath();
@@ -40,7 +51,7 @@ function createTechFaceTexture(label: string, sublabel: string, colorHex: string
     }
 
     // Corner tech markers
-    ctx.fillStyle = colorHex;
+    ctx.fillStyle = isLightMode ? (colorHex === "#6366f1" ? "#4f46e5" : colorHex) : colorHex;
     ctx.fillRect(24, 24, 32, 8);
     ctx.fillRect(24, 24, 8, 32);
     ctx.fillRect(456, 24, 32, 8);
@@ -50,10 +61,16 @@ function createTechFaceTexture(label: string, sublabel: string, colorHex: string
     ctx.fillRect(456, 480, 32, 8);
     ctx.fillRect(480, 456, 8, 32);
 
-    // Glowing main label text
-    ctx.shadowColor = colorHex;
-    ctx.shadowBlur = 25;
-    ctx.fillStyle = "#ffffff";
+    // Main label text
+    if (isLightMode) {
+      ctx.shadowColor = "rgba(0, 0, 0, 0.06)";
+      ctx.shadowBlur = 8;
+      ctx.fillStyle = "#0f172a"; // Dark slate 900 for clean high-contrast text
+    } else {
+      ctx.shadowColor = colorHex;
+      ctx.shadowBlur = 25;
+      ctx.fillStyle = "#ffffff";
+    }
     ctx.font = "bold 58px 'Outfit', sans-serif";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
@@ -61,7 +78,7 @@ function createTechFaceTexture(label: string, sublabel: string, colorHex: string
 
     // Sublabel badge text
     ctx.shadowBlur = 0;
-    ctx.fillStyle = colorHex;
+    ctx.fillStyle = isLightMode ? (colorHex === "#6366f1" ? "#4f46e5" : colorHex) : colorHex;
     ctx.font = "bold 28px 'JetBrains Mono', monospace";
     ctx.fillText(`[ ${sublabel} ]`, 256, 310);
   }
@@ -78,6 +95,9 @@ export default function Cyber3DCanvas({ isLightMode = false }: Cyber3DCanvasProp
     const container = mountRef.current;
     if (!container) return;
 
+    // Check if light mode is active via prop or DOM class on initial mount/refresh
+    const activeLight = isLightMode || (typeof document !== "undefined" && document.documentElement.classList.contains("light"));
+
     const width = container.clientWidth;
     const height = container.clientHeight;
 
@@ -92,14 +112,14 @@ export default function Cyber3DCanvas({ isLightMode = false }: Cyber3DCanvasProp
     container.appendChild(renderer.domElement);
 
     // 2. Lighting Setup
-    const ambientLight = new THREE.AmbientLight(0xffffff, isLightMode ? 1.2 : 0.8);
+    const ambientLight = new THREE.AmbientLight(0xffffff, activeLight ? 0.95 : 0.8);
     scene.add(ambientLight);
 
-    const dirLight1 = new THREE.DirectionalLight(0x00f0ff, 2.5);
+    const dirLight1 = new THREE.DirectionalLight(activeLight ? 0x4f46e5 : 0x00f0ff, activeLight ? 1.5 : 2.5);
     dirLight1.position.set(5, 5, 7);
     scene.add(dirLight1);
 
-    const dirLight2 = new THREE.DirectionalLight(0xec4899, 2);
+    const dirLight2 = new THREE.DirectionalLight(activeLight ? 0xdb2777 : 0xec4899, activeLight ? 1.2 : 2);
     dirLight2.position.set(-5, -5, -5);
     scene.add(dirLight2);
 
@@ -114,13 +134,13 @@ export default function Cyber3DCanvas({ isLightMode = false }: Cyber3DCanvasProp
     ];
 
     const cubeMaterials = faceConfigs.map((cfg) => {
-      const tex = createTechFaceTexture(cfg.label, cfg.sublabel, cfg.color, cfg.bg);
+      const tex = createTechFaceTexture(cfg.label, cfg.sublabel, cfg.color, cfg.bg, activeLight);
       return new THREE.MeshStandardMaterial({
         map: tex,
-        roughness: 0.2,
-        metalness: 0.8,
+        roughness: activeLight ? 0.45 : 0.2,
+        metalness: activeLight ? 0.1 : 0.8,
         transparent: true,
-        opacity: isLightMode ? 0.9 : 0.95,
+        opacity: activeLight ? 0.95 : 0.95,
       });
     });
 
@@ -129,13 +149,13 @@ export default function Cyber3DCanvas({ isLightMode = false }: Cyber3DCanvasProp
     const cubeMesh = new THREE.Mesh(cubeGeometry, cubeMaterials);
     scene.add(cubeMesh);
 
-    // Outer Wireframe Glow Frame around Cube
+    // Outer Wireframe Frame around Cube
     const wireGeom = new THREE.BoxGeometry(2.45, 2.45, 2.45);
     const wireMat = new THREE.MeshBasicMaterial({
-      color: isLightMode ? 0x4f46e5 : 0x00f0ff,
+      color: activeLight ? 0x4f46e5 : 0x00f0ff,
       wireframe: true,
       transparent: true,
-      opacity: 0.35,
+      opacity: activeLight ? 0.4 : 0.35,
     });
     const wireMesh = new THREE.Mesh(wireGeom, wireMat);
     scene.add(wireMesh);
@@ -143,9 +163,9 @@ export default function Cyber3DCanvas({ isLightMode = false }: Cyber3DCanvasProp
     // 5. Inner Glowing Core Sphere
     const coreGeom = new THREE.SphereGeometry(0.75, 32, 32);
     const coreMat = new THREE.MeshStandardMaterial({
-      color: isLightMode ? 0x6366f1 : 0x00f0ff,
-      emissive: isLightMode ? 0x4f46e5 : 0x00f0ff,
-      emissiveIntensity: 0.8,
+      color: activeLight ? 0x4f46e5 : 0x00f0ff,
+      emissive: activeLight ? 0x4f46e5 : 0x00f0ff,
+      emissiveIntensity: activeLight ? 0.35 : 0.8,
       roughness: 0.1,
     });
     const coreMesh = new THREE.Mesh(coreGeom, coreMat);
@@ -154,9 +174,9 @@ export default function Cyber3DCanvas({ isLightMode = false }: Cyber3DCanvasProp
     // 6. Dual Orbital Rings
     const ring1Geom = new THREE.TorusGeometry(2.9, 0.018, 16, 100);
     const ring1Mat = new THREE.MeshBasicMaterial({
-      color: isLightMode ? 0x3b82f6 : 0x00f0ff,
+      color: activeLight ? 0x4f46e5 : 0x00f0ff,
       transparent: true,
-      opacity: 0.6,
+      opacity: activeLight ? 0.5 : 0.6,
     });
     const ring1 = new THREE.Mesh(ring1Geom, ring1Mat);
     ring1.rotation.x = Math.PI / 3;
@@ -164,9 +184,9 @@ export default function Cyber3DCanvas({ isLightMode = false }: Cyber3DCanvasProp
 
     const ring2Geom = new THREE.TorusGeometry(3.3, 0.012, 16, 90);
     const ring2Mat = new THREE.MeshBasicMaterial({
-      color: isLightMode ? 0xec4899 : 0xf59e0b,
+      color: activeLight ? 0xdb2777 : 0xf59e0b,
       transparent: true,
-      opacity: 0.5,
+      opacity: activeLight ? 0.4 : 0.5,
     });
     const ring2 = new THREE.Mesh(ring2Geom, ring2Mat);
     ring2.rotation.y = Math.PI / 4;
@@ -189,10 +209,10 @@ export default function Cyber3DCanvas({ isLightMode = false }: Cyber3DCanvasProp
 
     particlesGeometry.setAttribute("position", new THREE.BufferAttribute(positions, 3));
     const particlesMaterial = new THREE.PointsMaterial({
-      color: isLightMode ? 0x4f46e5 : 0x00f0ff,
+      color: activeLight ? 0x4f46e5 : 0x00f0ff,
       size: 0.045,
       transparent: true,
-      opacity: 0.75,
+      opacity: activeLight ? 0.6 : 0.75,
     });
     const particleSystem = new THREE.Points(particlesGeometry, particlesMaterial);
     scene.add(particleSystem);

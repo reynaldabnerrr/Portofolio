@@ -114,6 +114,56 @@
   border-top: 1px solid rgba(15, 23, 42, 0.08) !important;
 }
 
+/* Redesigned Workspace Loader Light Mode Overrides */
+.light .workspace-loader {
+  background-color: #f8fafc !important;
+  color: #0f172a !important;
+}
+.light .workspace-loader .cyber-grid {
+  opacity: 0.15 !important;
+}
+.light .workspace-loader .loader-card {
+  background-color: rgba(255, 255, 255, 0.92) !important;
+  border-color: rgba(226, 232, 240, 0.9) !important;
+  box-shadow: 0 25px 60px rgba(79, 70, 229, 0.14) !important;
+  color: #0f172a !important;
+}
+.light .workspace-loader .text-gradient {
+  background-image: linear-gradient(to right, #4f46e5, #0891b2, #db2777) !important;
+  -webkit-background-clip: text !important;
+  background-clip: text !important;
+  color: transparent !important;
+}
+
+/* Hero 3D Card Light Mode Override */
+.light .hero-3d-card {
+  background-color: rgba(255, 255, 255, 0.85) !important;
+  border-color: rgba(79, 70, 229, 0.2) !important;
+  box-shadow: 0 20px 50px rgba(79, 70, 229, 0.12) !important;
+}
+
+/* Tactical Telemetry Header Bar Light Mode */
+.light .telemetry-bar {
+  background-color: rgba(241, 245, 249, 0.92) !important;
+  border-bottom-color: rgba(226, 232, 240, 1) !important;
+  color: #475569 !important;
+}
+.light .telemetry-bar .telemetry-sep {
+  color: #cbd5e1 !important;
+}
+.light .telemetry-bar .text-cyan-400 {
+  color: #0891b2 !important;
+  font-weight: 700 !important;
+}
+.light .telemetry-bar .text-indigo-400 {
+  color: #4f46e5 !important;
+  font-weight: 700 !important;
+}
+.light .telemetry-bar .text-purple-400 {
+  color: #9333ea !important;
+  font-weight: 700 !important;
+}
+
 /* Skills Network Nodes Light Mode Styles */
 .light .bg-\[\#090e18\]\/90 {
   background-color: rgba(255, 255, 255, 0.95) !important;
@@ -529,5 +579,26 @@ body {
 
 .font-syne-bold {
   font-family: 'Syne', sans-serif;
+}
+
+/* Accessibility: Global Focus Visible Ring */
+:focus-visible {
+  outline: 2px solid #6366f1 !important;
+  outline-offset: 3px !important;
+}
+
+.light :focus-visible {
+  outline: 2px solid #4f46e5 !important;
+  outline-offset: 3px !important;
+}
+
+/* Accessibility: Prefers Reduced Motion */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
