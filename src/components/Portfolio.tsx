@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
-import { GitHubCalendar } from "react-github-calendar";
 import { Typewriter } from "react-simple-typewriter";
+
+const GitHubCalendarLazy = React.lazy(() => import("react-github-calendar").then(m => ({ default: m.GitHubCalendar })));
 
 const MatrixRain = () => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -1083,15 +1084,15 @@ export default function Portfolio() {
               <div className="grid grid-cols-3 gap-4 pt-4">
                 <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/[0.05] text-center shadow-md shadow-black/25">
                   <span className="block text-3xl font-black text-indigo-400 tracking-tight font-outfit">3.78</span>
-                  <span className="text-[10px] uppercase text-gray-500 tracking-wider font-bold block mt-1">GPA Score</span>
+                  <span className="text-[10px] uppercase text-gray-400 tracking-wider font-bold block mt-1">GPA Score</span>
                 </div>
                 <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/[0.05] text-center shadow-md shadow-black/25">
                   <span className="block text-3xl font-black text-cyan-400 tracking-tight font-outfit">7+</span>
-                  <span className="text-[10px] uppercase text-gray-500 tracking-wider font-bold block mt-1">CTF Awards</span>
+                  <span className="text-[10px] uppercase text-gray-400 tracking-wider font-bold block mt-1">CTF Awards</span>
                 </div>
                 <div className="p-5 rounded-2xl bg-white/[0.02] border border-white/[0.05] text-center shadow-md shadow-black/25">
                   <span className="block text-3xl font-black text-pink-400 tracking-tight font-outfit">3+</span>
-                  <span className="text-[10px] uppercase text-gray-500 tracking-wider font-bold block mt-1">TA & Interns</span>
+                  <span className="text-[10px] uppercase text-gray-400 tracking-wider font-bold block mt-1">TA & Interns</span>
                 </div>
               </div>
             </div>
@@ -1109,7 +1110,7 @@ export default function Portfolio() {
                     <i className={item.icon}></i>
                   </div>
                   <div>
-                    <h4 className="font-bold text-white text-sm font-outfit mb-1 leading-tight">{item.title}</h4>
+                    <h3 className="font-bold text-white text-sm font-outfit mb-1 leading-tight">{item.title}</h3>
                     <p className="text-[10px] text-gray-400 leading-normal">{item.desc}</p>
                   </div>
                 </div>
@@ -1309,31 +1310,31 @@ export default function Portfolio() {
 
                         <div className="space-y-3">
                           <div>
-                            <label className="text-[10px] text-gray-500 block mb-1 font-bold">NAMA PELANGGAN</label>
+                            <label className="text-[10px] text-gray-400 block mb-1 font-bold">NAMA PELANGGAN</label>
                             <input
                               type="text"
                               required
                               placeholder="Masukkan nama Anda (e.g. Budi)"
                               value={simName}
                               onChange={(e) => setSimName(e.target.value)}
-                              className="w-full bg-white/[0.03] border border-white/[0.08] text-white rounded-lg px-3 py-2.5 text-xs focus:outline-none focus:border-indigo-500 transition-colors placeholder:text-gray-600"
+                              className="w-full bg-white/[0.03] border border-white/[0.08] text-white rounded-lg px-3 py-2.5 text-xs focus:outline-none focus:border-indigo-500 transition-colors placeholder:text-gray-400"
                             />
                           </div>
 
                           <div>
-                            <label className="text-[10px] text-gray-500 block mb-1 font-bold">WHATSAPP NUMBER (Simulation Invoice)</label>
+                            <label className="text-[10px] text-gray-400 block mb-1 font-bold">WHATSAPP NUMBER (Simulation Invoice)</label>
                             <input
                               type="tel"
                               required
                               placeholder="e.g. 08123456789"
                               value={simPhone}
                               onChange={(e) => setSimPhone(e.target.value)}
-                              className="w-full bg-white/[0.03] border border-white/[0.08] text-white rounded-lg px-3 py-2.5 text-xs focus:outline-none focus:border-indigo-500 transition-colors placeholder:text-gray-600"
+                              className="w-full bg-white/[0.03] border border-white/[0.08] text-white rounded-lg px-3 py-2.5 text-xs focus:outline-none focus:border-indigo-500 transition-colors placeholder:text-gray-400"
                             />
                           </div>
 
                           <div>
-                            <label className="text-[10px] text-gray-500 block mb-1 font-bold">PAYMENT METHOD</label>
+                            <label className="text-[10px] text-gray-400 block mb-1 font-bold">PAYMENT METHOD</label>
                             <div className="grid grid-cols-2 gap-2">
                               <button
                                 type="button"
@@ -1883,21 +1884,21 @@ export default function Portfolio() {
             
             {/* Work Experiences */}
             <div className="lg:col-span-6 space-y-8">
-              <h3 className="text-2xl font-black text-white font-outfit border-b border-white/[0.08] pb-3 flex items-center gap-3">
+              <h2 className="text-2xl font-black text-white font-outfit border-b border-white/[0.08] pb-3 flex items-center gap-3">
                 <div className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-base text-indigo-400">
                   <i className="fa-solid fa-briefcase"></i>
                 </div>
                 Work Experience
-              </h3>
+              </h2>
               <div className="relative border-l border-white/[0.08] ml-4 space-y-10 pt-2">
                 {workExperience.map((exp, index) => (
                   <div key={index} className="relative pl-6 group">
-                    <div className="absolute -left-[5px] top-1.5 w-2.5 h-2.5 rounded-full bg-indigo-500 shadow-glow transition-all group-hover:scale-125"></div>
+                    <div className="absolute -left-[5px] top-1.5 w-2.5 h-2.5 rounded-full bg-indigo-500 shadow-glow transition-transform duration-300 group-hover:scale-125"></div>
                     <div className="space-y-1.5">
                       <span className="text-[10px] font-bold text-indigo-400 uppercase tracking-widest">{exp.period}</span>
-                      <h4 className="text-lg font-bold text-white font-outfit leading-snug">{exp.role}</h4>
-                      <span className="text-xs text-gray-500 block font-semibold">{exp.org}</span>
-                      <ul className="list-disc list-outside pl-4 text-xs text-gray-400 space-y-2 pt-2.5 font-medium leading-relaxed">
+                      <h3 className="text-lg font-bold text-white font-outfit leading-snug">{exp.role}</h3>
+                      <span className="text-xs text-gray-400 block font-semibold">{exp.org}</span>
+                      <ul className="list-disc list-outside pl-4 text-xs text-gray-300 space-y-2 pt-2.5 font-medium leading-relaxed">
                         {exp.points.map((pt, pIdx) => (
                           <li key={pIdx}>{pt}</li>
                         ))}
@@ -1910,21 +1911,21 @@ export default function Portfolio() {
 
             {/* Organization Experiences */}
             <div className="lg:col-span-6 space-y-8">
-              <h3 className="text-2xl font-black text-white font-outfit border-b border-white/[0.08] pb-3 flex items-center gap-3">
+              <h2 className="text-2xl font-black text-white font-outfit border-b border-white/[0.08] pb-3 flex items-center gap-3">
                 <div className="w-9 h-9 rounded-xl bg-white/5 border border-white/10 flex items-center justify-center text-base text-cyan-400">
                   <i className="fa-solid fa-users"></i>
                 </div>
                 Organization Experience
-              </h3>
+              </h2>
               <div className="relative border-l border-white/[0.08] ml-4 space-y-10 pt-2">
                 {orgExperience.map((exp, index) => (
                   <div key={index} className="relative pl-6 group">
-                    <div className="absolute -left-[5px] top-1.5 w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-glow transition-all group-hover:scale-125"></div>
+                    <div className="absolute -left-[5px] top-1.5 w-2.5 h-2.5 rounded-full bg-cyan-400 shadow-glow transition-transform duration-300 group-hover:scale-125"></div>
                     <div className="space-y-1.5">
                       <span className="text-[10px] font-bold text-cyan-400 uppercase tracking-widest">{exp.period}</span>
-                      <h4 className="text-lg font-bold text-white font-outfit leading-snug">{exp.role}</h4>
-                      <span className="text-xs text-gray-500 block font-semibold">{exp.org}</span>
-                      <ul className="list-disc list-outside pl-4 text-xs text-gray-400 space-y-2 pt-2.5 font-medium leading-relaxed">
+                      <h3 className="text-lg font-bold text-white font-outfit leading-snug">{exp.role}</h3>
+                      <span className="text-xs text-gray-400 block font-semibold">{exp.org}</span>
+                      <ul className="list-disc list-outside pl-4 text-xs text-gray-300 space-y-2 pt-2.5 font-medium leading-relaxed">
                         {exp.points.map((pt, pIdx) => (
                           <li key={pIdx}>{pt}</li>
                         ))}
@@ -1959,7 +1960,7 @@ export default function Portfolio() {
                         {award.date}
                       </span>
                     </div>
-                    <h4 className="font-extrabold text-white text-base sm:text-lg font-outfit leading-snug">{award.title}</h4>
+                    <h3 className="font-extrabold text-white text-base sm:text-lg font-outfit leading-snug">{award.title}</h3>
                     <span className="text-xs text-cyan-400 font-bold block">{award.category}</span>
                     <p className="text-gray-400 text-xs leading-relaxed font-medium">{award.details}</p>
                   </div>
@@ -1980,14 +1981,16 @@ export default function Portfolio() {
             
             <div className="flex justify-center">
               <div className="cyber-card p-6 sm:p-8 rounded-3xl w-full max-w-4xl border border-white/[0.04] overflow-x-auto shadow-xl">
-                <div className="min-w-[700px] flex justify-center py-2">
-                  <GitHubCalendar 
-                    username="reynaldabnerrr" 
-                    colorScheme="dark"
-                    blockSize={12}
-                    blockMargin={4}
-                    fontSize={13}
-                  />
+                <div className="min-w-[700px] min-h-[160px] flex justify-center items-center py-2">
+                  <React.Suspense fallback={<div className="h-[160px] flex items-center justify-center text-xs text-gray-400 font-mono">Loading GitHub activity data...</div>}>
+                    <GitHubCalendarLazy 
+                      username="reynaldabnerrr" 
+                      colorScheme="dark"
+                      blockSize={12}
+                      blockMargin={4}
+                      fontSize={13}
+                    />
+                  </React.Suspense>
                 </div>
               </div>
             </div>
@@ -2302,7 +2305,7 @@ export default function Portfolio() {
                 value={chatbotInput}
                 onChange={(e) => setChatbotInput(e.target.value)}
                 placeholder="Type a message..."
-                className="flex-1 bg-white/[0.04] border border-white/[0.08] rounded-full px-4 py-2 text-xs text-white focus:outline-none placeholder:text-gray-500"
+                className="flex-1 bg-white/[0.04] border border-white/[0.08] rounded-full px-4 py-2 text-xs text-white focus:outline-none placeholder:text-gray-400"
               />
               <button
                 type="submit"
