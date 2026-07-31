@@ -18,13 +18,15 @@ npm run astro    # Run Astro CLI commands
 ## Architecture
 
 ### Framework Stack
+
 - **Astro 5** — Static site framework with React integration
 - **React 19** — Interactive UI components (Portfolio.tsx)
 - **Tailwind CSS 3** — Styling with CSS custom properties for theming
 - **TypeScript** — Type safety across the codebase
 
 ### Directory Structure
-```
+
+```Structure
 src/
 ├── components/
 │   └── Portfolio.tsx    # Main single-file React component (~2365 lines)
@@ -39,6 +41,7 @@ src/
 ### Key Implementation Details
 
 **Portfolio.tsx** is the monolithic React component containing:
+
 - Loading screen with animated progress
 - Hero section with Typewriter effect (react-simple-typewriter)
 - About, Services, Skills, Projects, Achievements sections
@@ -49,6 +52,7 @@ src/
 - Light/dark theme toggle (CSS class `light` on `<html>`)
 
 **Layout.astro** handles:
+
 - SEO meta tags and Open Graph
 - JSON-LD structured data (Person + WebSite schema)
 - Google Fonts (Outfit, Plus Jakarta Sans)
@@ -57,6 +61,7 @@ src/
 **CSS Theming** uses CSS custom properties defined in `:root` and `.light` classes in globals.css. The cyber aesthetic includes glassmorphism cards, gradient text animations, and particle canvas effects.
 
 ### Deployment
+
 - **Vercel** via `@astrojs/vercel` adapter
 - Web analytics enabled
-- Site URL: https://www.abner.my.id
+- Site URL: <https://www.abner.my.id>
