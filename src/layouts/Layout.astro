@@ -122,5 +122,11 @@ const jsonLd = {
   </head>
   <body class="bg-[#030712] text-gray-100 selection:bg-indigo-500/30 selection:text-indigo-200 min-h-screen relative overflow-x-hidden">
     <slot />
+    
+    <!-- Vercel Speed Insights -->
+    <script is:inline>
+      window.si = window.si || function () { (window.siq = window.siq || []).push(arguments); };
+    </script>
+    <script defer src="/_vercel/speed-insights/script.js"></script>
   </body>
 </html>
