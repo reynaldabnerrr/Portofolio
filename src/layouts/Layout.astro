@@ -1,5 +1,6 @@
 ---
 import { inject } from '@vercel/analytics';
+import { injectSpeedInsights } from '@vercel/speed-insights';
 
 interface Props {
   title: string;
@@ -124,6 +125,9 @@ const jsonLd = {
     
     <!-- Vercel Web Analytics -->
     <script is:inline set:html={inject()}></script>
+    
+    <!-- Vercel Speed Insights -->
+    <script is:inline set:html={injectSpeedInsights()}></script>
   </head>
   <body class="bg-[#030712] text-gray-100 selection:bg-indigo-500/30 selection:text-indigo-200 min-h-screen relative overflow-x-hidden">
     <slot />
