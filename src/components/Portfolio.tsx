@@ -644,17 +644,49 @@ export default function Portfolio() {
                 <span className="truncate">{loadingStatus}</span>
               </div>
 
-              {/* Tech Stack Indicator Badges */}
-              <div className="flex items-center justify-center gap-2 pt-1 flex-wrap">
-                <span className={`text-[9px] font-mono px-2.5 py-1 rounded-full border ${isLightMode ? 'bg-indigo-50 border-indigo-200 text-indigo-700' : 'bg-indigo-500/10 border-indigo-500/20 text-indigo-300'}`}>
-                  ⚡ ASTRO 5
-                </span>
-                <span className={`text-[9px] font-mono px-2.5 py-1 rounded-full border ${isLightMode ? 'bg-cyan-50 border-cyan-200 text-cyan-700' : 'bg-cyan-500/10 border-cyan-500/20 text-cyan-300'}`}>
-                  ⚛️ REACT 19
-                </span>
-                <span className={`text-[9px] font-mono px-2.5 py-1 rounded-full border ${isLightMode ? 'bg-pink-50 border-pink-200 text-pink-700' : 'bg-pink-500/10 border-pink-500/20 text-pink-300'}`}>
-                  🛡️ CYBERSEC
-                </span>
+              {/* Runtime Module Indicators */}
+              <div className="grid grid-cols-3 gap-2 pt-1" aria-label="Active runtime modules">
+                <div className={`relative flex min-w-0 flex-col items-center gap-1.5 rounded-xl border px-2 py-2.5 font-mono ${
+                  isLightMode
+                    ? 'bg-indigo-50/80 border-indigo-200 text-indigo-700'
+                    : 'bg-indigo-500/[0.08] border-indigo-400/20 text-indigo-300'
+                }`}>
+                  <span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_7px_rgba(52,211,153,0.9)]" aria-hidden="true" />
+                  <span className={`grid h-7 w-7 place-items-center rounded-lg border ${
+                    isLightMode ? 'bg-white border-indigo-200' : 'bg-indigo-400/10 border-indigo-300/20'
+                  }`}>
+                    <i className="fa-solid fa-rocket text-[11px]" aria-hidden="true" />
+                  </span>
+                  <span className="truncate text-[9px] font-bold tracking-[0.12em]">ASTRO 5</span>
+                </div>
+
+                <div className={`relative flex min-w-0 flex-col items-center gap-1.5 rounded-xl border px-2 py-2.5 font-mono ${
+                  isLightMode
+                    ? 'bg-cyan-50/80 border-cyan-200 text-cyan-700'
+                    : 'bg-cyan-500/[0.08] border-cyan-400/20 text-cyan-300'
+                }`}>
+                  <span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_7px_rgba(52,211,153,0.9)]" aria-hidden="true" />
+                  <span className={`grid h-7 w-7 place-items-center rounded-lg border ${
+                    isLightMode ? 'bg-white border-cyan-200' : 'bg-cyan-400/10 border-cyan-300/20'
+                  }`}>
+                    <i className="fa-brands fa-react text-xs" aria-hidden="true" />
+                  </span>
+                  <span className="truncate text-[9px] font-bold tracking-[0.12em]">REACT 19</span>
+                </div>
+
+                <div className={`relative flex min-w-0 flex-col items-center gap-1.5 rounded-xl border px-2 py-2.5 font-mono ${
+                  isLightMode
+                    ? 'bg-pink-50/80 border-pink-200 text-pink-700'
+                    : 'bg-pink-500/[0.08] border-pink-400/20 text-pink-300'
+                }`}>
+                  <span className="absolute right-2 top-2 h-1.5 w-1.5 rounded-full bg-emerald-400 shadow-[0_0_7px_rgba(52,211,153,0.9)]" aria-hidden="true" />
+                  <span className={`grid h-7 w-7 place-items-center rounded-lg border ${
+                    isLightMode ? 'bg-white border-pink-200' : 'bg-pink-400/10 border-pink-300/20'
+                  }`}>
+                    <i className="fa-solid fa-shield-halved text-[11px]" aria-hidden="true" />
+                  </span>
+                  <span className="truncate text-[9px] font-bold tracking-[0.12em]">CYBERSEC</span>
+                </div>
               </div>
             </div>
 
