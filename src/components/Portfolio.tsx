@@ -615,7 +615,7 @@ export default function Portfolio() {
                 <div className="flex items-center gap-1.5">
                   <i className="fa-solid fa-terminal text-[10px] text-indigo-500"></i>
                   <span className={`text-[10px] font-mono font-extrabold uppercase tracking-wider ${isLightMode ? 'text-slate-600' : 'text-gray-300'}`}>
-                    DON NETO // BOOTSTRAP PROTOCOL
+                    DON NETO // PROTOCOL
                   </span>
                 </div>
               </div>

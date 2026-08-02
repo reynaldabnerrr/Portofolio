@@ -138,6 +138,19 @@
   border-top: 1px solid rgba(15, 23, 42, 0.08) !important;
 }
 
+/* Release the SSR loader even when hydration or a client timer is interrupted. */
+@keyframes loader-release-failsafe {
+  to {
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+  }
+}
+
+.workspace-loader {
+  animation: loader-release-failsafe 400ms ease 2500ms forwards;
+}
+
 /* Redesigned Workspace Loader Light Mode Overrides */
 .light .workspace-loader {
   background-color: #f8fafc !important;
@@ -625,4 +638,3 @@ body {
     scroll-behavior: auto !important;
   }
 }
-
