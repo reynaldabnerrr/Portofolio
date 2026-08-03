@@ -56,11 +56,12 @@ export default function TerminalModal({
       case "projects":
         newLogs.push(
           "Featured Projects:",
-          "  1. E-Logbook Radiology UNHAS (Laravel & PWA medical platform)",
-          "  2. Topcell CRM (Laravel enterprise portal)",
-          "  3. ANTEKHUB (Flutter student networking)",
-          "  4. Jokka Web (Next.js culture explorer)",
-          "  5. Topcell Company Profile (Next.js responsive landing page)"
+          "  1. Clean Plate Lab (High-Protein Healthy Catering & Clinical Nutrition)",
+          "  2. E-Logbook Radiology UNHAS (Laravel & PWA medical platform)",
+          "  3. Topcell CRM (Laravel enterprise portal)",
+          "  4. ANTEKHUB (Flutter student networking)",
+          "  5. Jokka Web (Next.js culture explorer)",
+          "  6. Topcell Company Profile (Next.js responsive landing page)"
         );
         break;
       case "skills":

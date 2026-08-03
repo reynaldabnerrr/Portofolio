@@ -157,6 +157,27 @@ export default function Portfolio() {
 
   const projects: Project[] = [
     {
+      id: 6,
+      title: "Clean Plate Lab",
+      category: "Health Tech & High-Protein Catering Platform",
+      description: "Makassar's premier laboratory-verified high-protein catering & clinical nutrition platform with customizable 25g–100g protein tiers and full macro precision data transparency.",
+      longDescription: "Clean Plate Lab is a laboratory-verified high-protein healthy catering and clinical nutrition web platform operating in Makassar. Built for athletes, tech teams, and fitness seekers, the platform features customizable daily protein intake tiers (25g, 60g, 80g, 100g), an interactive Nutrition Label Inspector with full macro breakdown, a science-backed BMR/TDEE Macro Calculator, a weekly menu catalog, and a B2B corporate catering cost estimator.",
+      technologies: ["React", "TypeScript", "Tailwind CSS", "Vite", "REST API", "Responsive UI"],
+      github: "https://github.com/reynaldabnerrr/Clean_Plate_Lab",
+      demo: "https://www.cleanplatelab.online/",
+      image: "fa-solid fa-bowl-food",
+      color: "from-emerald-600 via-teal-600 to-green-500",
+      features: [
+        "Customizable daily protein intake tiers (25g, 60g, 80g, up to 100g)",
+        "Interactive Label Inspector with full lab macro specs & transparency",
+        "Science-backed BMR & TDEE Daily Macro Calculator with target plan recommendations",
+        "Weekly high-protein menu catalog with complete daily lab nutrition facts",
+        "B2B & Corporate Wellness Catering solution with automated budget/cost estimator",
+        "100% fresh homemade prep with food-grade safe packaging"
+      ],
+      status: "Completed"
+    },
+    {
       id: 5,
       title: "E-Logbook Radiology UNHAS",
       category: "Academic & Medical Platform",
@@ -176,6 +197,47 @@ export default function Portfolio() {
         "Role-based access control for residents, supervisors, and admins",
         "Integrated dashboard analytics and reporting system",
         "Progressive Web App (PWA) installation support"
+      ],
+      status: "Completed"
+    },
+    {
+      id: 2,
+      title: "Jokka Web",
+      category: "Web Application",
+      description: "Tourism platform introducing Makassar's culture, tourist destinations, and local culinary experiences. Equipped with an interactive itinerary planner.",
+      longDescription: "A Makassar culture and travel explorer application. Provides detailed destination data, local tourism event calendars, local culinary guides, interactive maps, and a database-driven user review system.",
+      technologies: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Vite", "API Integration"],
+      github: "https://github.com/reynaldabnerrr/Jokka.git",
+      demo: "https://jokka-1d960.firebaseapp.com",
+      image: "fa-solid fa-globe",
+      color: "from-emerald-500 to-teal-600",
+      features: [
+        "Interactive destination explorer",
+        "Event calendar and booking system",
+        "Cultural heritage showcase",
+        "Culinary guide and recommendations",
+        "Travel itinerary planner",
+        "User reviews and ratings"
+      ],
+      status: "Completed"
+    },
+    {
+      id: 3,
+      title: "Topcell Company Profile",
+      category: "Corporate Website",
+      description: "Modern corporate profile website for Topcell, presenting services, vision, and digital solutions interactively and elegantly.",
+      longDescription: "Professional corporate profile website designed to display Topcell's services, vision, mission, and brand identity. Built using Next.js and Tailwind CSS with smooth animations and a modern layout on both desktop and mobile.",
+      technologies: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Vercel"],
+      github: "https://github.com/reynaldabnerrr",
+      demo: "https://topcell.topgroup.asia/",
+      image: "fa-solid fa-building",
+      color: "from-orange-500 to-red-500",
+      features: [
+        "Professional company profile presentation",
+        "Responsive and modern landing page",
+        "Service and portfolio showcase",
+        "Clear call-to-action sections",
+        "Optimized experience for desktop and mobile"
       ],
       status: "Completed"
     },
@@ -217,47 +279,6 @@ export default function Portfolio() {
         "Mentorship portal and opportunity sharing features",
         "Job listings and event management pipelines",
         "Seamless integration with RESTful backend endpoints"
-      ],
-      status: "Completed"
-    },
-    {
-      id: 2,
-      title: "Jokka Web",
-      category: "Web Application",
-      description: "Tourism platform introducing Makassar's culture, tourist destinations, and local culinary experiences. Equipped with an interactive itinerary planner.",
-      longDescription: "A Makassar culture and travel explorer application. Provides detailed destination data, local tourism event calendars, local culinary guides, interactive maps, and a database-driven user review system.",
-      technologies: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Vercel", "API Integration"],
-      github: "https://github.com/reynaldabnerrr/Jokka.git",
-      demo: "https://jokka-1d960.firebaseapp.com",
-      image: "fa-solid fa-globe",
-      color: "from-emerald-500 to-teal-600",
-      features: [
-        "Interactive destination explorer",
-        "Event calendar and booking system",
-        "Cultural heritage showcase",
-        "Culinary guide and recommendations",
-        "Travel itinerary planner",
-        "User reviews and ratings"
-      ],
-      status: "Completed"
-    },
-    {
-      id: 3,
-      title: "Topcell Company Profile",
-      category: "Corporate Website",
-      description: "Modern corporate profile website for Topcell, presenting services, vision, and digital solutions interactively and elegantly.",
-      longDescription: "Professional corporate profile website designed to display Topcell's services, vision, mission, and brand identity. Built using Next.js and Tailwind CSS with smooth animations and a modern layout on both desktop and mobile.",
-      technologies: ["Next.js", "React", "TypeScript", "Tailwind CSS", "Vercel"],
-      github: "https://github.com/reynaldabnerrr",
-      demo: "https://topcell.topgroup.asia/",
-      image: "fa-solid fa-building",
-      color: "from-orange-500 to-red-500",
-      features: [
-        "Professional company profile presentation",
-        "Responsive and modern landing page",
-        "Service and portfolio showcase",
-        "Clear call-to-action sections",
-        "Optimized experience for desktop and mobile"
       ],
       status: "Completed"
     }
@@ -1528,15 +1549,21 @@ export default function Portfolio() {
                     )}
 
                     {project.github && (
-                      <a
-                        href={project.github}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="px-5 py-2.5 bg-white/[0.03] hover:bg-white/[0.08] text-gray-200 border border-white/[0.06] rounded-xl transition-all duration-300 flex items-center justify-center text-xs font-bold gap-2"
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        asChild
                       >
-                        <i className="fab fa-github text-sm"></i>
-                        GitHub
-                      </a>
+                        <a
+                          href={project.github}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="gap-2 text-xs font-bold"
+                        >
+                          <i className="fab fa-github text-xs"></i>
+                          GitHub
+                        </a>
+                      </Button>
                     )}
                   </div>
                 </div>

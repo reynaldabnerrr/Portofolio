@@ -30,7 +30,7 @@ export default function ChatbotWidget({ isLightMode = false }: ChatbotWidgetProp
 
       if (query.includes("project") || query.includes("work")) {
         response =
-          "Reynald has developed outstanding systems like Topcell CRM, ANTEKHUB (Flutter mobile app), and Jokka Web (Makassar culture explorer). You can inspect them in the Projects section!";
+          "Reynald has developed outstanding systems like Clean Plate Lab (High-Protein Healthy Catering), E-Logbook Radiology UNHAS, Topcell CRM, ANTEKHUB, and Jokka Web. You can inspect them in the Projects section!";
       } else if (query.includes("skill") || query.includes("stack") || query.includes("tech")) {
         response =
           "His core stack includes Laravel, Next.js, React, Tailwind CSS, Flutter, Firebase, Docker, Nginx, and Cybersecurity Incident Response.";
